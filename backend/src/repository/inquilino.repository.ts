@@ -11,7 +11,7 @@ export class InquilinoRepository {
     async save(inquilino: RegistrarInquilinoDTO) {
             const result = await pool.query
             (`INSERT INTO inquilino (nombre, telefono, email, documento, estado_id) 
-                VALUES ($1, $2, $3, $4, (SELECT id FROM estado_general WHERE valor = 'Activo')) 
+                VALUES ($1, $2, $3, $4, (SELECT id FROM estado_general WHERE valor = 'activo')) 
                 RETURNING *`, 
                 [inquilino.nombre, inquilino.telefono, inquilino.email, inquilino.documento]);
             return result.rows[0];
