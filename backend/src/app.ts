@@ -3,9 +3,6 @@ import errorGlobalMiddleware from './middleWare/global/errorGlobal.middleware.js
 
 import routes from './routes/index.js';
 
-// importar express-async-errors para manejar errores en async/await
-import 'express-async-errors'
-
 // al usar typescript, es necesario especificar el tipo de la variable: en este caso express.Application
 const app: express.Application = express();
 
