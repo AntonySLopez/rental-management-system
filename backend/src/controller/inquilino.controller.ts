@@ -13,6 +13,7 @@ export class InquilinoController {
         // 2. Llamar al servicio
         const result = await inquilinoService.registrarInquilino(inquilino);
         // 3. Retornar la respuesta
-        res.status(201).json(result);
+        console.log(result);
+        res.status(201).json({ message: "Inquilino registrado correctamente" })
     }
 }
