@@ -3,6 +3,12 @@ import type { RegistrarPropiedadDTO } from "../schema/registrarPropiedadDTO.js";
 
 export class PropiedadRepository {
     
+    async findById(id: number) {
+        const result = await pool.query
+        (`SELECT * FROM propiedad WHERE id = $1`, [id]);
+        return result.rows[0] ?? null;
+    }
+
     async findByNombre(nombre: string) {
         const result = await pool.query
         (`SELECT * FROM propiedad WHERE nombre = $1`, [nombre]);
