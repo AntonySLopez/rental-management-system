@@ -1,5 +1,5 @@
 import pool from "../config/postgres.js";
-import type { RegistrarInquilinoDTO } from "../application/registrarInquilinoDTO.js";
+import type { RegistrarInquilinoDTO } from "../schema/registrarInquilinoDTO.js";
 
 export class InquilinoRepository {
 

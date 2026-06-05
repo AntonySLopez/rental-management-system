@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { InquilinoService } from "../service/inquilino.service.js";
-import { registrarInquilinoSchema } from "../application/registrarInquilinoDTO.js";
+import { registrarInquilinoSchema } from "../schema/registrarInquilinoDTO.js";
 
 const inquilinoService = new InquilinoService();
 

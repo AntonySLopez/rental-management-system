@@ -1,5 +1,5 @@
 import { InquilinoRepository } from "../repository/inquilino.repository.js";
-import type { RegistrarInquilinoDTO } from "../application/registrarInquilinoDTO.js";
+import type { RegistrarInquilinoDTO } from "../schema/registrarInquilinoDTO.js";
 
 import { AppError } from "../middleWare/flujo/appError.middleware.js";
 
