@@ -1,0 +1,10 @@
+import { Router } from "express";
+import { ContratoController } from "../controller/contrato.controller.js";
+
+const router = Router() as Router
+
+const controller = new ContratoController()
+
+router.post("/crear", controller.crearContrato)
+
+export default router
