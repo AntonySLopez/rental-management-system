@@ -37,63 +37,63 @@ export class ContratoService {
             // iniciamos transaccion
             await cliente.query('BEGIN');
      
-        const inquilinoExistente = await this.inquilinoRepository.findById(contrato.inquilinoId, cliente);
-        if (!inquilinoExistente) {
-            throw new AppError("El inquilino no existe", 404);
-        }
-        const contratoExistente = await this.contratoRepository.validarLocalDisponible(contrato.localId, cliente);
-        if (contratoExistente) {
-            throw new AppError("El local no está disponible", 409);
-        }
-        console.log("local disponible");
-        
-        //guardamos el contrato y obtenemos el id
-        const contratoSaveResult = await this.contratoRepository.save(contrato, cliente);
-        console.log("contrato guardado con id", contratoSaveResult);
-        
-        //creamos estructura de cuotas
-        const cuotaAlquiler: Cuota = {
-            contrato_id: contratoSaveResult,
-            fecha_inicio: new Date(contrato.fechaInicio),
-            fecha_fin: new Date(contrato.fechaFin),
-            monto: contrato.precioMensual,
-        };
- 
-        // creamos cuotas de alquiler segun cantidad de meses
-        await this.cuotaAlquilerRepository.saveAllCuotasForContrato(cuotaAlquiler, contrato.duracionMeses, cliente);
-        console.log("cuotas creadas");
-
-        // creamos primer registro de consumo de luz
-        const primerResgistro: Luz = {
-            contrato_id: contratoSaveResult,
-            fecha_inicio: new Date(contrato.fechaInicio),
-            fecha_fin: new Date(contrato.fechaFin),
-            lectura_anterior: contrato.lecturaAnterior,
-            lectura_actual: 0,
-            precio_kwh: 0,
-            alumbrado_publico: 0,
-            consumo_total: 0,
-        };
-        await this.consumoLuzRepository.saveFirstConsumoLuz(primerResgistro, cliente);
-        console.log("primer consumo de luz creado");
-
-        // si hay garantia, creamos la garantia
-        if (contrato.garantia) {
-            // creamos garantia
-            console.log("creando garantia");
-            const garantia: Garantia = {
+            const inquilinoExistente = await this.inquilinoRepository.findById(contrato.inquilinoId, cliente);
+            if (!inquilinoExistente) {
+                throw new AppError("El inquilino no existe", 404);
+            }
+            const contratoExistente = await this.contratoRepository.validarLocalDisponible(contrato.localId, cliente);
+            if (contratoExistente) {
+                throw new AppError("El local no está disponible", 409);
+            }
+            console.log("local disponible");
+            
+            //guardamos el contrato y obtenemos el id
+            const contratoSaveResult = await this.contratoRepository.save(contrato, cliente);
+            console.log("contrato guardado con id", contratoSaveResult);
+            
+            //creamos estructura de cuotas
+            const cuotaAlquiler: Cuota = {
                 contrato_id: contratoSaveResult,
-                monto: contrato.garantia!,
-                fecha_registro: new Date(contrato.fechaInicio),
+                fecha_inicio: new Date(contrato.fechaInicio),
+                fecha_fin: new Date(contrato.fechaFin),
+                monto: contrato.precioMensual,
             };
-            await this.garantiaRepository.saveGarantia(garantia, cliente);
-            console.log("garantia creada");
-        };
-        // confirmamos transaccion
-        await cliente.query('COMMIT'); 
+    
+            // creamos cuotas de alquiler segun cantidad de meses
+            await this.cuotaAlquilerRepository.saveAllCuotasForContrato(cuotaAlquiler, contrato.duracionMeses, cliente);
+            console.log("cuotas creadas");
 
-        console.log("id de contrato creado:", contratoSaveResult);
-        return contratoSaveResult;
+            // creamos primer registro de consumo de luz
+            const primerResgistro: Luz = {
+                contrato_id: contratoSaveResult,
+                fecha_inicio: new Date(contrato.fechaInicio),
+                fecha_fin: new Date(contrato.fechaFin),
+                lectura_anterior: contrato.lecturaAnterior,
+                lectura_actual: 0,
+                precio_kwh: 0,
+                alumbrado_publico: 0,
+                consumo_total: 0,
+            };
+            await this.consumoLuzRepository.saveFirstConsumoLuz(primerResgistro, cliente);
+            console.log("primer consumo de luz creado");
+
+            // si hay garantia, creamos la garantia
+            if (contrato.garantia) {
+                // creamos garantia
+                console.log("creando garantia");
+                const garantia: Garantia = {
+                    contrato_id: contratoSaveResult,
+                    monto: contrato.garantia!,
+                    fecha_registro: new Date(contrato.fechaInicio),
+                };
+                await this.garantiaRepository.saveGarantia(garantia, cliente);
+                console.log("garantia creada");
+            };
+            // confirmamos transaccion
+            await cliente.query('COMMIT'); 
+
+            console.log("id de contrato creado:", contratoSaveResult);
+            return contratoSaveResult;
 
         } catch (error) {
             await cliente.query('ROLLBACK');

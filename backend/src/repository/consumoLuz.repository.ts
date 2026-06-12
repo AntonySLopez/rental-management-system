@@ -18,4 +18,36 @@ export class ConsumoLuzRepository {
         );
         return result.rows[0];
     }
+
+    // busca el ultimo registro de consumo de luz por contrato id
+    async findLastByContratoId(contratoId: number, cliente?: PoolClient) {
+        const result = await (cliente ?? pool).query(
+            `SELECT lectura_actual, fecha_fin FROM consumo_luz WHERE contrato_id = $1 ORDER BY id DESC LIMIT 1`,
+            [contratoId]
+        );  
+        return result.rows[0];
+    }
+
+    // guardar consumo de luz sobre el id del ultimo registro
+    async saveConsumo(consumo: Luz, cliente?: PoolClient) {
+        const result = await (cliente ?? pool).query(
+            `INSERT INTO consumo_luz (contrato_id, fecha_inicio, fecha_fin, lectura_anterior, lectura_actual, precio_kwh, alumbrado_publico, consumo_total, monto, estado_id) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, (SELECT id FROM estado_deuda WHERE estado = 'pendiente')) 
+            RETURNING *`,
+            [consumo.contrato_id, consumo.fecha_inicio, consumo.fecha_fin, consumo.lectura_anterior, consumo.lectura_actual, consumo.precio_kwh, consumo.alumbrado_publico, consumo.consumo_total, consumo.monto]
+        );
+        return result.rows[0];
+    }
+
+    async saveNewConsumoLuz (consumo: Luz, cliente?: PoolClient){
+
+        const result = await (cliente ?? pool).query(
+            `INSERT INTO consumo_luz (contrato_id, fecha_inicio, fecha_fin, lectura_anterior, lectura_actual, precio_kwh, alumbrado_publico, consumo_total, estado_id) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, (SELECT id FROM estado_deuda WHERE estado = 'pendiente')) 
+            RETURNING *`,
+            [consumo.contrato_id, consumo.fecha_inicio, consumo.fecha_fin, consumo.lectura_anterior, consumo.lectura_actual, consumo.precio_kwh, consumo.alumbrado_publico, consumo.consumo_total]
+        );
+        return result.rows[0];
+    }
+    
 };

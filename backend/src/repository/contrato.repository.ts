@@ -19,4 +19,11 @@ export class ContratoRepository {
             [contrato.inquilinoId, contrato.localId, contrato.precioMensual, contrato.duracionMeses, contrato.fechaInicio, contrato.fechaFin]);
         return result.rows[0].id;
     }
+
+    // validar contrato por id
+    async findById(id: number, cliente?: PoolClient) {
+        const result = await (cliente ?? pool).query
+        (`SELECT ec.estado FROM contrato c JOIN estado_contrato ec ON c.estado_id = ec.id WHERE c.id = $1`, [id]);
+        return result.rows[0];
+    }
 }
