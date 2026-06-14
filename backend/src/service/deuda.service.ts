@@ -1,0 +1,75 @@
+import { ContratoRepository } from "../repository/contrato.repository.js";
+import { CuotaAlquilerRepository } from "../repository/cuotaAlquiler.repository.js";
+import { ConsumoLuzRepository } from "../repository/consumoLuz.repository.js";
+import type { ConsultarDeudaDTO } from "../schema/consultarDeudaDTO.js";
+import type { DeudaAlquiler, DeudaConsumoLuz } from "../types/deuda.types.js";
+
+import { AppError } from "../middleWare/flujo/appError.middleware.js";
+import { number } from "zod";
+
+export class DeudaService {
+    private contratoRepository: ContratoRepository;
+    private cuotaAlquilerRepository: CuotaAlquilerRepository;
+    private consumoLuzRepository: ConsumoLuzRepository;
+
+    constructor() {
+        this.contratoRepository = new ContratoRepository();
+        this.cuotaAlquilerRepository = new CuotaAlquilerRepository();
+        this.consumoLuzRepository = new ConsumoLuzRepository();
+    }
+
+    async consultarDeuda(deuda: ConsultarDeudaDTO) {
+        // validar que contrato exista
+        await this.validarContratoExistente(deuda.contratoId);
+        console.log("contrato valido");
+        
+        //obtener deuda de alquiler
+        const deudaAlquiler = await this.obtenerDeudaAlquiler(deuda.contratoId);
+        console.log("deuda de alquiler obtenida");
+        //obtener deuda de consumo luz
+        const deudaConsumoLuz = await this.obtenerDeudaConsumoLuz(deuda.contratoId);
+        console.log("deuda de consumo luz obtenida");
+        //resumir deudas
+        const deudas = this.resumirDeudas(deudaAlquiler, deudaConsumoLuz);
+        console.log("deudas resumidas");
+        //retornar resultado
+        return deudas;
+        }
+
+    private async validarContratoExistente(contratoId: number) {
+        const contratoExistente = await this.contratoRepository.findById(contratoId);
+        if (!contratoExistente || contratoExistente.estado !== "activo") {
+            throw new AppError("El contrato no existe o no está activo", 404);
+        }
+        return contratoExistente;
+    }
+
+    private async obtenerDeudaAlquiler(contratoId: number) {
+        const deuda = await this.cuotaAlquilerRepository.findAllByContratoId(contratoId);
+        return deuda;
+    }
+
+    private async obtenerDeudaConsumoLuz(contratoId: number) {
+        const deuda = await this.consumoLuzRepository.findAllByContratoId(contratoId);
+        return deuda;
+    }
+
+    private async resumirDeudas(deudaAlquiler: DeudaAlquiler[], deudaConsumoLuz: DeudaConsumoLuz[]) {
+        const deudaTotalAlquiler: number = deudaAlquiler.reduce((acc, deuda) => acc + Number(deuda.monto), 0) - deudaAlquiler.reduce((acc, deuda) => acc + Number(deuda.monto_pagado), 0);
+        const deudaTotalConsumoLuz: number = deudaConsumoLuz.reduce((acc, deuda) => acc + Number(deuda.monto), 0) - deudaConsumoLuz.reduce((acc, deuda) => acc + Number(deuda.monto_pagado), 0);
+
+        const resultado = {
+            total:{
+                alquiler: deudaTotalAlquiler,
+                consumoLuz: deudaTotalConsumoLuz,
+                general: deudaTotalAlquiler + deudaTotalConsumoLuz
+            },
+            detallado:{
+                alquiler: deudaAlquiler,
+                consumoLuz: deudaConsumoLuz
+            }
+        };
+        console.log("resultado", resultado);
+        return resultado;
+    }
+}

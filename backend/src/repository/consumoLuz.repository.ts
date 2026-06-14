@@ -49,5 +49,13 @@ export class ConsumoLuzRepository {
         );
         return result.rows[0];
     }
+
+    async findAllByContratoId(contratoId: number) {
+        const result = await pool.query(
+            `select cl.fecha_inicio, cl.lectura_actual, cl.monto, cl.monto_pagado, ed.estado from consumo_luz cl join estado_deuda ed on cl.estado_id = ed.id where ed.estado != 'pagado' and cl.contrato_id = $1`,
+            [contratoId]
+        );
+        return result.rows;
+    }
     
 };
