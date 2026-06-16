@@ -62,7 +62,7 @@ CREATE TABLE contrato (
     fecha_fin DATE NOT NULL,
     observacion VARCHAR(200),
     estado_id INT NOT NULL REFERENCES estado_contrato(id),
-    fecha_creacion DATE NOT NULL DEFAULT CURRENT_DATE
+    fecha_creacion DATE NOT NULL DEFAULT CURRENT_DATE,
 );
 
 CREATE TABLE garantia (
@@ -82,7 +82,6 @@ CREATE TABLE cuota_alquiler (
     fecha_fin DATE NOT NULL,
     monto NUMERIC(10,2) NOT NULL,
     monto_pagado NUMERIC(10,2) DEFAULT 0,
-    fecha_vencimiento DATE NOT NULL,
     estado_id INT NOT NULL REFERENCES estado_deuda(id)
 );
 

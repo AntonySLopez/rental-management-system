@@ -48,4 +48,24 @@ export class CuotaAlquilerRepository {
         );
         return result.rows;
     }
+    // listar todas las cuotas pendientes por contrato
+     async findPendientesByContrato(contratoId: number, cliente?: PoolClient) {
+        const result = await (cliente ?? pool).query
+        (`select ca.id, ca.fecha_inicio, ca.monto, ca.monto_pagado, ed.estado from cuota_alquiler ca join estado_deuda ed on ca.estado_id = ed.id where ed.estado != 'pagado' and ca.contrato_id = $1 ORDER BY ca.fecha_inicio ASC`, [contratoId]);
+        return result.rows.map(row => ({
+            ...row,
+            monto: Number(row.monto),
+            monto_pagado: Number(row.monto_pagado),
+            type: "cuota_alquiler"
+        }));
+    }
+
+    // actualizar cuota de alquiler
+    async updateCuota(id:number, monto_pagado:number,estado: string, cliente?: PoolClient) {
+        const result = await (cliente ?? pool).query(
+            `UPDATE cuota_alquiler SET monto_pagado = $1, estado_id = (SELECT id FROM estado_deuda WHERE estado = $2) WHERE id = $3 RETURNING *`,
+            [monto_pagado, estado, id]
+        );
+        return result.rows[0];
+    }
 }

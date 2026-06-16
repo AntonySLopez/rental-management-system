@@ -39,6 +39,7 @@ export class ConsumoLuzRepository {
         return result.rows[0];
     }
 
+    // guardar nuevo consumo de luz
     async saveNewConsumoLuz (consumo: Luz, cliente?: PoolClient){
 
         const result = await (cliente ?? pool).query(
@@ -50,12 +51,35 @@ export class ConsumoLuzRepository {
         return result.rows[0];
     }
 
-    async findAllByContratoId(contratoId: number) {
-        const result = await pool.query(
+    // listar todos los consumos de luz por contrato
+    async findAllByContratoId(contratoId: number, cliente?: PoolClient) {
+        const result = await (cliente ?? pool).query(
             `select cl.fecha_inicio, cl.lectura_actual, cl.monto, cl.monto_pagado, ed.estado from consumo_luz cl join estado_deuda ed on cl.estado_id = ed.id where ed.estado != 'pagado' and cl.contrato_id = $1`,
             [contratoId]
         );
         return result.rows;
     }
     
+    // listar todos los consumos de luz pendientes por contrato
+    async findPendientesByContrato(contratoId: number, cliente?: PoolClient) {
+        const result = await (cliente ?? pool).query(
+            `select cl.id, cl.fecha_inicio, cl.monto, cl.monto_pagado, ed.estado from consumo_luz cl join estado_deuda ed on cl.estado_id = ed.id where ed.estado != 'pagado' and cl.contrato_id = $1 ORDER BY cl.fecha_inicio ASC`,
+            [contratoId]
+        );
+        return result.rows.map(row => ({
+            ...row,
+            monto: Number(row.monto),
+            monto_pagado: Number(row.monto_pagado),
+            type: "consumo_luz"
+        }));
+    }
+
+    // actualizar consumo de luz
+    async updateConsumo(id:number, monto_pagado:number,estado: string, cliente?: PoolClient) {
+        const result = await (cliente ?? pool).query(
+            `UPDATE consumo_luz SET monto_pagado = $1, estado_id = (SELECT id FROM estado_deuda WHERE estado = $2) WHERE id = $3 RETURNING *`,
+            [monto_pagado, estado, id]
+        );
+        return result.rows[0];
+    }
 };
