@@ -72,7 +72,8 @@ CREATE TABLE garantia (
     fecha_registro DATE NOT NULL,
     fecha_movimiento DATE,
     observaciones VARCHAR(200),
-    estado_id INT NOT NULL REFERENCES estado_garantia(id)
+    estado_id INT NOT NULL REFERENCES estado_garantia(id),
+    movimiento_id INT REFERENCES movimiento(id)
 );
 
 CREATE TABLE cuota_alquiler (

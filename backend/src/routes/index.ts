@@ -7,6 +7,7 @@ import contratoRoutes from "./contrato.routes.js";
 import luzRoutes from "./luz.routes.js";
 import deudaRoutes from "./deuda.routes.js";
 import pagoRoutes from "./pago.routes.js";
+import garantiaRoutes from "./garantia.routes.js";
 
 const routes = Router() as Router;
 
@@ -17,5 +18,6 @@ routes.use("/contrato", contratoRoutes);
 routes.use("/luz", luzRoutes);
 routes.use("/deuda", deudaRoutes);
 routes.use("/pago", pagoRoutes);
+routes.use("/garantia", garantiaRoutes);
 
 export default routes;
