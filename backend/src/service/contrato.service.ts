@@ -28,6 +28,7 @@ export class ContratoService {
         this.garantiaRepository = new GarantiaRepository();
     }
     
+    // crear contrato
     async crearContrato(contrato: CrearContratoDTO) {
 
         const cliente: PoolClient = await pool.connect();
@@ -104,5 +105,30 @@ export class ContratoService {
             console.log("hilo de conexion liberado");
         }
     }
-}
 
+    // cerrar contrato
+    async cerrarContrato(contratoId: number) {
+        
+            // validamos contrato
+            await this.validarContrato(contratoId);
+            console.log("contrato valido");
+            
+            // cerramos contrato
+            await this.cerrar(contratoId);
+            console.log("contrato cerrado");
+    }
+
+    // validar contrato
+    private async validarContrato(contratoId: number) {
+        const contrato = await this.contratoRepository.findById(contratoId);
+        if (!contrato) {
+            throw new AppError("Contrato no encontrado", 404);
+        }
+        return contrato;
+    }
+
+    // cierra contrato
+    private async cerrar(contratoId: number) {
+        await this.contratoRepository.close(contratoId);
+    }
+}

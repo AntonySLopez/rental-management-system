@@ -26,4 +26,11 @@ export class ContratoRepository {
         (`SELECT ec.estado FROM contrato c JOIN estado_contrato ec ON c.estado_id = ec.id WHERE c.id = $1`, [id]);
         return result.rows[0];
     }
+
+    // cerrar contrato
+    async close(id: number, cliente?: PoolClient) {
+        const result = await (cliente ?? pool).query
+        (`UPDATE contrato SET estado_id = (SELECT id FROM estado_contrato WHERE estado = 'cerrado') WHERE id = $1`, [id]);
+        return result.rows[0];
+    }
 }
