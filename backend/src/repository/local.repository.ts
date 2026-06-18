@@ -1,5 +1,6 @@
 import pool from "../config/postgres.js";
 import type { RegistrarLocalDTO } from "../schema/registrarLocalDTO.js";
+import type { PoolClient } from "pg";
 
 export class LocalRepository {
  
@@ -17,4 +18,11 @@ export class LocalRepository {
             [local.propiedadId, local.nombreLocal, local.descripcion, local.area]);
         return result.rows[0];
     };
+
+        // Valida disponibilidad de un local para un contrato nuevo
+    async findById(localId: number, cliente?: PoolClient) {
+        const result = await (cliente ?? pool).query
+        (`SELECT * FROM local WHERE id = $1`, [localId]);
+        return result.rows[0];
+    }
 };

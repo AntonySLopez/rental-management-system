@@ -41,8 +41,8 @@ export class CuotaAlquilerRepository {
         }
     }
 
-    async findAllByContratoId(contratoId: number) {
-        const result = await pool.query(
+    async findAllByContratoId(contratoId: number, cliente?: PoolClient) {
+        const result = await (cliente ?? pool).query(
             `select ca.fecha_inicio, ca.monto, ca.monto_pagado, ed.estado from cuota_alquiler ca join estado_deuda ed on ca.estado_id = ed.id where ed.estado != 'pagado' and ca.contrato_id = $1`,
             [contratoId]
         );

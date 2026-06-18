@@ -2,11 +2,13 @@ import type { Request, Response } from "express";
 import { ContratoService } from "../service/contrato.service.js";
 import { crearContratoSchema } from "../schema/crearContratoDTO.js";
 import { cerrarContratoSchema } from "../schema/cerrarContrato.DTO.js";
+import { renovarContratoSchema } from "../schema/renovarContratoDTO.js";
 
 const contratoService = new ContratoService();
 
 export class ContratoController {
 
+    // crear contrato
     crearContrato = async (req: Request, res: Response) => {
         console.log("Creando contrato...");
         // 1. Validar el body
@@ -18,6 +20,7 @@ export class ContratoController {
         res.status(201).json({ message: "Contrato creado correctamente" })
     }
 
+    // cerrar contrato
     cerrarContrato = async (req: Request, res: Response) => {
         console.log("Cerrando contrato...");
         // 1. Validar el body
@@ -26,5 +29,16 @@ export class ContratoController {
         await contratoService.cerrarContrato(contratoId.contrato_id);
         // 3. Retornar la respuesta
         res.status(200).json({ message: "Contrato cerrado correctamente" })
+    }
+
+    // renovar contrato
+    renovarContrato = async (req: Request, res: Response) => {
+        console.log("Renovando contrato...");
+        // 1. Validar el body
+        const contrato = renovarContratoSchema.parse(req.body);
+        // 2. Llamar al servicio
+        await contratoService.renovarContrato(contrato);
+        // 3. Retornar la respuesta
+        res.status(200).json({ message: "Contrato renovado correctamente" })
     }
 }

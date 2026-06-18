@@ -5,7 +5,7 @@ import type { ConsultarDeudaDTO } from "../schema/consultarDeudaDTO.js";
 import type { DeudaAlquiler, DeudaConsumoLuz } from "../types/deuda.types.js";
 
 import { AppError } from "../middleWare/flujo/appError.middleware.js";
-import { number } from "zod";
+import type { PoolClient } from "pg";
 
 export class DeudaService {
     private contratoRepository: ContratoRepository;
@@ -18,16 +18,16 @@ export class DeudaService {
         this.consumoLuzRepository = new ConsumoLuzRepository();
     }
 
-    async consultarDeuda(deuda: ConsultarDeudaDTO) {
+    async consultarDeuda(deuda: ConsultarDeudaDTO, cliente?: PoolClient) {
         // validar que contrato exista
-        await this.validarContratoExistente(deuda.contratoId);
+        await this.validarContratoExistente(deuda.contratoId, cliente);
         console.log("contrato valido");
         
         //obtener deuda de alquiler
-        const deudaAlquiler = await this.obtenerDeudaAlquiler(deuda.contratoId);
+        const deudaAlquiler = await this.obtenerDeudaAlquiler(deuda.contratoId, cliente);
         console.log("deuda de alquiler obtenida");
         //obtener deuda de consumo luz
-        const deudaConsumoLuz = await this.obtenerDeudaConsumoLuz(deuda.contratoId);
+        const deudaConsumoLuz = await this.obtenerDeudaConsumoLuz(deuda.contratoId, cliente);
         console.log("deuda de consumo luz obtenida");
         //resumir deudas
         const deudas = this.resumirDeudas(deudaAlquiler, deudaConsumoLuz);
@@ -36,21 +36,24 @@ export class DeudaService {
         return deudas;
         }
 
-    private async validarContratoExistente(contratoId: number) {
-        const contratoExistente = await this.contratoRepository.findById(contratoId);
-        if (!contratoExistente || contratoExistente.estado !== "activo") {
-            throw new AppError("El contrato no existe o no está activo", 404);
+    private async validarContratoExistente(contratoId: number, cliente?: PoolClient) {
+        const contratoExistente = await this.contratoRepository.findById(contratoId, cliente);
+        if (!contratoExistente) {
+            throw new AppError("El contrato no existe", 404);
+        }
+        if (contratoExistente.estado !== "activo") {
+            throw new AppError("El contrato no está activo", 400);
         }
         return contratoExistente;
     }
 
-    private async obtenerDeudaAlquiler(contratoId: number) {
-        const deuda = await this.cuotaAlquilerRepository.findAllByContratoId(contratoId);
+    private async obtenerDeudaAlquiler(contratoId: number, cliente?: PoolClient) {
+        const deuda = await this.cuotaAlquilerRepository.findAllByContratoId(contratoId, cliente);
         return deuda;
     }
 
-    private async obtenerDeudaConsumoLuz(contratoId: number) {
-        const deuda = await this.consumoLuzRepository.findAllByContratoId(contratoId);
+    private async obtenerDeudaConsumoLuz(contratoId: number, cliente?: PoolClient) {
+        const deuda = await this.consumoLuzRepository.findAllByContratoId(contratoId, cliente);
         return deuda;
     }
 
