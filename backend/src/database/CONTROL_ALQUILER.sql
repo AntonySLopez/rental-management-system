@@ -49,7 +49,8 @@ CREATE TABLE local (
     nombre_local VARCHAR(100) NOT NULL,
     descripcion VARCHAR(200),
     area NUMERIC(10,2),
-    estado_id INT NOT NULL REFERENCES estado_general(id)
+    estado_id INT NOT NULL REFERENCES estado_general(id),
+	contrato_id INT REFERENCES contrato(id)
 );
 
 CREATE TABLE contrato (
@@ -73,7 +74,7 @@ CREATE TABLE garantia (
     fecha_movimiento DATE,
     observaciones VARCHAR(200),
     estado_id INT NOT NULL REFERENCES estado_garantia(id),
-    movimiento_id INT REFERENCES movimiento(id)
+	movimiento_id INT REFERENCES movimiento(id)
 );
 
 CREATE TABLE cuota_alquiler (

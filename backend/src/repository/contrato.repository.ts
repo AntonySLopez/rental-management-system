@@ -7,7 +7,7 @@ export class ContratoRepository {
     async save(contrato: CrearContratoDTO, cliente?: PoolClient) {
         const result = await (cliente ?? pool).query
         (`INSERT INTO contrato (inquilino_id, local_id, precio_mensual, duracion_meses, fecha_inicio, fecha_fin, estado_id) 
-            VALUES ($1, $2, $3, $4, $5, $6, (SELECT id FROM estado_general WHERE valor = 'activo')) 
+            VALUES ($1, $2, $3, $4, $5, $6, (SELECT id FROM estado_contrato WHERE estado = 'activo')) 
             RETURNING *`, 
             [contrato.inquilinoId, contrato.localId, contrato.precioMensual, contrato.duracionMeses, contrato.fechaInicio, contrato.fechaFin]);
         return result.rows[0].id;

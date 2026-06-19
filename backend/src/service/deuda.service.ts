@@ -49,6 +49,7 @@ export class DeudaService {
 
     private async obtenerDeudaAlquiler(contratoId: number, cliente?: PoolClient) {
         const deuda = await this.cuotaAlquilerRepository.findAllByContratoId(contratoId, cliente);
+        // filtramos pagos e incluye los que 
         return deuda;
     }
 

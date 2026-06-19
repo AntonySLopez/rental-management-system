@@ -25,4 +25,16 @@ export class LocalRepository {
         (`SELECT * FROM local WHERE id = $1`, [localId]);
         return result.rows[0];
     }
+    
+    // Libera un local para que pueda ser usado en un nuevo contrato
+    async liberar(localId: number, cliente?: PoolClient) {
+        await (cliente ?? pool).query
+        (`UPDATE local SET contrato_id = NULL WHERE id = $1`, [localId]);
+    }
+    
+    // Actualiza un local a ocupado con el id del contrato
+    async updateLocalOcupado(localId: number, contratoId: number, cliente?: PoolClient) {
+        await (cliente ?? pool).query
+        (`UPDATE local SET contrato_id = $1 WHERE id = $2`, [contratoId, localId]);
+    }
 };

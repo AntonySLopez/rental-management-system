@@ -20,7 +20,7 @@ export class CuotaAlquilerRepository {
             
             return client.query(
                 `INSERT INTO cuota_alquiler (contrato_id, fecha_inicio, fecha_fin, monto, estado_id) 
-                VALUES ($1, $2, $3, $4, (SELECT id FROM estado_deuda WHERE estado = 'pendiente')) 
+                VALUES ($1, $2, $3, $4, (SELECT id FROM estado_deuda WHERE estado = 'activo')) 
                 RETURNING *`,
                 [cuota.contrato_id, fechaInicio, fechaFin, cuota.monto]
             );
@@ -43,7 +43,7 @@ export class CuotaAlquilerRepository {
 
     async findAllByContratoId(contratoId: number, cliente?: PoolClient) {
         const result = await (cliente ?? pool).query(
-            `select ca.fecha_inicio, ca.monto, ca.monto_pagado, ed.estado from cuota_alquiler ca join estado_deuda ed on ca.estado_id = ed.id where ed.estado != 'pagado' and ca.contrato_id = $1`,
+            `select ca.fecha_inicio, ca.monto, ca.monto_pagado, ed.estado from cuota_alquiler ca join estado_deuda ed on ca.estado_id = ed.id where ed.estado != 'pagado' and ed.estado != 'pendiente' and ca.contrato_id = $1`,
             [contratoId]
         );
         return result.rows;
