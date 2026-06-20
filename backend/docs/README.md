@@ -8,12 +8,13 @@ Esta carpeta contiene la documentación completa del sistema de gestión de alqu
 docs/
 └── backend/          # Documentación del backend
     ├── README.md                    # Índice y guía rápida
-    ├── leccion-1-vision-general.md  # Objetivo, actores, entidades y reglas de negocio
-    ├── leccion-2-arquitectura-backend.md  # Flujo Route → Controller → DTO → Service → Repository → Database
-    ├── leccion-3-estructura-carpetas.md    # Estructura de carpetas y módulos
-    ├── leccion-4-casos-uso-crud.md         # Casos de uso CRUD principales
-    ├── leccion-5-flujo-interno.md          # Flujo interno de cada caso de uso
-    └── leccion-6-middlewares-config.md     # Middlewares, configuración e infraestructura
+    └── Requerimientos/              # Lecciones detalladas
+        ├── leccion-1-vision-general.md  # Objetivo, actores, entidades y reglas de negocio
+        ├── leccion-2-arquitectura-backend.md  # Flujo Route → Controller → DTO → Service → Repository → Database
+        ├── leccion-3-estructura-carpetas.md    # Estructura de carpetas y módulos
+        ├── leccion-4-casos-uso-crud.md         # Casos de uso CRUD principales
+        ├── leccion-5-flujo-interno.md          # Flujo interno de cada caso de uso
+        └── leccion-6-middlewares-config.md     # Middlewares implementados y futuros
 ```
 
 ## Stack Tecnológico
@@ -74,31 +75,22 @@ DB_NAME=rental_management
 - Módulos de infraestructura
 
 ### Lección 4: Casos de Uso CRUD Principales
-- Casos de uso por módulo (Inquilinos, Propiedades, Contratos, Pagos, Garantías, Deudas, Consumo Luz)
-- DTOs de entrada
-- Efectos secundarios
-- Matriz de componentes por caso de uso
+- Endpoints implementados con DTOs, validaciones y efectos secundarios
+- Endpoints pendientes por módulo
+- Componentes involucrados por caso de uso
 - Códigos de estado HTTP
-- Errores comunes
+- Errores comunes simplificados
 
 ### Lección 5: Flujo Interno de Casos de Uso
-- Flujo detallado paso a paso:
-  - Crear Contrato
-  - Registrar Pago
-  - Consultar Deuda
-  - Gestionar Garantía
-  - Registrar Consumo de Luz
-- Resumen de patrones (Creación, Lectura, Actualización)
+- Abstracciones de intención por caso de uso (11 flujos documentados)
+- Flujo service con intención y repositories/services usados
+- Responses por definir durante refactorización
 
-### Lección 6: Middlewares, Configuración e Infraestructura
-- Middlewares (Global de errores, Parsing JSON)
-- Configuración (Variables de entorno, Base de datos)
-- Infraestructura (Stack tecnológico, Scripts, TypeScript)
-- Ciclo de vida de request
-- Manejo de transacciones
-- Monitoreo y logging
-- Seguridad
-- Despliegue
+### Lección 6: Middlewares Implementados y Futuros
+- Middlewares implementados (error global, parsing JSON)
+- Middlewares futuros necesarios (seguridad, logging, validación, compresión)
+- Orden sugerido de middlewares
+- Variables de entorno adicionales
 
 ## Endpoints Implementados
 
@@ -132,6 +124,6 @@ DB_NAME=rental_management
 
 ## Recursos Adicionales
 
-- [Esquema de Base de Datos](../backend/src/database/CONTROL_ALQUILER.sql)
-- [Package.json Backend](../backend/package.json)
-- [TypeScript Config](../backend/tsconfig.json)
+- [Esquema de Base de Datos](../src/database/CONTROL_ALQUILER.sql)
+- [Package.json Backend](../package.json)
+- [TypeScript Config](../tsconfig.json)
