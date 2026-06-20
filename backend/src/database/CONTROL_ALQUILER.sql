@@ -142,6 +142,7 @@ INSERT INTO estado_deuda (estado) VALUES ('pendiente');
 INSERT INTO estado_deuda (estado) VALUES ('parcial');
 INSERT INTO estado_deuda (estado) VALUES ('pagado');
 INSERT INTO estado_deuda (estado) VALUES ('atrasado');
+INSERT INTO estado_deuda (estado) VALUES ('activado');
 
 INSERT INTO estado_garantia (estado) VALUES ('retenida');
 INSERT INTO estado_garantia (estado) VALUES ('devuelta');
