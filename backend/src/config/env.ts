@@ -10,6 +10,7 @@ const envSchema = z.object({
   DB_USER: z.string(),
   DB_PASSWORD: z.string(),
   DB_NAME: z.string(),
+  JWT_SECRET: z.string(),
 });
 // se usa safeParse para evitar que el proceso se detenga
 const parsed = envSchema.safeParse(process.env);

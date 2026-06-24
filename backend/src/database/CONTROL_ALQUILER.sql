@@ -24,6 +24,11 @@ CREATE TABLE metodo_pago (
 	metodo VARCHAR(50) NOT NULL UNIQUE
 );
 
+create table acceso (
+	id serial primary key,
+	nombre varchar(20) not null
+)
+
 -- tablas principales
 CREATE TABLE inquilino (
     id SERIAL PRIMARY KEY,
@@ -128,6 +133,14 @@ CREATE TABLE aplicacion_pago_luz (
 	fecha_aplicacion DATE NOT NULL DEFAULT CURRENT_DATE
 );
 
+create table users (
+	id serial primary key,
+	nombre varchar(100) not null,
+	acceso_id int not null references acceso,
+	email varchar(255) not null,
+	password varchar(200) not null
+)
+
 -- Estados
 
 INSERT INTO estado_general (valor) VALUES ('activo');
@@ -151,3 +164,5 @@ INSERT INTO estado_garantia (estado) VALUES ('aplicada_a_deuda');
 INSERT INTO metodo_pago (metodo) VALUES ('efectivo');
 INSERT INTO metodo_pago (metodo) VALUES ('yape');
 INSERT INTO metodo_pago (metodo) VALUES ('deposito');
+
+insert into acceso (nombre) values ('administrador')
