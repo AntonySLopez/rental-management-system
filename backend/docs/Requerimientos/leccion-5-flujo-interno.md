@@ -187,3 +187,22 @@ Validar propiedad y crear registro de local vinculado.
 ```json
 // (Por definir durante refactorización)
 ```
+
+## Flujo 12: Login de Usuario
+
+### Intención del Flujo
+Autenticar usuario mediante credenciales y generar token de acceso JWT.
+
+### Flujo Service (auth.service.ts)
+- Buscar usuario por email (authRepository)
+- Verificar contraseña con bcrypt
+- Generar token JWT con email del usuario (expiración: 24 horas)
+- Retornar nombre del usuario y token
+
+### Response
+```json
+{
+  "nombre": "string",
+  "token": "string"
+}
+```

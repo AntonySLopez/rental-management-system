@@ -2,6 +2,33 @@
 
 ## Casos de Uso Implementados
 
+### Login de Usuario
+**Endpoint**: `POST /auth/login`
+
+**DTO de Entrada**:
+```typescript
+{
+  email: string (email válido),
+  password: string (mínimo 8 caracteres)
+}
+```
+
+**Validaciones**:
+- Email: obligatorio, formato válido
+- Password: obligatorio, mínimo 8 caracteres
+
+**Efectos Secundarios**:
+- Busca usuario por email en base de datos
+- Verifica contraseña con bcrypt
+- Genera token JWT con email del usuario (expiración: 24 horas)
+- Retorna nombre del usuario y token
+
+**Componentes**:
+- auth.controller.ts
+- auth.service.ts
+- auth.respository.ts
+- auth.DTO.ts
+
 ### Registrar Inquilino
 **Endpoint**: `POST /inquilino/registrar`
 

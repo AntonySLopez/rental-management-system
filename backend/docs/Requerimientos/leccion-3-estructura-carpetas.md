@@ -9,6 +9,7 @@ backend/src/
 │   ├── env.ts               # Variables de entorno
 │   └── postgres.ts          # Pool de conexión
 ├── controller/              # Controladores HTTP
+│   ├── auth.controller.ts
 │   ├── contrato.controller.ts
 │   ├── pago.controller.ts
 │   ├── inquilino.controller.ts
@@ -18,6 +19,7 @@ backend/src/
 │   ├── deuda.controller.ts
 │   └── consumoLuz.controller.ts
 ├── service/                 # Lógica de negocio
+│   ├── auth.service.ts
 │   ├── contrato.service.ts
 │   ├── pago.service.ts
 │   ├── inquilino.service.ts
@@ -27,6 +29,7 @@ backend/src/
 │   ├── deuda.service.ts
 │   └── consumoLuz.service.ts
 ├── repository/              # Acceso a datos
+│   ├── auth.respository.ts
 │   ├── contrato.repository.ts
 │   ├── cuotaAlquiler.repository.ts
 │   ├── pago.repository.ts
@@ -36,6 +39,7 @@ backend/src/
 │   ├── garantia.repository.ts
 │   └── consumoLuz.repository.ts
 ├── schema/                  # DTOs Zod
+│   ├── auth.DTO.ts
 │   ├── crearContratoDTO.ts
 │   ├── renovarContratoDTO.ts
 │   ├── cerrarContratoDTO.ts
@@ -47,6 +51,7 @@ backend/src/
 │   ├── consultarDeudaDTO.ts
 │   └── registrarConsumoLuzDTO.ts
 ├── types/                   # Tipos TypeScript
+│   ├── auth.types.ts
 │   ├── contrato.types.ts
 │   ├── cuota.types.ts
 │   ├── deuda.types.ts
@@ -56,6 +61,7 @@ backend/src/
 │   ├── luz.types.ts
 │   └── gestionGarantia.types.ts
 ├── routes/                  # Definición de rutas
+│   ├── auth.routes.ts
 │   ├── contrato.routes.ts
 │   ├── pago.routes.ts
 │   ├── inquilino.routes.ts
@@ -66,7 +72,8 @@ backend/src/
 │   └── luz.routes.ts
 ├── middleWare/              # Middlewares Express
 │   └── global/
-│       └── errorGlobal.middleware.ts
+│       ├── errorGlobal.middleware.ts
+│       └── verificarToken.middleware.ts
 └── database/                # Esquema SQL
     └── CONTROL_ALQUILER.sql
 ```
@@ -90,6 +97,25 @@ backend/src/
 - `GET /inquilino/:id` - Obtener inquilino
 - `PUT /inquilino/:id` - Actualizar inquilino
 - `DELETE /inquilino/:id` - Eliminar inquilino
+
+**Dependencias**: Sin dependencias de otros módulos
+
+### Módulo de Autenticación
+**Entidad**: `usuario`
+
+**Archivos implementados**:
+- `controller/auth.controller.ts` ✅
+- `service/auth.service.ts` ✅
+- `repository/auth.respository.ts` ✅
+- `routes/auth.routes.ts` ✅
+- `schema/auth.DTO.ts` ✅
+- `types/auth.types.ts` ✅
+
+**Endpoints implementados**:
+- `POST /auth/login` - Login de usuario ✅
+
+**Endpoints pendientes**:
+- `POST /auth/register` - Registro de usuario (seguridad: solo vía administración directa)
 
 **Dependencias**: Sin dependencias de otros módulos
 
@@ -254,7 +280,8 @@ backend/src/
 - `postgres.ts` - Pool de conexiones a PostgreSQL
 
 ### Middleware
-- `errorGlobal.middleware.ts` - Manejo centralizado de errores
+- `errorGlobal.middleware.ts` - Manejo centralizado de errores (incluye errores JWT)
+- `verificarToken.middleware.ts` - Verificación de tokens JWT en requests protegidos
 
 ### Database
 - `CONTROL_ALQUILER.sql` - Esquema completo de base de datos

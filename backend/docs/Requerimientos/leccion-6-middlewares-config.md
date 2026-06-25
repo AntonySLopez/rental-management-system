@@ -39,6 +39,9 @@ export default errorGlobalMiddleware;
 **Tipos de Errores Manejados**:
 - **AppError**: Errores operacionales (isOperational = true)
 - **ZodError**: Errores de validación de DTOs
+- **JsonWebTokenError**: Token JWT inválido/malformado
+- **TokenExpiredError**: Token JWT expirado
+- **NotBeforeError**: Token JWT aún no válido
 - **Error genérico**: Errores no especificados (500)
 
 ### Middleware de Parsing JSON
@@ -52,31 +55,34 @@ app.use(express.json());
 
 **Propósito**: Convierte automáticamente el body de requests HTTP a JSON
 
+### Middleware de Verificación de Token
 
+**Archivo**: `src/middleWare/global/verificarToken.middleware.ts`
+
+**Implementación**:
+```typescript
+import type { Request, Response, NextFunction } from 'express';
+import env from '../../config/env.js';
+import jwt from 'jsonwebtoken';
+import { AppError } from '../flujo/appError.middleware.js';
+
+export function verificarToken(req: Request, res: Response, next: NextFunction) {
+    // validar token existente
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+        throw new AppError('Token no proporcionado', 401);
+    }
+    // compara token con el que se generó
+    jwt.verify(token, env.JWT_SECRET);
+    next();
+}
+```
+
+**Propósito**: Verifica tokens JWT en headers Authorization de requests protegidos
 
 ## Middlewares Futuros Necesarios
 
 ### Seguridad
-
-#### Middleware de Autenticación
-- **Propósito**: Validar tokens JWT en requests protegidos
-- **Implementación sugerida**: 
-  ```typescript
-  import jwt from 'jsonwebtoken';
-  
-  function authMiddleware(req, res, next) {
-    const token = req.headers.authorization?.split(' ')[1];
-    if (!token) return res.status(401).json({ message: 'Token requerido' });
-    
-    try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = decoded;
-      next();
-    } catch (error) {
-      return res.status(401).json({ message: 'Token inválido' });
-    }
-  }
-  ```
 
 #### Middleware de Autorización por Rol
 - **Propósito**: Verificar permisos de usuario
@@ -156,13 +162,17 @@ app.use(express.json());
 10. Error Global (manejo de errores)
 ```
 
-## Configuración de Variables de Entorno Adicionales
+## Configuración de Variables de Entorno
 
-Para los nuevos middlewares se necesitarán:
+### Variables Implementadas
+```env
+# JWT (implementado)
+JWT_SECRET=your_secret_key
+```
 
+### Variables Adicionales para Middlewares Futuros
 ```env
 # JWT
-JWT_SECRET=your_secret_key
 JWT_EXPIRES_IN=24h
 
 # CORS
