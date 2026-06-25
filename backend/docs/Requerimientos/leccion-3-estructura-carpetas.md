@@ -55,6 +55,7 @@ backend/src/
 │   ├── contrato.types.ts
 │   ├── cuota.types.ts
 │   ├── deuda.types.ts
+│   ├── expressRequest.types.ts     # Extensión de Request: req.user.email
 │   ├── garantia.types.ts
 │   ├── movimiento.types.ts
 │   ├── aplicacionPago.types.ts
@@ -72,6 +73,7 @@ backend/src/
 │   └── luz.routes.ts
 ├── middleWare/              # Middlewares Express
 │   └── global/
+│       ├── autorizacionAdmin.middleware.ts
 │       ├── errorGlobal.middleware.ts
 │       ├── rateLimit.middleware.ts
 │       └── verificarToken.middleware.ts

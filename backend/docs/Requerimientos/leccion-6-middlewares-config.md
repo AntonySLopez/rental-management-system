@@ -8,32 +8,10 @@
 
 **Implementación**:
 ```typescript
-import type { Request, Response, NextFunction } from 'express';
-import { AppError } from '../flujo/appError.middleware.js';
-import { ZodError } from 'zod';
+import errorGlobalMiddleware from '../../middleWare/global/errorGlobal.middleware.js';
 
-function errorGlobalMiddleware(err: Error, req: Request, res: Response, next: NextFunction) {
-    if(err instanceof AppError && err.isOperational){
-        const { statusCode, message } = err;
-        console.error(err);
-        res.status(statusCode).json({
-            message: message
-        })
-    } else if(err instanceof ZodError){
-        console.error(err);
-        res.status(400).json({
-            message: 'Bad estructure request',
-            errors: err.issues
-        })
-    } else {
-        console.error(err);
-        res.status(500).json({
-            message: 'Internal server error'
-        })
-    }
-}
+app.use(errorGlobalMiddleware);
 
-export default errorGlobalMiddleware;
 ```
 
 **Tipos de Errores Manejados**:
@@ -74,21 +52,9 @@ app.use(helmet());
 
 **Implementación**:
 ```typescript
-import type { Request, Response, NextFunction } from 'express';
-import env from '../../config/env.js';
-import jwt from 'jsonwebtoken';
-import { AppError } from '../flujo/appError.middleware.js';
+import verificarToken from '../../middleWare/global/verificarToken.middleware.js';
 
-export function verificarToken(req: Request, res: Response, next: NextFunction) {
-    // validar token existente
-    const token = req.headers.authorization?.split(' ')[1];
-    if (!token) {
-        throw new AppError('Token no proporcionado', 401);
-    }
-    // compara token con el que se generó
-    jwt.verify(token, env.JWT_SECRET);
-    next();
-}
+app.use(verificarToken);
 ```
 
 **Propósito**: Verifica tokens JWT en headers Authorization de requests protegidos
@@ -113,17 +79,26 @@ app.use(cors());
 
 **Implementación**:
 ```typescript
-import rateLimit from 'express-rate-limit';
+import rateLimitMiddleware from '../../middleWare/global/rateLimit.middleware.js';
 
-export const rateLimitMiddleware = () => {
-    return rateLimit({
-        windowMs: 1 * 60 * 1000, // 1 minuto
-        max: 10 // límite por IP
-    });
-}
+app.use(rateLimitMiddleware);
+
 ```
 
 **Propósito**: Prevenir abuso de API limitando requests por IP
+
+## middleware de Autorizacion por rol
+
+**Archivo**: `src/middleWare/global/autorizacionPorRol.middleware.ts`
+
+**Implementación**:
+```typescript
+import autorizacionAdmin from '../../middleWare/global/autorizacionAdmin.middleware.js';
+
+app.use(autorizacionAdmin, routes);
+```
+
+**Propósito**: Verificar permisos de usuario por rol
 
 ## Middlewares Futuros Necesarios
 

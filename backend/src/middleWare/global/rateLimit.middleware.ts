@@ -1,8 +1,6 @@
-import rateLimit from 'express-rate-limit';
+import rateLimit from 'express-rate-limit'
 
-export const rateLimitMiddleware = () => {
-    return rateLimit({
-        windowMs: 1 * 60 * 1000, // 1 minuto
-        max: 10 // límite por IP
-    });
-}
+export const rateLimitMiddleware = rateLimit({
+    windowMs: 1 * 60 * 1000,
+    max: 10
+})

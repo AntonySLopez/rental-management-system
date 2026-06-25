@@ -6,6 +6,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import { rateLimitMiddleware } from './middleWare/global/rateLimit.middleware.js';
 import routes from './routes/index.js';
+import { autorizacionAdmin } from './middleWare/global/autorizacionAdmin.middleware.js';
 
 // al usar typescript, es necesario especificar el tipo de la variable: en este caso express.Application
 const app: express.Application = express();
@@ -25,8 +26,11 @@ app.use(rateLimitMiddleware);
 // rutas de autenticación
 app.use("/auth", authRoutes);
 
-// middlewares para manejar las rutas
-app.use(verificarToken,routes);
+// middleware para verificar token
+app.use(verificarToken);
+
+// middleware para acceso a rutas de rol de administrador
+app.use(autorizacionAdmin, routes);
 
 // middleware global para manejar errores
 app.use(errorGlobalMiddleware);

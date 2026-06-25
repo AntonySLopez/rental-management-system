@@ -10,7 +10,8 @@ export default function verificarToken(req: Request, res: Response, next: NextFu
         throw new AppError('Token no proporcionado', 401);
     }
     // compara token con el que se generó
-    jwt.verify(token, env.JWT_SECRET);
+    const user = jwt.verify(token, env.JWT_SECRET) as { email: string };
+    req.user = user;
     next();
 
 }
