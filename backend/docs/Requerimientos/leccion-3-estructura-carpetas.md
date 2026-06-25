@@ -73,6 +73,7 @@ backend/src/
 ├── middleWare/              # Middlewares Express
 │   └── global/
 │       ├── errorGlobal.middleware.ts
+│       ├── rateLimit.middleware.ts
 │       └── verificarToken.middleware.ts
 └── database/                # Esquema SQL
     └── CONTROL_ALQUILER.sql
@@ -282,6 +283,7 @@ backend/src/
 ### Middleware
 - `errorGlobal.middleware.ts` - Manejo centralizado de errores (incluye errores JWT)
 - `verificarToken.middleware.ts` - Verificación de tokens JWT en requests protegidos
+- `rateLimit.middleware.ts` - Limitación de requests por IP
 
 ### Database
 - `CONTROL_ALQUILER.sql` - Esquema completo de base de datos

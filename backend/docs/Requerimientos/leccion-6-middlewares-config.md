@@ -107,6 +107,23 @@ app.use(cors());
 
 **Propósito**: Controlar acceso desde diferentes orígenes
 
+## Middleware de Rate Limiting
+
+**Archivo**: `src/middleWare/global/rateLimit.middleware.ts`
+
+**Implementación**:
+```typescript
+import rateLimit from 'express-rate-limit';
+
+export const rateLimitMiddleware = () => {
+    return rateLimit({
+        windowMs: 1 * 60 * 1000, // 1 minuto
+        max: 10 // límite por IP
+    });
+}
+```
+
+**Propósito**: Prevenir abuso de API limitando requests por IP
 
 ## Middlewares Futuros Necesarios
 
@@ -115,21 +132,6 @@ app.use(cors());
 #### Middleware de Autorización por Rol
 - **Propósito**: Verificar permisos de usuario
 - **Implementación sugerida**: Verificar roles/permisos antes de acceder a rutas
-
-#### Middleware de Rate Limiting
-- **Propósito**: Prevenir abuso de API limitando requests por IP
-- **Librería sugerida**: `express-rate-limit`
-- **Implementación**:
-  ```typescript
-  import rateLimit from 'express-rate-limit';
-  
-  const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutos
-    max: 100 // límite por IP
-  });
-  
-  app.use(limiter);
-  ```
 
 #### Middleware de Sanitización
 - **Propósito**: Prevenir inyección de código malicioso
