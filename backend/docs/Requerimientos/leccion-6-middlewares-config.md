@@ -55,6 +55,19 @@ app.use(express.json());
 
 **Propósito**: Convierte automáticamente el body de requests HTTP a JSON
 
+### Middleware de Helmet
+
+**Archivo**: `src/app.ts`
+
+**Implementación**:
+```typescript
+import helmet from 'helmet';
+
+app.use(helmet());
+```
+
+**Propósito**: Agrega headers de seguridad HTTP para proteger la aplicación
+
 ### Middleware de Verificación de Token
 
 **Archivo**: `src/middleWare/global/verificarToken.middleware.ts`
@@ -80,6 +93,21 @@ export function verificarToken(req: Request, res: Response, next: NextFunction) 
 
 **Propósito**: Verifica tokens JWT en headers Authorization de requests protegidos
 
+### Middleware de CORS
+
+**Archivo**: `src/app.ts`
+
+**Implementación**:
+```typescript
+import cors from 'cors';
+
+// configura opciones para futuro
+app.use(cors());
+```
+
+**Propósito**: Controlar acceso desde diferentes orígenes
+
+
 ## Middlewares Futuros Necesarios
 
 ### Seguridad
@@ -103,26 +131,9 @@ export function verificarToken(req: Request, res: Response, next: NextFunction) 
   app.use(limiter);
   ```
 
-#### Middleware de CORS
-- **Propósito**: Controlar acceso desde diferentes orígenes
-- **Librería sugerida**: `cors`
-- **Implementación**:
-  ```typescript
-  import cors from 'cors';
-  
-  app.use(cors({
-    origin: process.env.FRONTEND_URL,
-    credentials: true
-  }));
-  ```
-
 #### Middleware de Sanitización
 - **Propósito**: Prevenir inyección de código malicioso
 - **Librería sugerida**: `express-mongo-sanitize` o similar
-
-#### Middleware de Helmet
-- **Propósito**: Headers de seguridad HTTP
-- **Librería sugerida**: `helmet`
 
 ### Logging y Monitoreo
 
