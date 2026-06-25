@@ -26,6 +26,8 @@ docs/
 - **Base de Datos**: PostgreSQL 8.21.0
 - **Validación**: Zod 4.4.3
 - **Package Manager**: pnpm 10.7.1
+- **Autenticación**: JWT (jsonwebtoken), bcryptjs
+- **Seguridad**: Helmet, CORS, express-rate-limit
 
 ### Frontend
 - **Framework**: Astro (en desarrollo)
@@ -47,6 +49,7 @@ DB_PORT=5432
 DB_USER=postgres
 DB_PASSWORD=your_password
 DB_NAME=rental_management
+JWT_SECRET=your_secret_key
 ```
 
 ## Documentación por Lección
@@ -80,20 +83,23 @@ DB_NAME=rental_management
 - Componentes involucrados por caso de uso
 - Códigos de estado HTTP
 - Errores comunes simplificados
+- Caso de uso de autenticación (login)
 
 ### Lección 5: Flujo Interno de Casos de Uso
-- Abstracciones de intención por caso de uso (11 flujos documentados)
+- Abstracciones de intención por caso de uso (12 flujos documentados)
 - Flujo service con intención y repositories/services usados
 - Responses por definir durante refactorización
+- Flujo de autenticación con JWT
 
 ### Lección 6: Middlewares Implementados y Futuros
-- Middlewares implementados (error global, parsing JSON)
-- Middlewares futuros necesarios (seguridad, logging, validación, compresión)
+- Middlewares implementados (error global, parsing JSON, helmet, CORS, rate limiting, verificación JWT, autorización por rol)
+- Middlewares futuros necesarios (logging, validación, sanitización, compresión)
 - Orden sugerido de middlewares
-- Variables de entorno adicionales
+- Variables de entorno implementadas y adicionales
 
 ## Endpoints Implementados
 
+- `POST /auth/login` - Login de usuario (autenticación JWT)
 - `POST /inquilino/registrar` - Registrar inquilino
 - `POST /propiedad/registrar` - Registrar propiedad
 - `POST /local/registrar` - Registrar local
@@ -116,6 +122,8 @@ DB_NAME=rental_management
 - Arquitectura definida
 - Validación de datos implementada
 - Gestión de transacciones activa
+- Autenticación JWT implementada
+- Middlewares de seguridad configurados (Helmet, CORS, rate limiting, autorización por rol)
 
 ### Frontend
 🚧 En desarrollo
