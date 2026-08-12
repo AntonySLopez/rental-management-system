@@ -1,0 +1,58 @@
+<!-- Barra de Navegación Lateral (Sidebar) -->
+<aside class="fixed left-0 top-0 h-full w-64 z-40 flex flex-col p-8 bg-surface dark:bg-surface-dim border-r-2 border-on-surface/10">
+  <div class="mb-12">
+    <h1 class="text-2xl font-bold text-on-surface">PropManager Pro</h1>
+    <p class="text-sm text-on-surface-variant opacity-70">Commercial & Residential</p>
+  </div>
+
+  <nav class="flex-1 space-y-3">
+    <!-- TODO [LÓGICA - NAVEGACIÓN]: Usar [routerLinkActive]="'neo-pressed bg-secondary-container text-on-secondary-container border-2 border-on-surface'" -->
+    <a href="#" class="flex items-center gap-3 bg-secondary-container text-on-secondary-container p-3 rounded-lg border-2 border-on-surface neo-pressed transition-all">
+      <span class="material-symbols-outlined active-icon">dashboard</span>
+      <span class="text-sm font-semibold">Dashboard</span>
+    </a>
+
+    <!-- TODO [LÓGICA - NAVEGACIÓN]: Conectar rutas con routerLink="/properties", etc. -->
+    <a href="#" class="flex items-center gap-3 text-on-surface-variant p-3 hover:bg-surface-container-high transition-colors rounded-lg group">
+      <span class="material-symbols-outlined group-hover:text-primary transition-colors">domain</span>
+      <span class="text-sm font-semibold">Properties</span>
+    </a>
+
+    <a href="#" class="flex items-center gap-3 text-on-surface-variant p-3 hover:bg-surface-container-high transition-colors rounded-lg group">
+      <span class="material-symbols-outlined group-hover:text-primary transition-colors">group</span>
+      <span class="text-sm font-semibold">Tenants</span>
+    </a>
+
+    <a href="#" class="flex items-center gap-3 text-on-surface-variant p-3 hover:bg-surface-container-high transition-colors rounded-lg group">
+      <span class="material-symbols-outlined group-hover:text-primary transition-colors">description</span>
+      <span class="text-sm font-semibold">Leases</span>
+    </a>
+
+    <a href="#" class="flex items-center gap-3 text-on-surface-variant p-3 hover:bg-surface-container-high transition-colors rounded-lg group">
+      <span class="material-symbols-outlined group-hover:text-primary transition-colors">build</span>
+      <span class="text-sm font-semibold">Maintenance</span>
+    </a>
+
+    <a href="#" class="flex items-center gap-3 text-on-surface-variant p-3 hover:bg-surface-container-high transition-colors rounded-lg group">
+      <span class="material-symbols-outlined group-hover:text-primary transition-colors">analytics</span>
+      <span class="text-sm font-semibold">Reports</span>
+    </a>
+  </nav>
+
+  <div class="pt-8 mt-8 border-t border-on-surface/5 space-y-3">
+    <!-- TODO [LÓGICA - EVENTO]: Enlazar (click)="openAddPropertyModal()" -->
+    <button type="button" class="w-full py-4 px-4 bg-primary-container text-on-primary-container font-semibold text-sm rounded-full neo-raised hover:scale-[0.98] active:scale-95 transition-all mb-6">
+      Add New Property
+    </button>
+
+    <a href="#" class="flex items-center gap-3 text-on-surface-variant p-3 hover:bg-surface-container-high transition-colors rounded-lg">
+      <span class="material-symbols-outlined">settings</span>
+      <span class="text-sm font-semibold">Settings</span>
+    </a>
+
+    <a href="#" class="flex items-center gap-3 text-on-surface-variant p-3 hover:bg-surface-container-high transition-colors rounded-lg">
+      <span class="material-symbols-outlined">help</span>
+      <span class="text-sm font-semibold">Support</span>
+    </a>
+  </div>
+</aside>

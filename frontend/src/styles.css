@@ -1,0 +1,72 @@
+@import "tailwindcss";
+@import 'material-symbols';
+
+/* 
+  Ecosistema de variables en Tailwind v4 (@theme).
+  Registra las variables de diseño de Stitch para que Tailwind genere automáticamente
+  las clases utilitarias correspondiente (ej: bg-surface-container-lowest, text-secondary).
+*/
+@theme {
+  /* --- TOKENS PANTALLA 1: LOGIN --- */
+  --color-primary: #006c49;
+  --color-primary-container: #10b981;
+  --color-surface: #f0f2f5;
+  --color-on-surface: #171c21;
+  --color-on-surface-variant: #3c4a42;
+  --color-outline: #6c7a71;
+  --color-on-primary: #ffffff;
+  --font-sans: 'Manrope', system-ui, sans-serif;
+
+  /* --- TOKENS PANTALLA 2 Y 3: DASHBOARD Y AGREGAR INQUILINO --- */
+  --color-on-primary-container: #00422b;
+  --color-secondary: #5c5f61;
+  
+  /* Variaciones de contenedores y superficies */
+  --color-surface-dim: #d5dae1;
+  --color-surface-container: #e9eef5;
+  --color-surface-container-low: #eff4fb;
+  --color-surface-container-high: #e4e9f0;
+  --color-surface-container-highest: #dee3ea;
+  --color-surface-container-lowest: #ffffff;
+  
+  /* Secundarios y estados */
+  --color-secondary-container: #e0e3e6;
+  --color-on-secondary-container: #626567;
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+}
+
+/* 
+  Variables nativas para sombras y neumorfismo.
+  Se mantienen centralizadas todas las elevaciones de la aplicación.
+*/
+:root {
+  /* Sombras Login */
+  --nm-shadow-flat: 20px 20px 60px #ccd0d5, -20px -20px 60px #ffffff;
+  --nm-shadow-inset: inset 8px 8px 16px #ccd0d5, inset -8px -8px 16px #ffffff;
+  --nm-shadow-button: 8px 8px 20px #ccd0d5, -8px -8px 20px #ffffff;
+
+  /* Sombras Dashboard y Formularios */
+  --neo-light: -6px -6px 12px rgba(255, 255, 255, 0.8);
+  --neo-dark: 6px 6px 12px rgba(163, 177, 198, 0.4);
+  --neo-inset-light: inset -4px -4px 8px rgba(255, 255, 255, 0.7);
+  --neo-inset-dark: inset 4px 4px 8px rgba(163, 177, 198, 0.3);
+  --shadow-light: -6px -6px 12px rgba(255, 255, 255, 0.8);
+  --shadow-dark: 6px 6px 12px rgba(0, 0, 0, 0.1);
+  --inner-shadow-dark: inset 4px 4px 8px rgba(0, 0, 0, 0.08);
+  --inner-shadow-light: inset -4px -4px 8px rgba(255, 255, 255, 0.8);
+}
+
+/* Reseteo y reglas base globales */
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  margin: 0;
+  overflow-x: hidden;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  vertical-align: middle;
+}

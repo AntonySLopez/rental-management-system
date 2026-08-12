@@ -1,0 +1,35 @@
+/* Imagen de fondo de la aplicación */
+.bg-hero {
+  background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLsdaGR7l41Ad4oxvF89k6S8Mn5aimptK2a6x8i13diUey1qyWRXOKN6kuYtDoFd9ecfcdL7kDEvmu3jssmE7IEg8ekq3e2PA_dDNWv_qo9t0w1x85-9VS3toCP5fA_UbE15CREa45WMzICnEgJZN0GaiFyz9--c8wMr1BFi16bV24XkzcPlC0V2TdBGTLwPcmeE_sngaSnBFfrCaHHtwO7-9NiFM1iqSlQhsgBewLgL5FsPSyvPf1_vXDGM');
+  background-size: cover;
+  background-position: center;
+  filter: blur(4px) brightness(0.9);
+}
+
+/* Efectos de Neumorfismo aislados para este componente */
+.neo-raised {
+  box-shadow: var(--neo-light), var(--neo-dark);
+  transition: all 0.2s ease-in-out;
+}
+
+.neo-raised:hover {
+  box-shadow: -2px -2px 5px rgba(255, 255, 255, 0.8), 2px 2px 5px rgba(163, 177, 198, 0.4);
+  transform: translateY(-2px);
+}
+
+.neo-pressed {
+  box-shadow: var(--neo-inset-light), var(--neo-inset-dark);
+}
+
+/* Tarjeta Glassmorphism */
+.glass-card {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Iconos de Material Symbols rellenos */
+.active-icon {
+  font-variation-settings: 'FILL' 1;
+}

@@ -1,0 +1,43 @@
+/* Imagen de fondo de la pantalla de Login */
+.login-container {
+  background-image: linear-gradient(rgba(240, 242, 245, 0.7), rgba(240, 242, 245, 0.7)), 
+                    url('https://lh3.googleusercontent.com/aida/AP1WRLsdaGR7l41Ad4oxvF89k6S8Mn5aimptK2a6x8i13diUey1qyWRXOKN6kuYtDoFd9ecfcdL7kDEvmu3jssmE7IEg8ekq3e2PA_dDNWv_qo9t0w1x85-9VS3toCP5fA_UbE15CREa45WMzICnEgJZN0GaiFyz9--c8wMr1BFi16bV24XkzcPlC0V2TdBGTLwPcmeE_sngaSnBFfrCaHHtwO7-9NiFM1iqSlQhsgBewLgL5FsPSyvPf1_vXDGM');
+}
+
+/* Efecto Neumórfico de la tarjeta principal */
+.nm-card {
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: rgba(0, 0, 0, 0.1) 25px 25px 50px, rgba(255, 255, 255, 0.9) -15px -15px 40px;
+}
+
+/* Inputs hundidos (Inset Neumorphism) */
+.nm-inset {
+  background-color: var(--color-surface);
+  box-shadow: var(--nm-shadow-inset);
+  transition: box-shadow 0.3s ease;
+}
+
+.nm-inset:focus {
+  box-shadow: inset 10px 10px 20px #c1cad7, inset -10px -10px 20px #ffffff;
+}
+
+/* Botón principal */
+.nm-button {
+  background-color: var(--color-primary-container);
+  box-shadow: var(--nm-shadow-button);
+}
+
+.nm-button:active {
+  box-shadow: inset 6px 6px 12px #065f46, inset -4px -4px 8px rgba(255, 255, 255, 0.2);
+  transform: scale(0.98);
+}
+
+/* Clase de utilidad para cambio de color de icono cuando Angular maneje el foco */
+.input-group:focus-within .input-icon {
+  color: var(--color-primary);
+}
+
+.nm-input:focus {
+  box-shadow: inset 10px 10px 20px #c1cad7, inset -10px -10px 20px #ffffff;
+  outline: none;
+}

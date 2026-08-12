@@ -1,0 +1,85 @@
+<main class="login-container flex items-center justify-center min-h-screen p-6 bg-cover bg-center bg-fixed">
+  <!-- Tarjeta de Login -->
+  <div class="nm-card w-full max-w-[500px] p-10 lg:p-14 rounded-2xl bg-surface/80 backdrop-blur-md">
+    
+    <header class="mb-12 text-center">
+      <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-3">Bienvenido a Manager Pro</h1>
+      <p class="text-base text-on-surface-variant">Gestión inteligente de tus propiedades.</p>
+    </header>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-8">
+      
+      <!-- Campo Correo Electrónico -->
+      <div class="space-y-3">
+        <label class="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant px-2" for="email">
+          Correo Electrónico
+        </label>
+        <div class="relative">
+          <span class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-outline transition-colors">
+            mail
+          </span>
+          <input 
+            id="email" 
+            type="email" 
+            placeholder="nombre@empresa.com" 
+            class="nm-inset w-full h-16 pl-14 pr-6 border-none rounded-full text-base focus:input-focused"
+            formControlName="email"
+          />
+        </div>
+      </div>
+
+      <!-- Campo Contraseña -->
+      <div class="space-y-3">
+        <div class="flex justify-between items-center px-2">
+          <label class="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant" for="password">
+            Contraseña
+          </label>
+          <!-- TODO [LÓGICA - NAVEGACIÓN]: Reemplazar href="#" por routerLink="/recuperar-password" -->
+          <!-- <a href="#" class="text-xs text-primary hover:text-primary-container transition-colors">
+            ¿Olvidó su contraseña?
+          </a> -->
+        </div>
+        
+        <div class="relative">
+          <span class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-outline transition-colors">
+            lock
+          </span>
+
+          <input 
+            id="password" 
+            [type]="showPassword ? 'text' : 'password'" 
+            placeholder="••••••••" 
+            class="nm-inset w-full h-16 pl-14 pr-14 border-none rounded-full text-base focus:input-focused"
+            formControlName="password"
+          />
+
+          <button type="button" class="absolute right-5 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface transition-colors" (click)="togglePassword()">
+            <span class="material-symbols-outlined">{{ showPassword ? 'visibility_off' : 'visibility' }}</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Botón de Acción -->
+      <!-- TODO [LÓGICA - SUBMIT]: Conectar click o submit del formulario -->
+      <button 
+        type="submit" 
+        class="nm-button w-full h-16 flex items-center justify-center gap-3 text-white font-semibold text-sm uppercase tracking-widest rounded-full transition-transform"
+      >
+        {{ isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión' }}
+        <span class="material-symbols-outlined">login</span>
+      </button>
+
+    </form>
+
+    <footer class="mt-14 text-center">
+      <p class="text-sm text-on-surface-variant">
+        ¿No tienes una cuenta? 
+        <!-- TODO [LÓGICA - NAVEGACIÓN]: Reemplazar href="#" por routerLink="/registro" -->
+        <a href="#" class="text-on-surface font-bold hover:text-primary underline underline-offset-8 decoration-2 transition-colors ml-1">
+          Crear una cuenta
+        </a>
+      </p>
+    </footer>
+
+  </div>
+</main>

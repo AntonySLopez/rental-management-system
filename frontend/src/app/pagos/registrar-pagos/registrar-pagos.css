@@ -1,0 +1,51 @@
+/* Textura de fondo aislada */
+.bg-hero {
+  background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLsdaGR7l41Ad4oxvF89k6S8Mn5aimptK2a6x8i13diUey1qyWRXOKN6kuYtDoFd9ecfcdL7kDEvmu3jssmE7IEg8ekq3e2PA_dDNWv_qo9t0w1x85-9VS3toCP5fA_UbE15CREa45WMzICnEgJZN0GaiFyz9--c8wMr1BFi16bV24XkzcPlC0V2TdBGTLwPcmeE_sngaSnBFfrCaHHtwO7-9NiFM1iqSlQhsgBewLgL5FsPSyvPf1_vXDGM');
+}
+
+/* Ocultar barra de desplazamiento manteniendo funcionalidad */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Sombras Neumórficas */
+.neu-raised {
+  box-shadow: -6px -6px 12px rgba(255, 255, 255, 0.8), 6px 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.neu-pressed {
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.08), inset -4px -4px 8px rgba(255, 255, 255, 0.9);
+}
+
+.neu-button:active {
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.08), inset -4px -4px 8px rgba(255, 255, 255, 0.9);
+  transform: translateY(2px);
+}
+
+/* Tarjeta Cristalina Glassmorphism */
+.glass-card {
+  background: rgba(246, 249, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Título Brutalista */
+.brutal-title {
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+}
+
+/* Iconos de Material Symbols activados */
+.active-icon {
+  font-variation-settings: 'FILL' 1;
+}
+
+/* Microinteracción visual al enfocar inputs (Reemplaza el listener JavaScript manual) */
+.field-container:focus-within {
+  transform: translateY(-2px);
+}

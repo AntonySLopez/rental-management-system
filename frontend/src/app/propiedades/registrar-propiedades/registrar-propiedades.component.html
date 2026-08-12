@@ -1,0 +1,225 @@
+<div class="flex h-screen overflow-hidden bg-surface text-on-surface font-sans">
+  
+  <!-- SideNavBar (Navegación Lateral) -->
+  <aside class="hidden md:flex flex-col h-full py-6 px-4 border-r-4 border-on-surface bg-surface w-64 z-50 shrink-0">
+    <div class="mb-12 px-4">
+      <h1 class="text-3xl font-black uppercase italic tracking-tighter text-on-surface">
+        PropManager Pro
+      </h1>
+      <p class="text-secondary font-bold uppercase text-[10px] tracking-widest mt-1">Management Suite</p>
+    </div>
+
+    <nav class="flex-grow space-y-4 px-4">
+      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLink="/dashboard" -->
+      <a href="#" class="flex items-center gap-4 p-4 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 group">
+        <span class="material-symbols-outlined group-hover:scale-110 transition-transform">dashboard</span>
+        <span class="text-sm">Dashboard</span>
+      </a>
+
+      <!-- Estado Activo: Properties -->
+      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLinkActive -->
+      <a href="#" class="flex items-center gap-4 p-4 bg-primary text-white border-2 border-on-surface active-nav-shadow translate-x-1 font-bold uppercase group">
+        <span class="material-symbols-outlined active-icon">domain</span>
+        <span class="text-sm">Properties</span>
+      </a>
+
+      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLink="/tenants" -->
+      <a href="#" class="flex items-center gap-4 p-4 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 group">
+        <span class="material-symbols-outlined group-hover:scale-110 transition-transform">group</span>
+        <span class="text-sm">Tenants</span>
+      </a>
+
+      <a href="#" class="flex items-center gap-4 p-4 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 group">
+        <span class="material-symbols-outlined group-hover:scale-110 transition-transform">description</span>
+        <span class="text-sm">Leases</span>
+      </a>
+
+      <a href="#" class="flex items-center gap-4 p-4 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 group">
+        <span class="material-symbols-outlined group-hover:scale-110 transition-transform">build</span>
+        <span class="text-sm">Maintenance</span>
+      </a>
+
+      <a href="#" class="flex items-center gap-4 p-4 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 group">
+        <span class="material-symbols-outlined group-hover:scale-110 transition-transform">assessment</span>
+        <span class="text-sm">Reports</span>
+      </a>
+    </nav>
+
+    <div class="mt-auto px-4 pb-6 border-t-2 border-on-surface/10 pt-4">
+      <!-- TODO [LÓGICA - ACCIÓN]: Enlazar evento (click)="openAddPropertyModal()" -->
+      <button type="button" class="w-full mb-8 bg-surface-container-highest border-2 border-on-surface p-4 font-black uppercase tracking-tighter hover:bg-on-surface hover:text-surface transition-colors active:translate-y-1">
+        Add Property
+      </button>
+
+      <a href="#" class="flex items-center gap-4 p-4 text-secondary font-bold uppercase hover:text-on-surface transition-colors">
+        <span class="material-symbols-outlined">help</span>
+        <span class="text-sm">Help Center</span>
+      </a>
+
+      <!-- TODO [LÓGICA - LOGOUT]: Enlazar (click)="logout()" -->
+      <a href="#" class="flex items-center gap-4 p-4 text-tertiary font-bold uppercase hover:opacity-80 transition-opacity">
+        <span class="material-symbols-outlined">logout</span>
+        <span class="text-sm">Logout</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Área Principal de Contenido -->
+  <main class="flex-grow flex flex-col relative min-w-0">
+    
+    <!-- TopNavBar -->
+    <header class="flex justify-between items-center w-full px-6 h-20 sticky top-0 z-50 bg-surface/80 backdrop-blur-md border-b-4 border-on-surface">
+      <div class="flex items-center gap-8">
+        <div class="md:hidden text-2xl font-black uppercase tracking-tighter text-on-surface">
+          PM-P
+        </div>
+        <nav class="hidden lg:flex items-center gap-6">
+          <a href="#" class="text-primary font-black underline decoration-4 underline-offset-4 text-sm">Overview</a>
+          <a href="#" class="text-secondary font-bold uppercase hover:bg-surface-container-highest p-2 rounded transition-all text-sm">Analytics</a>
+          <a href="#" class="text-secondary font-bold uppercase hover:bg-surface-container-highest p-2 rounded transition-all text-sm">Resources</a>
+        </nav>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <button type="button" class="p-3 text-secondary hover:bg-surface-container-highest transition-all duration-200 active:translate-y-1">
+          <span class="material-symbols-outlined">notifications</span>
+        </button>
+
+        <button type="button" class="p-3 text-secondary hover:bg-surface-container-highest transition-all duration-200 active:translate-y-1">
+          <span class="material-symbols-outlined">settings</span>
+        </button>
+
+        <!-- TODO [LÓGICA - AVATAR]: Renderizar iniciales de usuario de forma dinámica con {{ userInitials }} -->
+        <div class="h-10 w-10 rounded-full bg-primary-container border-2 border-on-surface ml-2 flex items-center justify-center font-black text-on-primary-container shadow-sm">
+          JD
+        </div>
+      </div>
+    </header>
+
+    <!-- Imagen de fondo con filtro de desenfoque -->
+    <div class="absolute inset-0 -z-10 bg-cover bg-center transition-all duration-700 brightness-75 grayscale-[0.2] bg-hero"></div>
+
+    <!-- Contenedor del Formulario -->
+    <div class="flex-grow overflow-y-auto p-6 flex flex-col items-center justify-start py-16">
+      <div class="w-full max-w-4xl">
+        
+        <!-- Título con estilo Brutalista -->
+        <div class="mb-8">
+          <h2 class="text-4xl md:text-[64px] font-black uppercase tracking-tighter text-white drop-shadow-[0_4px_0_rgba(0,108,73,1)] leading-none mb-2">
+            REGISTRAR PROPIEDAD
+          </h2>
+          <div class="h-3 w-48 bg-primary-container border-2 border-on-surface"></div>
+        </div>
+
+        <!-- Tarjeta Glassmorphism con Formulario -->
+        <div class="glass-card neu-raised rounded-xl p-6 md:p-12 border-4 border-on-surface">
+          
+          <!-- TODO [LÓGICA - FORMULARIO]: Vincular con ReactiveForms mediante [formGroup]="propertyForm" y (ngSubmit)="onSubmitProperty()" -->
+          <form class="space-y-8">
+            
+            <!-- Grid de Inputs Principales -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              
+              <!-- Campo: Nombre de la Propiedad -->
+              <div class="flex flex-col gap-2 transition-transform duration-200 input-container">
+                <label class="font-black uppercase tracking-widest text-on-surface text-sm flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary text-lg">edit</span>
+                  Nombre de la Propiedad
+                </label>
+                <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="propertyName" -->
+                <input 
+                  type="text" 
+                  placeholder="Ej: Plaza Comercial Los Olivos" 
+                  class="neu-pressed bg-surface-container-low border-none rounded-none p-4 text-on-surface focus:ring-4 focus:ring-primary-container transition-all text-base outline-none placeholder:text-secondary/50"
+                />
+              </div>
+
+              <!-- Campo: Dirección -->
+              <div class="flex flex-col gap-2 transition-transform duration-200 input-container">
+                <label class="font-black uppercase tracking-widest text-on-surface text-sm flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary text-lg">location_on</span>
+                  Dirección
+                </label>
+                <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="address" -->
+                <input 
+                  type="text" 
+                  placeholder="Avenida Central #452, Sector Norte" 
+                  class="neu-pressed bg-surface-container-low border-none rounded-none p-4 text-on-surface focus:ring-4 focus:ring-primary-container transition-all text-base outline-none placeholder:text-secondary/50"
+                />
+              </div>
+
+            </div>
+
+            <!-- Campo: Descripción Detallada -->
+            <div class="flex flex-col gap-2 transition-transform duration-200 input-container">
+              <label class="font-black uppercase tracking-widest text-on-surface text-sm flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-lg">notes</span>
+                Descripción Detallada
+              </label>
+              <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="description" -->
+              <textarea 
+                rows="4" 
+                placeholder="Detalles sobre locales disponibles, metros cuadrados, servicios incluidos..." 
+                class="neu-pressed bg-surface-container-low border-none rounded-none p-4 text-on-surface focus:ring-4 focus:ring-primary-container transition-all text-base outline-none placeholder:text-secondary/50 resize-none"
+              ></textarea>
+            </div>
+
+            <!-- Sección Inferior del Formulario -->
+            <div class="pt-6 flex flex-col md:flex-row items-center justify-between gap-6">
+              <div class="text-secondary text-sm italic font-medium flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm">info</span>
+                Todos los campos son obligatorios para el registro inicial.
+              </div>
+
+              <!-- Botón de Guardado -->
+              <!-- TODO [LÓGICA - SUBMIT]: Conectar envío y deshabilitación condicional [disabled]="propertyForm.invalid" -->
+              <button 
+                type="submit" 
+                class="btn-brutal-save w-full md:w-auto neu-raised bg-primary text-white font-black uppercase py-4 px-12 text-lg tracking-widest border-2 border-on-surface hover:bg-on-surface transition-all group flex items-center justify-center gap-3 cursor-pointer"
+              >
+                GUARDAR PROPIEDAD
+                <span class="material-symbols-outlined group-hover:translate-x-2 transition-transform">arrow_forward</span>
+              </button>
+            </div>
+
+          </form>
+        </div>
+
+        <!-- Indicador de Pasos / Wizard -->
+        <!-- TODO [LÓGICA - WIZARD]: Controlar paso activo con [ngClass] o dinámicamente según estado del registro -->
+        <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="neu-raised glass-card p-4 flex flex-col items-center justify-center border-2 border-on-surface">
+            <span class="material-symbols-outlined text-primary mb-1">domain_add</span>
+            <span class="text-[10px] font-black uppercase text-on-surface">Paso 1/3</span>
+          </div>
+
+          <div class="neu-pressed bg-surface-container/30 p-4 flex flex-col items-center justify-center border-2 border-on-surface opacity-50">
+            <span class="material-symbols-outlined text-secondary mb-1">payments</span>
+            <span class="text-[10px] font-black uppercase text-secondary">Precios</span>
+          </div>
+
+          <div class="neu-pressed bg-surface-container/30 p-4 flex flex-col items-center justify-center border-2 border-on-surface opacity-50">
+            <span class="material-symbols-outlined text-secondary mb-1">image</span>
+            <span class="text-[10px] font-black uppercase text-secondary">Multimedia</span>
+          </div>
+
+          <div class="neu-pressed bg-surface-container/30 p-4 flex flex-col items-center justify-center border-2 border-on-surface opacity-50">
+            <span class="material-symbols-outlined text-secondary mb-1">check_circle</span>
+            <span class="text-[10px] font-black uppercase text-secondary">Publicar</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Pie de página informativo estilo Brutalismo -->
+    <footer class="h-12 bg-on-surface text-surface flex items-center justify-between px-6 font-black uppercase text-[10px] tracking-widest">
+      <div>SYSTEM STATUS: ONLINE</div>
+      <div class="flex gap-4">
+        <span>PROP_MGR_V3.0.4</span>
+        <span>LOC: 19.4326° N, 99.1332° W</span>
+      </div>
+    </footer>
+
+  </main>
+</div>

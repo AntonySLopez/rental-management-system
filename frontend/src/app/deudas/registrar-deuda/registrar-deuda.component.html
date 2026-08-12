@@ -1,0 +1,222 @@
+<div class="bg-background text-on-surface flex min-h-screen font-sans">
+  
+  <!-- SideNavBar -->
+  <app-panel-lateral></app-panel-lateral>
+
+  <!-- Área Principal -->
+  <div class="flex-1 flex flex-col relative min-w-0">
+    
+    <!-- Imagen Decorativa de Fondo -->
+    <div class="fixed inset-0 z-0 opacity-20 pointer-events-none">
+      <div class="w-full h-full bg-cover bg-center blur-xl scale-110 bg-hero"></div>
+    </div>
+
+    <!-- TopNavBar -->
+    <header class="flex justify-between items-center w-full min-w-0 px-6 h-20 sticky top-0 z-50 bg-surface/80 backdrop-blur-md border-b-4 border-on-surface shadow-[-6px_-6px_12px_rgba(255,255,255,0.8),6px_6px_12px_rgba(0,0,0,0.1)]">
+      <div class="flex items-center gap-6">
+        <button type="button" class="md:hidden">
+          <span class="material-symbols-outlined text-on-surface text-3xl">menu</span>
+        </button>
+        
+        <div class="neu-pressed px-4 py-2 flex items-center gap-3 rounded-full bg-surface-container-low min-w-[300px]">
+          <span class="material-symbols-outlined text-secondary">search</span>
+          <!-- TODO [LÓGICA - BÚSQUEDA]: Conectar [(ngModel)]="searchStatementQuery" -->
+          <input type="text" placeholder="Buscar por propiedad o inquilino..." class="bg-transparent border-none focus:outline-none text-sm w-full font-medium text-on-surface" />
+        </div>
+      </div>
+
+      <div class="flex items-center gap-6">
+        <button type="button" class="material-symbols-outlined p-2 neu-raised rounded-full hover:neu-pressed transition-all active:translate-y-1 cursor-pointer">notifications</button>
+        <button type="button" class="material-symbols-outlined p-2 neu-raised rounded-full hover:neu-pressed transition-all active:translate-y-1 cursor-pointer">settings</button>
+
+        <!-- TODO [LÓGICA - AVATAR]: Renderizar [src]="currentUser().avatarUrl" -->
+        <div class="h-10 w-10 rounded-full brutal-border bg-surface-dim overflow-hidden shadow-sm">
+          <img 
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDr8bI1nOP5t-LYnGNoHCofRVd-P8eLsqSuA3hKBZU5ny0o5RtlLP957NPU1Hvn5YUWOZ4JxOtK24U7h2HLww4QFI5qbA5MsJJIw3RmYIRD17BbslDUe-8IE9ZVt1kByYTBRDfBvL_WijsdBjTNKkOKX0090hEyfANMCMkGwOLWHU48L-OG97XBe7ev0X7Ujl7JPrsenTH-5Ir6yCqJPbC-iUwDK3V-Y1s6MnGRGBj2R1fDzLLYKuz1Jg" 
+            alt="Foto de perfil del administrador" 
+            class="w-full h-full object-cover" 
+          />
+        </div>
+      </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="relative z-10 p-6 lg:p-12 max-w-7xl mx-auto w-full custom-scrollbar">
+      
+      <!-- Sección del Encabezado de la Página -->
+      <div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+          <span class="text-primary font-black uppercase tracking-widest text-xs mb-2 block">Finanzas & Cobros</span>
+          <h2 class="text-4xl lg:text-5xl font-black uppercase tracking-tighter text-on-surface italic leading-none">
+            ESTADO DE CUENTA
+          </h2>
+        </div>
+
+        <!-- TODO [LÓGICA - ACCIÓN]: Enlazar (click)="navigateToRegisterPayment()" -->
+        <button type="button" class="neu-raised bg-primary-container text-on-primary-container px-8 py-4 rounded-none brutal-border font-black uppercase tracking-widest flex items-center gap-3 active:translate-y-1 active:shadow-none transition-all group cursor-pointer">
+          <span class="material-symbols-outlined group-hover:rotate-12 transition-transform">payments</span>
+          REGISTRAR PAGO
+        </button>
+      </div>
+
+      <!-- Sección 1: Tarjetas de Resumen -->
+      <section class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+        
+        <!-- Total Alquiler -->
+        <div class="neu-raised bg-surface p-8 border-4 border-on-surface flex flex-col justify-between h-48 hover:-translate-y-1 transition-transform">
+          <div class="flex justify-between items-start">
+            <span class="text-sm font-black uppercase text-secondary">Alquiler Pendiente</span>
+            <span class="material-symbols-outlined text-primary active-icon">apartment</span>
+          </div>
+          <!-- TODO [LÓGICA - INTERPOLACIÓN]: Reemplazar por {{ pendingRentAmount() | currency }} -->
+          <div class="text-4xl lg:text-5xl font-black italic tracking-tighter leading-none text-on-surface">
+            $2.450,00
+          </div>
+        </div>
+
+        <!-- Total Luz -->
+        <div class="neu-raised bg-surface p-8 border-4 border-on-surface flex flex-col justify-between h-48 hover:-translate-y-1 transition-transform">
+          <div class="flex justify-between items-start">
+            <span class="text-sm font-black uppercase text-secondary">Luz Pendiente</span>
+            <span class="material-symbols-outlined text-tertiary active-icon">bolt</span>
+          </div>
+          <!-- TODO [LÓGICA - INTERPOLACIÓN]: Reemplazar por {{ pendingElectricityAmount() | currency }} -->
+          <div class="text-4xl lg:text-5xl font-black italic tracking-tighter leading-none text-on-surface">
+            $158,20
+          </div>
+        </div>
+
+        <!-- Total General -->
+        <div class="neu-raised bg-primary p-8 border-4 border-on-surface flex flex-col justify-between h-48 hover:-translate-y-1 transition-transform text-white">
+          <div class="flex justify-between items-start">
+            <span class="text-sm font-black uppercase opacity-80">Total General</span>
+            <span class="material-symbols-outlined active-icon">account_balance_wallet</span>
+          </div>
+          <!-- TODO [LÓGICA - INTERPOLACIÓN]: Reemplazar por {{ totalPendingAmount() | currency }} -->
+          <div class="text-4xl lg:text-5xl font-black italic tracking-tighter leading-none">
+            $2.608,20
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Sección 2: Tablas de Datos -->
+      <div class="space-y-16">
+        
+        <!-- Cuotas Pendientes -->
+        <section>
+          <div class="flex items-center gap-4 mb-6">
+            <div class="h-1 w-12 bg-on-surface"></div>
+            <h3 class="text-2xl font-black uppercase italic">Cuotas Pendientes</h3>
+          </div>
+
+          <div class="brutal-border overflow-hidden bg-surface-container-low shadow-[8px_8px_0px_0px_rgba(23,28,33,1)]">
+            <table class="w-full text-left border-collapse">
+              <thead class="bg-on-surface text-surface uppercase font-black text-xs tracking-widest">
+                <tr>
+                  <th class="p-4 border-r border-surface/20">Periodo</th>
+                  <th class="p-4 border-r border-surface/20">Concepto</th>
+                  <th class="p-4 border-r border-surface/20">Vencimiento</th>
+                  <th class="p-4 text-right">Monto</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y-2 divide-on-surface">
+                <!-- TODO [LÓGICA - REPETICIÓN]: Implementar @for (installment of pendingInstallments(); track installment.id) -->
+                <tr class="glass-row hover:bg-white/60 transition-colors">
+                  <td class="p-4 font-bold border-r-2 border-on-surface">OCTUBRE 2023</td>
+                  <td class="p-4 font-medium border-r-2 border-on-surface italic">Alquiler - Local 4B</td>
+                  <td class="p-4 font-bold text-tertiary border-r-2 border-on-surface uppercase">05/10/2023</td>
+                  <td class="p-4 text-right font-black">$1.225,00</td>
+                </tr>
+
+                <tr class="glass-row hover:bg-white/60 transition-colors">
+                  <td class="p-4 font-bold border-r-2 border-on-surface">NOVIEMBRE 2023</td>
+                  <td class="p-4 font-medium border-r-2 border-on-surface italic">Alquiler - Local 4B</td>
+                  <td class="p-4 font-bold border-r-2 border-on-surface uppercase">05/11/2023</td>
+                  <td class="p-4 text-right font-black">$1.225,00</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Consumos Pendientes -->
+        <section>
+          <div class="flex items-center gap-4 mb-6">
+            <div class="h-1 w-12 bg-on-surface"></div>
+            <h3 class="text-2xl font-black uppercase italic">Consumos Pendientes</h3>
+          </div>
+
+          <div class="brutal-border overflow-hidden bg-surface-container-low shadow-[8px_8px_0px_0px_rgba(23,28,33,1)]">
+            <table class="w-full text-left border-collapse">
+              <thead class="bg-on-surface text-surface uppercase font-black text-xs tracking-widest">
+                <tr>
+                  <th class="p-4 border-r border-surface/20">Servicio</th>
+                  <th class="p-4 border-r border-surface/20">Lectura Ant.</th>
+                  <th class="p-4 border-r border-surface/20">Lectura Act.</th>
+                  <th class="p-4 text-right">Consumo/Valor</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y-2 divide-on-surface">
+                <!-- TODO [LÓGICA - REPETICIÓN]: Implementar @for (utility of pendingUtilities(); track utility.id) -->
+                <tr class="glass-row hover:bg-white/60 transition-colors">
+                  <td class="p-4 font-bold border-r-2 border-on-surface flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm">bolt</span> 
+                    LUZ - OCT
+                  </td>
+                  <td class="p-4 border-r-2 border-on-surface">12.450 kWh</td>
+                  <td class="p-4 border-r-2 border-on-surface">12.610 kWh</td>
+                  <td class="p-4 text-right font-black">$79,10</td>
+                </tr>
+
+                <tr class="glass-row hover:bg-white/60 transition-colors">
+                  <td class="p-4 font-bold border-r-2 border-on-surface flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm">bolt</span> 
+                    LUZ - NOV
+                  </td>
+                  <td class="p-4 border-r-2 border-on-surface">12.610 kWh</td>
+                  <td class="p-4 border-r-2 border-on-surface">12.770 kWh</td>
+                  <td class="p-4 text-right font-black">$79,10</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Pie de página con detalles e información del inmueble -->
+      <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-surface-container p-6 brutal-border neu-raised">
+        <div class="space-y-4">
+          <p class="text-sm text-on-surface-variant max-w-md">
+            * Los pagos realizados después del día 10 de cada mes incurrirán en un recargo del 5% sobre el total adeudado. Por favor, regularice su situación para evitar cortes de servicio.
+          </p>
+
+          <div class="flex gap-4">
+            <!-- TODO [LÓGICA - ACCIÓN]: Enlazar (click)="downloadPdfStatement()" -->
+            <button type="button" class="p-3 neu-raised bg-white rounded-full hover:neu-pressed transition-all cursor-pointer">
+              <span class="material-symbols-outlined">download</span>
+            </button>
+
+            <!-- TODO [LÓGICA - ACCIÓN]: Enlazar (click)="printStatement()" -->
+            <button type="button" class="p-3 neu-raised bg-white rounded-full hover:neu-pressed transition-all cursor-pointer">
+              <span class="material-symbols-outlined">print</span>
+            </button>
+
+            <!-- TODO [LÓGICA - ACCIÓN]: Enlazar (click)="shareStatement()" -->
+            <button type="button" class="p-3 neu-raised bg-white rounded-full hover:neu-pressed transition-all cursor-pointer">
+              <span class="material-symbols-outlined">share</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex flex-col items-end gap-2 text-right">
+          <span class="text-xs font-black uppercase text-secondary">Referencia de Inmueble</span>
+          <span class="text-xl lg:text-2xl text-on-surface font-black">LOCAL COMERCIAL #4B - PLAZA CENTRAL</span>
+          <span class="text-sm font-medium text-on-surface-variant italic">ID de Contrato: CON-2023-00452</span>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>

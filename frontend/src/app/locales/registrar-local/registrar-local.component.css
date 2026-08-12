@@ -1,0 +1,60 @@
+/* Textura de Fondo */
+.bg-hero {
+  background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLsdaGR7l41Ad4oxvF89k6S8Mn5aimptK2a6x8i13diUey1qyWRXOKN6kuYtDoFd9ecfcdL7kDEvmu3jssmE7IEg8ekq3e2PA_dDNWv_qo9t0w1x85-9VS3toCP5fA_UbE15CREa45WMzICnEgJZN0GaiFyz9--c8wMr1BFi16bV24XkzcPlC0V2TdBGTLwPcmeE_sngaSnBFfrCaHHtwO7-9NiFM1iqSlQhsgBewLgL5FsPSyvPf1_vXDGM');
+  background-size: cover;
+  background-position: center;
+}
+
+/* Efectos de Neumorfismo aislados */
+.neu-raised {
+  background-color: var(--color-surface);
+  box-shadow: -6px -6px 12px rgba(255, 255, 255, 0.8), 6px 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.neu-pressed {
+  background-color: var(--color-surface);
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.1), inset -4px -4px 8px rgba(255, 255, 255, 0.8);
+}
+
+/* Botón Neumórfico Esmeralda */
+.neu-btn-primary {
+  background-color: var(--color-primary-container);
+  box-shadow: -4px -4px 10px rgba(255, 255, 255, 0.2), 4px 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease-in-out;
+}
+
+.neu-btn-primary:active {
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.3), inset -4px -4px 8px rgba(255, 255, 255, 0.1);
+  transform: scale(0.98);
+}
+
+/* Tarjeta Cristalina */
+.glass-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Título estilo Brutalismo */
+.brutal-title {
+  text-shadow: 4px 4px 0px rgba(0,0,0,1);
+  -webkit-text-stroke: 1px black;
+}
+
+/* Iconos activados */
+.active-icon {
+  font-variation-settings: 'FILL' 1;
+}
+
+/* Animación de esqueleto para la carga de datos */
+@keyframes skeleton-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton-animate {
+  background: linear-gradient(90deg, #e9eef5 25%, #f6f9ff 50%, #e9eef5 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s infinite;
+}

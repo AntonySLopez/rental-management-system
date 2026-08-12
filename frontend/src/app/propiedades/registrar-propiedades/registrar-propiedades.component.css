@@ -1,0 +1,47 @@
+/* Imagen de fondo con filtro */
+.bg-hero {
+  background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLsdaGR7l41Ad4oxvF89k6S8Mn5aimptK2a6x8i13diUey1qyWRXOKN6kuYtDoFd9ecfcdL7kDEvmu3jssmE7IEg8ekq3e2PA_dDNWv_qo9t0w1x85-9VS3toCP5fA_UbE15CREa45WMzICnEgJZN0GaiFyz9--c8wMr1BFi16bV24XkzcPlC0V2TdBGTLwPcmeE_sngaSnBFfrCaHHtwO7-9NiFM1iqSlQhsgBewLgL5FsPSyvPf1_vXDGM');
+  filter: blur(8px) scale(1.05);
+}
+
+/* Sombra para enlace de navegación activo */
+.active-nav-shadow {
+  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+}
+
+/* Elevación Neumórfica Local */
+.neu-raised {
+  box-shadow: var(--shadow-light), var(--shadow-dark);
+}
+
+.neu-pressed {
+  box-shadow: var(--inner-shadow-light), var(--inner-shadow-dark);
+}
+
+/* Tarjeta Glassmorphism */
+.glass-card {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* Iconos activados */
+.active-icon {
+  font-variation-settings: 'FILL' 1;
+}
+
+/* Microinteracción visual al enfocar inputs (Reemplaza al script JS inline) */
+.input-container:focus-within {
+  transform: translateX(4px);
+}
+
+/* Efecto Hover para el botón principal con desplazamiento brutalista */
+.btn-brutal-save:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 1);
+}
+
+.btn-brutal-save:active {
+  transform: translate(0, 0);
+  box-shadow: none;
+}

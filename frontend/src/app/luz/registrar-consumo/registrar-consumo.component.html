@@ -1,0 +1,307 @@
+<div class="bg-background text-on-background font-sans overflow-hidden h-screen flex">
+  
+  <!-- SideNavBar (Navegación Lateral) -->
+  <aside class="hidden md:flex flex-col h-screen w-64 border-r-4 border-on-surface bg-surface fixed left-0 top-0 z-50 py-6 px-4">
+    <div class="mb-8 px-2">
+      <h1 class="text-3xl font-black uppercase italic text-primary leading-none">PropManager Pro</h1>
+      <p class="text-xs font-bold uppercase tracking-widest text-secondary mt-1">Management Suite</p>
+    </div>
+
+    <nav class="flex-1 space-y-4">
+      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLink="/dashboard" -->
+      <a class="flex items-center gap-4 p-4 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 hover:bg-surface-container-high" href="#">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span class="text-sm">Dashboard</span>
+      </a>
+
+      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLink="/properties" -->
+      <a class="flex items-center gap-4 p-4 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 hover:bg-surface-container-high" href="#">
+        <span class="material-symbols-outlined">domain</span>
+        <span class="text-sm">Properties</span>
+      </a>
+
+      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLink="/tenants" -->
+      <a class="flex items-center gap-4 p-4 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 hover:bg-surface-container-high" href="#">
+        <span class="material-symbols-outlined">group</span>
+        <span class="text-sm">Tenants</span>
+      </a>
+
+      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLink="/leases" -->
+      <a class="flex items-center gap-4 p-4 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 hover:bg-surface-container-high" href="#">
+        <span class="material-symbols-outlined">description</span>
+        <span class="text-sm">Leases</span>
+      </a>
+
+      <!-- Estado Activo: Mantenimiento / Consumos -->
+      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLinkActive -->
+      <a class="flex items-center gap-4 p-4 bg-primary text-white border-2 border-on-surface shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] translate-x-1 font-bold uppercase" href="#">
+        <span class="material-symbols-outlined active-icon">build</span>
+        <span class="text-sm">Maintenance</span>
+      </a>
+
+      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLink="/reports" -->
+      <a class="flex items-center gap-4 p-4 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 hover:bg-surface-container-high" href="#">
+        <span class="material-symbols-outlined">assessment</span>
+        <span class="text-sm">Reports</span>
+      </a>
+    </nav>
+
+    <div class="mt-auto space-y-2 pt-4 border-t-2 border-on-surface/10">
+      <button type="button" class="w-full text-left flex items-center gap-4 p-4 text-on-surface-variant font-bold uppercase hover:bg-surface-container-high transition-all cursor-pointer">
+        <span class="material-symbols-outlined">help</span>
+        <span class="text-sm">Help Center</span>
+      </button>
+      
+      <!-- TODO [LÓGICA - LOGOUT]: Enlazar (click)="logout()" -->
+      <button type="button" class="w-full text-left flex items-center gap-4 p-4 text-tertiary font-bold uppercase hover:bg-surface-container-high transition-all cursor-pointer">
+        <span class="material-symbols-outlined">logout</span>
+        <span class="text-sm">Logout</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Wrapper Contenido Principal -->
+  <main class="flex-1 md:ml-64 flex flex-col relative overflow-hidden">
+    
+    <!-- Capa de Fondo Decorativa -->
+    <div class="absolute inset-0 z-0">
+      <div class="w-full h-full bg-cover bg-center opacity-40 blur-md grayscale-[0.2] bg-hero"></div>
+      <div class="absolute inset-0 bg-surface/60 backdrop-blur-sm"></div>
+    </div>
+
+    <!-- TopNavBar -->
+    <header class="flex justify-between items-center w-full px-6 h-20 sticky top-0 z-50 bg-surface/80 backdrop-blur-md border-b-4 border-on-surface shadow-[-6px_-6px_12px_rgba(255,255,255,0.8),6px_6px_12px_rgba(0,0,0,0.1)]">
+      <div class="flex items-center gap-6">
+        <div class="text-2xl font-black uppercase tracking-tighter text-on-surface">
+          P-08 <span class="text-primary">CONSUMO</span>
+        </div>
+        
+        <div class="neomorphic-pressed h-10 px-4 rounded-full flex items-center bg-surface-container-low border border-outline-variant/30">
+          <span class="material-symbols-outlined text-secondary mr-2">search</span>
+          <!-- TODO [LÓGICA - BÚSQUEDA]: Conectar [(ngModel)]="searchInvoiceQuery" -->
+          <input type="text" placeholder="Buscar factura..." class="bg-transparent border-none focus:outline-none text-xs w-48" />
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <nav class="hidden md:flex gap-8 mr-8">
+          <a class="text-secondary font-bold uppercase hover:text-primary transition-all text-sm" href="#">Resumen</a>
+          <a class="text-primary font-black underline decoration-4 underline-offset-4 text-sm" href="#">Electricidad</a>
+          <a class="text-secondary font-bold uppercase hover:text-primary transition-all text-sm" href="#">Agua</a>
+        </nav>
+
+        <button type="button" class="neomorphic-raised p-2 rounded-full hover:bg-surface-container-highest transition-all active:translate-y-1 cursor-pointer">
+          <span class="material-symbols-outlined text-on-surface">notifications</span>
+        </button>
+        <button type="button" class="neomorphic-raised p-2 rounded-full hover:bg-surface-container-highest transition-all active:translate-y-1 cursor-pointer">
+          <span class="material-symbols-outlined text-on-surface">settings</span>
+        </button>
+
+        <!-- TODO [LÓGICA - AVATAR]: Renderizar [src]="currentUser().avatarUrl" -->
+        <div class="w-10 h-10 rounded-full border-2 border-primary overflow-hidden neomorphic-raised">
+          <img 
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtYQmvJzDFjzUyyI-Hc8vgk11OJMTxzTSQaqLxvAM9wODJ7T7GXLBBalku1mZ82OKC21noSBISeuhIBx0PWQZTRpLnsbrYKjE1Yv-WktX1jEkGbdEjnpHShKNV2GVFu-otVv7_5igHVOIsQ8fKoJV1_xiqMRTZGluDQcq-p3ELpefgAXVltCklOkM2Q2By5YGErmSW_w54926kM52Np1eQit6A5QUNmLPFjjptUCxVTLwLNjI2_BbAAA" 
+            alt="Avatar administrador" 
+            class="w-full h-full object-cover" 
+          />
+        </div>
+      </div>
+    </header>
+
+    <!-- Contenido de la Página -->
+    <div class="relative z-10 flex-1 overflow-y-auto p-6 lg:p-12">
+      <div class="max-w-6xl mx-auto">
+        
+        <!-- Título de la Sección -->
+        <h2 class="text-4xl lg:text-5xl font-black uppercase tracking-tighter text-on-surface mb-12 flex items-center gap-4">
+          <span class="w-12 h-12 bg-primary flex items-center justify-center brutal-border brutal-shadow transform -rotate-3">
+            <span class="material-symbols-outlined text-white active-icon">bolt</span>
+          </span>
+          CONSUMO DE LUZ
+        </h2>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          
+          <!-- Sección Formulario -->
+          <div class="lg:col-span-7 space-y-6">
+            <div class="neomorphic-raised p-6 rounded-lg bg-surface/50 border border-white/40">
+              <h3 class="text-sm font-black uppercase mb-6 text-secondary border-b-2 border-on-surface/5 pb-2">Parámetros de Medición</h3>
+              
+              <!-- TODO [LÓGICA - FORMULARIO]: Vincular con ReactiveForms mediante [formGroup]="consumptionForm" y (ngSubmit)="onSaveConsumption()" -->
+              <form class="space-y-6">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  
+                  <!-- Campos de Fecha -->
+                  <div class="space-y-2">
+                    <label class="text-xs font-bold uppercase text-on-surface-variant px-2">Fecha Inicio</label>
+                    <div class="neomorphic-pressed p-1 rounded-full bg-surface-container-low">
+                      <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="startDate" -->
+                      <input type="date" value="2023-10-01" class="w-full bg-transparent border-none focus:outline-none px-4 py-2 text-base text-on-surface" />
+                    </div>
+                  </div>
+
+                  <div class="space-y-2">
+                    <label class="text-xs font-bold uppercase text-on-surface-variant px-2">Fecha Fin</label>
+                    <div class="neomorphic-pressed p-1 rounded-full bg-surface-container-low">
+                      <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="endDate" -->
+                      <input type="date" value="2023-10-31" class="w-full bg-transparent border-none focus:outline-none px-4 py-2 text-base text-on-surface" />
+                    </div>
+                  </div>
+
+                  <!-- Campos de Lectura -->
+                  <div class="space-y-2">
+                    <label class="text-xs font-bold uppercase text-on-surface-variant px-2">Lectura Anterior (kWh)</label>
+                    <div class="neomorphic-pressed p-1 rounded-full bg-surface-container-low">
+                      <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="previousReading" -->
+                      <input type="number" placeholder="0000.00" value="45230" class="w-full bg-transparent border-none focus:outline-none px-4 py-2 text-base text-on-surface" />
+                    </div>
+                  </div>
+
+                  <div class="space-y-2">
+                    <label class="text-xs font-bold uppercase text-on-surface-variant px-2">Lectura Actual (kWh)</label>
+                    <div class="neomorphic-pressed p-1 rounded-full bg-surface-container-low">
+                      <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="currentReading" -->
+                      <input type="number" placeholder="0000.00" value="45680" class="w-full bg-transparent border-none focus:outline-none px-4 py-2 text-base text-on-surface" />
+                    </div>
+                  </div>
+
+                  <!-- Tarifas y Costos -->
+                  <div class="space-y-2">
+                    <label class="text-xs font-bold uppercase text-on-surface-variant px-2">Precio kWh ($)</label>
+                    <div class="neomorphic-pressed p-1 rounded-full bg-surface-container-low">
+                      <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="kwhPrice" -->
+                      <input type="number" step="0.01" value="0.15" class="w-full bg-transparent border-none focus:outline-none px-4 py-2 text-base text-on-surface" />
+                    </div>
+                  </div>
+
+                  <div class="space-y-2">
+                    <label class="text-xs font-bold uppercase text-on-surface-variant px-2">Alumbrado Público ($)</label>
+                    <div class="neomorphic-pressed p-1 rounded-full bg-surface-container-low">
+                      <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="publicLightingFee" -->
+                      <input type="number" step="0.01" value="12.50" class="w-full bg-transparent border-none focus:outline-none px-4 py-2 text-base text-on-surface" />
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- Mensaje de Validación de Error -->
+                <!-- TODO [LÓGICA - CONTROL DE FLUJO]: Mostrar condicionalmente con @if (isInvalidReading()) -->
+                <div class="brutal-border bg-error text-white p-6 brutal-shadow transform -rotate-1 transition-all duration-300">
+                  <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-4xl">warning</span>
+                    <div>
+                      <p class="font-black uppercase text-lg">Error de lectura</p>
+                      <p class="font-medium text-sm">La lectura actual debe ser estrictamente mayor a la anterior para procesar el consumo.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Botón Guardar -->
+                <div class="pt-4">
+                  <!-- TODO [LÓGICA - SUBMIT]: Conectar envío y deshabilitado [disabled]="consumptionForm.invalid" -->
+                  <button type="submit" class="neomorphic-raised w-full py-4 rounded-full bg-primary text-white font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-all brutal-shadow cursor-pointer">
+                    <span class="material-symbols-outlined">save</span>
+                    Registrar Consumo
+                  </button>
+                </div>
+
+              </form>
+            </div>
+          </div>
+
+          <!-- Widget Flotante Calculado (Resultados en tiempo real) -->
+          <div class="lg:col-span-5 relative flex items-center justify-center">
+            
+            <div class="glass-card brutal-border brutal-shadow p-8 w-full max-w-sm space-y-8 transform rotate-2">
+              
+              <!-- Consumo Calculado -->
+              <div class="space-y-2">
+                <p class="text-xs font-black uppercase text-secondary tracking-widest">Consumo Total</p>
+                <div class="flex items-baseline gap-2">
+                  <!-- TODO [LÓGICA - SIGNAL/COMPUTED]: Reemplazar con {{ totalConsumptionKwh() }} -->
+                  <span class="text-6xl font-black text-on-surface leading-none">450</span>
+                  <span class="text-2xl font-bold text-primary">kWh</span>
+                </div>
+              </div>
+
+              <div class="h-1 bg-on-surface/10"></div>
+
+              <!-- Monto Calculado -->
+              <div class="space-y-2">
+                <p class="text-xs font-black uppercase text-secondary tracking-widest">Monto a Pagar</p>
+                <div class="flex items-baseline gap-2">
+                  <span class="text-2xl font-bold text-primary">$</span>
+                  <!-- TODO [LÓGICA - SIGNAL/COMPUTED]: Reemplazar con {{ calculatedAmount() | number:'1.2-2' }} -->
+                  <span class="text-6xl font-black text-on-surface leading-none">80.00</span>
+                </div>
+                <div class="flex items-center gap-1 text-xs font-medium text-on-surface-variant mt-2">
+                  <span class="material-symbols-outlined text-sm">info</span>
+                  <span>Incluye cargos base e impuestos</span>
+                </div>
+              </div>
+
+              <!-- Indicador Porcentual -->
+              <div class="pt-2">
+                <div class="neomorphic-pressed h-4 w-full rounded-full overflow-hidden bg-surface-container-high p-1">
+                  <!-- TODO [LÓGICA - ESTILO DINÁMICO]: Ajustar ancho con [style.width.%]="averageConsumptionPercentage()" -->
+                  <div class="bg-primary-container h-full rounded-full w-[65%]"></div>
+                </div>
+                <!-- TODO [LÓGICA - INTERPOLACIÓN]: Reemplazar con {{ averageConsumptionPercentage() }}% -->
+                <p class="text-[10px] uppercase font-black text-secondary mt-2 text-center">65% del promedio mensual</p>
+              </div>
+
+            </div>
+
+            <!-- Acento Flotante Secundario -->
+            <div class="absolute -top-12 -right-4 neomorphic-raised p-3 rounded-lg bg-surface brutal-border transform -rotate-12 hidden xl:block">
+              <span class="material-symbols-outlined text-4xl text-primary active-icon">electric_meter</span>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Estadísticas Inferiores (Tarjetas resumen) -->
+        <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          <div class="neomorphic-raised p-6 rounded-lg bg-surface/60 border border-white/20">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-xs font-bold uppercase text-secondary">Mes Pasado</p>
+                <!-- TODO [LÓGICA - INTERPOLACIÓN]: {{ previousMonthKwh() }} kWh -->
+                <h4 class="text-2xl font-black text-on-surface">420 kWh</h4>
+              </div>
+              <span class="material-symbols-outlined text-primary">trending_up</span>
+            </div>
+          </div>
+
+          <div class="neomorphic-raised p-6 rounded-lg bg-surface/60 border border-white/20">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-xs font-bold uppercase text-secondary">Promedio Anual</p>
+                <!-- TODO [LÓGICA - INTERPOLACIÓN]: {{ annualAverageKwh() }} kWh -->
+                <h4 class="text-2xl font-black text-on-surface">395 kWh</h4>
+              </div>
+              <span class="material-symbols-outlined text-secondary">analytics</span>
+            </div>
+          </div>
+
+          <div class="neomorphic-raised p-6 rounded-lg bg-surface/60 border border-white/20">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-xs font-bold uppercase text-secondary">Próximo Pago</p>
+                <!-- TODO [LÓGICA - INTERPOLACIÓN]: {{ nextDueDate() | date:'dd MMM' }} -->
+                <h4 class="text-2xl font-black text-on-surface">15 Nov</h4>
+              </div>
+              <span class="material-symbols-outlined text-tertiary">calendar_today</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>

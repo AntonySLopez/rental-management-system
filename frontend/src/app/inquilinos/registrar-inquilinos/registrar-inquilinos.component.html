@@ -1,0 +1,226 @@
+<div class="bg-surface text-on-surface flex h-screen overflow-hidden">
+  
+  <!-- SideNavBar -->
+  <aside class="hidden md:flex flex-col h-full py-6 px-3 border-r-4 border-on-surface bg-surface z-40 w-64 shrink-0 shadow-[6px_0px_12px_rgba(0,0,0,0.05)]">
+    <div class="mb-16 px-3">
+      <h1 class="text-3xl font-black uppercase italic text-on-surface">PropManager Pro</h1>
+      <p class="text-on-surface-variant text-sm font-semibold mt-1 opacity-70">Management Suite</p>
+    </div>
+
+    <nav class="flex-1 space-y-4 px-3 overflow-y-auto">
+      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLink="/dashboard" -->
+      <a href="#" class="flex items-center gap-3 p-3 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 hover:bg-surface-container-high">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span class="text-sm">Dashboard</span>
+      </a>
+
+      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLink="/properties" -->
+      <a href="#" class="flex items-center gap-3 p-3 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 hover:bg-surface-container-high">
+        <span class="material-symbols-outlined">domain</span>
+        <span class="text-sm">Properties</span>
+      </a>
+
+      <!-- Estado Activo: Tenants -->
+      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLinkActive para resaltar la sección actual -->
+      <a href="#" class="flex items-center gap-3 p-3 bg-primary text-white border-2 border-on-surface shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] translate-x-1">
+        <span class="material-symbols-outlined">group</span>
+        <span class="text-sm font-bold">Tenants</span>
+      </a>
+
+      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLink="/leases" -->
+      <a href="#" class="flex items-center gap-3 p-3 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 hover:bg-surface-container-high">
+        <span class="material-symbols-outlined">description</span>
+        <span class="text-sm">Leases</span>
+      </a>
+
+      <a href="#" class="flex items-center gap-3 p-3 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 hover:bg-surface-container-high">
+        <span class="material-symbols-outlined">build</span>
+        <span class="text-sm">Maintenance</span>
+      </a>
+
+      <a href="#" class="flex items-center gap-3 p-3 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 hover:bg-surface-container-high">
+        <span class="material-symbols-outlined">assessment</span>
+        <span class="text-sm">Reports</span>
+      </a>
+    </nav>
+
+    <div class="mt-auto pt-6 space-y-2 px-3">
+      <!-- TODO [LÓGICA - ACCIÓN]: Conectar (click)="openAddPropertyModal()" -->
+      <button type="button" class="w-full bg-surface-container-high text-on-surface font-black uppercase py-4 border-2 border-on-surface shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-1 active:translate-y-1 transition-all mb-8">
+        Add Property
+      </button>
+
+      <a href="#" class="flex items-center gap-3 p-3 text-on-surface-variant hover:text-on-surface font-bold uppercase text-sm">
+        <span class="material-symbols-outlined">help</span>
+        Help Center
+      </a>
+
+      <!-- TODO [LÓGICA - LOGOUT]: Conectar (click)="logout()" -->
+      <a href="#" class="flex items-center gap-3 p-3 text-tertiary hover:opacity-80 font-bold uppercase text-sm">
+        <span class="material-symbols-outlined">logout</span>
+        Logout
+      </a>
+    </div>
+  </aside>
+
+  <!-- Área Principal -->
+  <main class="flex-1 flex flex-col min-w-0 relative h-full">
+    
+    <!-- Hero Background Overlay -->
+    <div class="absolute inset-0 z-0 pointer-events-none">
+      <div class="w-full h-full bg-cover bg-center opacity-30 bg-hero"></div>
+      <div class="absolute inset-0 bg-surface/60 backdrop-blur-sm"></div>
+    </div>
+
+    <!-- TopNavBar -->
+    <header class="flex justify-between items-center w-full px-6 h-20 sticky top-0 z-50 bg-surface/80 backdrop-blur-md border-b-4 border-on-surface shadow-[-6px_-6px_12px_rgba(255,255,255,0.8),6px_6px_12px_rgba(0,0,0,0.1)]">
+      <div class="flex items-center gap-6">
+        <span class="text-2xl font-black uppercase tracking-tighter text-on-surface">PropManager Pro</span>
+        <div class="hidden lg:flex items-center gap-6 ml-8">
+          <a class="text-secondary font-bold uppercase hover:bg-surface-container-highest transition-all duration-200 p-2" href="#">Overview</a>
+          <a class="text-primary font-black underline decoration-4 underline-offset-4 p-2" href="#">Tenants</a>
+          <a class="text-secondary font-bold uppercase hover:bg-surface-container-highest transition-all duration-200 p-2" href="#">Financials</a>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <div class="neu-pressed bg-surface-container-low px-4 py-2 rounded-full hidden sm:flex items-center gap-2">
+          <span class="material-symbols-outlined text-secondary">search</span>
+          <!-- TODO [LÓGICA - BÚSQUEDA]: Conectar [(ngModel)]="searchTerm" o control del formulario -->
+          <input class="bg-transparent border-none focus:outline-none text-sm w-48" placeholder="Buscar inquilino..." type="text"/>
+        </div>
+
+        <button type="button" class="p-3 rounded-full hover:bg-surface-container-highest transition-all active:translate-y-1">
+          <span class="material-symbols-outlined text-on-surface">notifications</span>
+        </button>
+
+        <button type="button" class="p-3 rounded-full hover:bg-surface-container-highest transition-all active:translate-y-1">
+          <span class="material-symbols-outlined text-on-surface">settings</span>
+        </button>
+
+        <!-- TODO [LÓGICA - PERFIL]: Renderizar iniciales o avatar de usuario dinámicamente -->
+        <div class="w-10 h-10 rounded-full bg-primary-container border-2 border-on-surface flex items-center justify-center font-black">
+          JD
+        </div>
+      </div>
+    </header>
+
+    <!-- Área de Formulario -->
+    <div class="relative z-10 flex-1 overflow-y-auto p-6 lg:p-12 flex items-center justify-center">
+      
+      <!-- 
+        TODO [LÓGICA - NOTIFICACIÓN DE ÉXITO]: 
+        Alternar la visibilidad de esta alerta usando la directiva de Angular @if (showSuccessAlert)
+      -->
+      <div class="fixed top-24 left-1/2 -translate-x-1/2 z-[60] w-full max-w-md px-6 animate-slide-down">
+        <div class="bg-primary-container text-on-primary-container p-4 border-4 border-on-surface shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex items-center gap-4">
+          <span class="material-symbols-outlined active-icon text-on-primary-container">check_circle</span>
+          <div class="flex-1">
+            <p class="font-bold uppercase text-xs">Operación Exitosa</p>
+            <p class="text-xs opacity-90">El sistema está listo para recibir nuevos datos.</p>
+          </div>
+          <!-- TODO [LÓGICA - CERRAR ALERTA]: Conectar (click)="closeAlert()" -->
+          <button type="button" class="material-symbols-outlined hover:bg-on-primary-container/10 p-1 rounded">close</button>
+        </div>
+      </div>
+
+      <!-- Card Registro de Inquilino -->
+      <div class="w-full max-w-2xl glass-card rounded-xl p-8 lg:p-10 neu-raised relative overflow-hidden">
+        
+        <div class="mb-10">
+          <h2 class="text-3xl font-black text-on-surface uppercase brutal-border pb-2 inline-block">
+            REGISTRAR INQUILINO
+          </h2>
+          <p class="text-secondary text-xs font-semibold mt-4 uppercase tracking-widest">Nueva Alta de Contrato</p>
+        </div>
+
+        <!-- TODO [LÓGICA - FORMULARIO]: Vincular ReactiveForms mediante [formGroup]="tenantForm" y (ngSubmit)="onSaveTenant()" -->
+        <form class="space-y-8">
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            <!-- Campo Nombre Completo -->
+            <div class="space-y-2">
+              <label class="text-xs font-semibold uppercase text-secondary tracking-wider ml-1">Nombre Completo</label>
+              <div class="neu-pressed bg-white/20 p-4 rounded-lg flex items-center gap-3 transition-all focus-within:ring-2 focus-within:ring-primary/20">
+                <span class="material-symbols-outlined text-secondary">person</span>
+                <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="fullName" -->
+                <input class="bg-transparent border-none focus:outline-none w-full text-on-surface font-bold placeholder:text-secondary/50 placeholder:font-normal" placeholder="Ej: Juan Pérez" type="text"/>
+              </div>
+            </div>
+
+            <!-- Campo Documento / ID -->
+            <div class="space-y-2">
+              <label class="text-xs font-semibold uppercase text-secondary tracking-wider ml-1">Documento / ID</label>
+              <div class="neu-pressed bg-white/20 p-4 rounded-lg flex items-center gap-3 transition-all focus-within:ring-2 focus-within:ring-primary/20">
+                <span class="material-symbols-outlined text-secondary">badge</span>
+                <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="documentId" -->
+                <input class="bg-transparent border-none focus:outline-none w-full text-on-surface font-bold placeholder:text-secondary/50 placeholder:font-normal" placeholder="00.000.000-A" type="text"/>
+              </div>
+            </div>
+
+            <!-- Campo Teléfono -->
+            <div class="space-y-2">
+              <label class="text-xs font-semibold uppercase text-secondary tracking-wider ml-1">Teléfono de Contacto</label>
+              <div class="neu-pressed bg-white/20 p-4 rounded-lg flex items-center gap-3 transition-all focus-within:ring-2 focus-within:ring-primary/20">
+                <span class="material-symbols-outlined text-secondary">call</span>
+                <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="phone" -->
+                <input class="bg-transparent border-none focus:outline-none w-full text-on-surface font-bold placeholder:text-secondary/50 placeholder:font-normal" placeholder="+34 600 000 000" type="text"/>
+              </div>
+            </div>
+
+            <!-- Campo Email -->
+            <div class="space-y-2">
+              <label class="text-xs font-semibold uppercase text-secondary tracking-wider ml-1">Email</label>
+              <div class="neu-pressed bg-white/20 p-4 rounded-lg flex items-center gap-3 transition-all focus-within:ring-2 focus-within:ring-primary/20">
+                <span class="material-symbols-outlined text-secondary">mail</span>
+                <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="email" -->
+                <input class="bg-transparent border-none focus:outline-none w-full text-on-surface font-bold placeholder:text-secondary/50 placeholder:font-normal" placeholder="inquilino@email.com" type="email"/>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Aceptación de Términos -->
+          <div class="pt-4 border-t border-on-surface/5">
+            <div class="flex items-center gap-4 mb-4">
+              <div class="neu-pressed w-6 h-6 rounded flex items-center justify-center bg-primary-container cursor-pointer">
+                <!-- TODO [LÓGICA - CHECKBOX TOGGLE]: Alternar visibilidad con [formControlName]="acceptTerms" -->
+                <span class="material-symbols-outlined text-on-primary-container text-[16px] active-icon">verified</span>
+              </div>
+              <span class="text-xs text-secondary">Aceptar términos de tratamiento de datos y verificación de crédito.</span>
+            </div>
+          </div>
+
+          <!-- Botón de Envío -->
+          <div class="pt-6 flex justify-end">
+            <!-- TODO [LÓGICA - SUBMIT]: Conectar envío de formulario y deshabilitación condicional [disabled]="tenantForm.invalid" -->
+            <button class="group relative px-10 py-4 bg-primary-container rounded-full border-4 border-on-surface shadow-[6px_6px_0px_0px_rgba(23,28,33,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 active:scale-95 transition-all duration-200" type="submit">
+              <span class="relative z-10 flex items-center gap-3 text-on-primary-container font-black uppercase text-lg tracking-tight">
+                REGISTRAR
+                <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+              </span>
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+
+    <!-- Navegación Móvil -->
+    <nav class="md:hidden flex justify-around items-center h-16 bg-surface fixed bottom-0 left-0 right-0 z-50 border-t-2 border-on-surface">
+      <button type="button" class="p-2 text-secondary"><span class="material-symbols-outlined">dashboard</span></button>
+      <button type="button" class="p-2 text-secondary"><span class="material-symbols-outlined">domain</span></button>
+      <button type="button" class="p-2 text-primary font-bold"><span class="material-symbols-outlined active-icon">group</span></button>
+      <button type="button" class="p-2 text-secondary"><span class="material-symbols-outlined">settings</span></button>
+    </nav>
+
+  </main>
+</div>
+
+<!-- Partículas atmosféricas -->
+<div class="fixed inset-0 pointer-events-none z-[-1] overflow-hidden">
+  <div class="absolute top-[10%] left-[5%] w-64 h-64 bg-primary/5 rounded-full blur-[100px]"></div>
+  <div class="absolute bottom-[20%] right-[10%] w-96 h-96 bg-primary-container/10 rounded-full blur-[120px]"></div>
+</div>
