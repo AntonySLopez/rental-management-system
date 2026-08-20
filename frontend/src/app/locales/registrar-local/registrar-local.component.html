@@ -1,248 +1,188 @@
-<div class="flex h-screen w-full relative bg-surface text-on-surface font-sans overflow-hidden">
-  
-  <!-- Imagen de Fondo con Desenfoque -->
-  <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-    <div class="w-full h-full scale-110 blur-xl brightness-75 transition-all duration-700 bg-hero"></div>
-  </div>
-
-  <!-- SideNavBar -->
-  <aside class="hidden md:flex flex-col h-full py-6 px-3 border-r-4 border-on-surface bg-surface z-50 w-64 shrink-0 shadow-[6px_0px_12px_rgba(0,0,0,0.05)]">
-    <div class="mb-12 px-3">
-      <h1 class="text-3xl font-black uppercase italic text-primary">PropManager Pro</h1>
-      <p class="text-xs font-bold opacity-70 uppercase tracking-widest mt-1">Management Suite</p>
-    </div>
-
-    <nav class="flex-1 space-y-2">
-      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLink="/dashboard" -->
-      <a href="#" class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 hover:bg-surface-container-high">
-        <span class="material-symbols-outlined">dashboard</span>
-        <span class="text-sm">Dashboard</span>
-      </a>
-
-      <!-- Estado Activo: Properties -->
-      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLinkActive -->
-      <a href="#" class="flex items-center gap-3 px-4 py-3 bg-primary text-white border-2 border-on-surface shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] translate-x-1 font-bold uppercase">
-        <span class="material-symbols-outlined">domain</span>
-        <span class="text-sm">Properties</span>
-      </a>
-
-      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLink="/tenants" -->
-      <a href="#" class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 hover:bg-surface-container-high">
-        <span class="material-symbols-outlined">group</span>
-        <span class="text-sm">Tenants</span>
-      </a>
-
-      <a href="#" class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 hover:bg-surface-container-high">
-        <span class="material-symbols-outlined">description</span>
-        <span class="text-sm">Leases</span>
-      </a>
-
-      <a href="#" class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 hover:bg-surface-container-high">
-        <span class="material-symbols-outlined">build</span>
-        <span class="text-sm">Maintenance</span>
-      </a>
-
-      <a href="#" class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 hover:bg-surface-container-high">
-        <span class="material-symbols-outlined">assessment</span>
-        <span class="text-sm">Reports</span>
-      </a>
-    </nav>
-
-    <div class="mt-auto pt-6 space-y-2">
-      <!-- TODO [LÓGICA - EVENTO]: Enlazar (click)="openAddPropertyModal()" -->
-      <button type="button" class="w-full neu-btn-primary text-white font-black py-4 px-4 rounded-full mb-4 flex items-center justify-center gap-2">
-        <span class="material-symbols-outlined">add_circle</span>
-        <span>ADD PROPERTY</span>
-      </button>
-
-      <a href="#" class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all">
-        <span class="material-symbols-outlined">help</span>
-        <span class="text-sm">Help Center</span>
-      </a>
-
-      <!-- TODO [LÓGICA - LOGOUT]: Enlazar (click)="logout()" -->
-      <a href="#" class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all">
-        <span class="material-symbols-outlined">logout</span>
-        <span class="text-sm">Logout</span>
-      </a>
-    </div>
-  </aside>
-
+<div class="flex h-screen w-full relative bg-surface text-on-surface font-sans">
+  <app-panel-lateral></app-panel-lateral>
+  <div class="flex w-full h-screen">
   <!-- Área Principal de Contenido -->
-  <main class="flex-1 flex flex-col h-screen relative z-10 overflow-y-auto">
-    
-    <!-- TopNavBar -->
-    <header class="flex justify-between items-center w-full px-6 h-20 sticky top-0 z-50 bg-surface/80 backdrop-blur-md border-b-4 border-on-surface shadow-[-6px_-6px_12px_rgba(255,255,255,0.8),6px_6px_12px_rgba(0,0,0,0.1)]">
-      <div class="flex items-center gap-6">
-        <span class="text-2xl font-black uppercase tracking-tighter text-on-surface">PropManager Pro</span>
-        <div class="hidden lg:flex items-center ml-8 space-x-6">
-          <a href="#" class="text-primary font-black underline decoration-4 underline-offset-4 text-sm uppercase">Register</a>
-          <a href="#" class="text-secondary font-bold uppercase text-sm hover:bg-surface-container-highest transition-all duration-200 px-3 py-1">Overview</a>
-          <a href="#" class="text-secondary font-bold uppercase text-sm hover:bg-surface-container-highest transition-all duration-200 px-3 py-1">Analytics</a>
+    <main class="flex-1 flex flex-col h-screen relative z-10 overflow-y-auto">
+      
+      <!-- TopNavBar -->
+      <header class="flex justify-between items-center w-full px-6 h-20 sticky top-0 z-50 bg-surface/80 backdrop-blur-md border-b-4 border-on-surface shadow-[-6px_-6px_12px_rgba(255,255,255,0.8),6px_6px_12px_rgba(0,0,0,0.1)]">
+        <div class="flex items-center gap-6">
+          <span class="text-2xl font-black uppercase tracking-tighter text-on-surface">PropManager Pro</span>
+          <div class="hidden lg:flex items-center ml-8 space-x-6">
+            <a href="#" class="text-primary font-black underline decoration-4 underline-offset-4 text-sm uppercase">Register</a>
+            <a href="#" class="text-secondary font-bold uppercase text-sm hover:bg-surface-container-highest transition-all duration-200 px-3 py-1">Overview</a>
+            <a href="#" class="text-secondary font-bold uppercase text-sm hover:bg-surface-container-highest transition-all duration-200 px-3 py-1">Analytics</a>
+          </div>
         </div>
-      </div>
 
-      <div class="flex items-center gap-3">
-        <button type="button" class="p-3 rounded-full neu-raised hover:bg-surface-container-highest active:translate-y-1 transition-all">
-          <span class="material-symbols-outlined text-primary">notifications</span>
-        </button>
+        <div class="flex items-center gap-3">
+          <button type="button" class="p-3 rounded-full neu-raised hover:bg-surface-container-highest active:translate-y-1 transition-all">
+            <span class="material-symbols-outlined text-primary">notifications</span>
+          </button>
 
-        <button type="button" class="p-3 rounded-full neu-raised hover:bg-surface-container-highest active:translate-y-1 transition-all">
-          <span class="material-symbols-outlined text-primary">settings</span>
-        </button>
+          <button type="button" class="p-3 rounded-full neu-raised hover:bg-surface-container-highest active:translate-y-1 transition-all">
+            <span class="material-symbols-outlined text-primary">settings</span>
+          </button>
 
-        <!-- TODO [LÓGICA - AVATAR]: Renderizar [src]="currentUser().avatarUrl" dinámicamente -->
-        <div class="w-10 h-10 rounded-full border-2 border-on-surface bg-surface-container-high ml-2 overflow-hidden shadow-sm">
-          <img 
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9_DXtbY52-7i7o51pkGNazMGLk_lp8nrrDf6o2326UnC-mGXBsC4Q3D8tqBr4nMJ8jchym2-5z3mkOs0eNqJ_vyrXxC8Y8hqIZW2413ors9ScbRad5WTRisXFb0rlHqfBU0vJqUFuxPvAC1jR3GiJgfkN3S480EMtekqxSa6gNKpfqWujzBAhfHuPFmtoRha2riQ4-Z63qGLiPuc9nthjHsSMeI4uWg-kuqlkA2PONw7LRbR0Ok72OA" 
-            alt="Usuario Administrador" 
-            class="w-full h-full object-cover" 
-          />
+          <!-- TODO [LÓGICA - AVATAR]: Renderizar [src]="currentUser().avatarUrl" dinámicamente -->
+          <div class="w-10 h-10 rounded-full border-2 border-on-surface bg-surface-container-high ml-2 overflow-hidden shadow-sm">
+            <img 
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9_DXtbY52-7i7o51pkGNazMGLk_lp8nrrDf6o2326UnC-mGXBsC4Q3D8tqBr4nMJ8jchym2-5z3mkOs0eNqJ_vyrXxC8Y8hqIZW2413ors9ScbRad5WTRisXFb0rlHqfBU0vJqUFuxPvAC1jR3GiJgfkN3S480EMtekqxSa6gNKpfqWujzBAhfHuPFmtoRha2riQ4-Z63qGLiPuc9nthjHsSMeI4uWg-kuqlkA2PONw7LRbR0Ok72OA" 
+              alt="Usuario Administrador" 
+              class="w-full h-full object-cover" 
+            />
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
 
-    <!-- Contenido del Formulario -->
-    <div class="flex-1 flex flex-col items-center justify-center p-6 lg:p-12">
-      <div class="w-full max-w-2xl">
-        
-        <!-- Título Principal -->
-        <h2 class="text-3xl lg:text-4xl font-black uppercase italic text-white brutal-title mb-8 tracking-tight">
-          REGISTRAR LOCAL
-        </h2>
-
-        <!-- Formulario en Tarjeta Glassmorphism -->
-        <div class="glass-card rounded-xl p-6 lg:p-10 shadow-2xl relative overflow-hidden">
+      <!-- Contenido del Formulario -->
+      <div class="flex-1 flex flex-col items-center justify-center p-2">
+        <div class="w-full max-w-2xl p-3">
           
-          <!-- TODO [LÓGICA - FORMULARIO]: Vincular con ReactiveForms mediante [formGroup]="registerLocalForm" y (ngSubmit)="onSubmitLocal()" -->
-          <form class="space-y-6">
+          <!-- Título Principal -->
+          <h2 class="text-3xl lg:text-4xl font-black uppercase italic text-white brutal-title mb-8 tracking-tight">
+            REGISTRAR LOCAL
+          </h2>
+
+          <!-- Formulario en Tarjeta Glassmorphism -->
+          <div class="glass-card rounded-xl p-6 lg:p-10 shadow-2xl relative overflow-hidden">
             
-            <!-- Selector de Propiedad con Estado Carga / Skeleton -->
-            <div class="space-y-2">
-              <label class="text-sm text-white uppercase font-black tracking-widest pl-2">Propiedad</label>
-              <div class="relative group">
-                <div class="w-full h-14 neu-pressed rounded-full flex items-center px-6 border border-white/10 overflow-hidden relative">
-                  
-                  <!-- 
-                    TODO [LÓGICA - SKELETON / LOADING]: 
-                    Controlar visibilidad de la carga con @if (loadingProperties)
-                  -->
-                  <div class="absolute inset-0 skeleton-animate opacity-40 z-0"></div>
-                  
-                  <div class="flex items-center gap-3 z-10 w-full">
-                    <div class="animate-spin text-primary-container">
-                      <span class="material-symbols-outlined">progress_activity</span>
-                    </div>
+            <!-- TODO [LÓGICA - FORMULARIO]: Vincular con ReactiveForms mediante [formGroup]="registerLocalForm" y (ngSubmit)="onSubmitLocal()" -->
+            <form [formGroup]="LocalForm" (ngSubmit)="onSubmit()" class="space-y-6">
+              
+              <!-- Selector de Propiedad con Estado Carga / Skeleton -->
+              <div class="space-y-2">
+                <label class="text-sm text-black uppercase font-black tracking-widest pl-2">Propiedad</label>
+                <div class="relative group">
+                  <div class="w-full h-14 neu-pressed rounded-full flex items-center px-6 border border-white/10 overflow-hidden relative">
                     
-                    <!-- TODO [LÓGICA - SELECCIÓN]: Reemplazar por <select> o dropdown interactivo cuando carguen las propiedades -->
-                    <span class="text-on-surface-variant font-bold italic animate-pulse">Cargando propiedades...</span>
-                    <span class="material-symbols-outlined ml-auto text-secondary">expand_more</span>
+                    @if (loadingProperties()) {
+                      <div class="flex items-center gap-3 z-10 w-full">
+                        <div class="animate-spin text-primary-container">
+                          <span class="material-symbols-outlined">progress_activity</span>
+                        </div>
+                        <span class="text-on-surface-variant font-bold italic animate-pulse">Cargando propiedades...</span>
+            
+                      </div>
+                    } @else {
+                      <select 
+                        formControlName="propiedadId"
+                        class="w-full h-full bg-surface border-none focus:outline-none text-on-surface font-bold cursor-pointer"
+                      >
+                        <option value="">Selecciona una propiedad</option>
+                        @for (prop of propiedades(); track prop.id) {
+                          <option [value]="prop.id">{{ prop.nombre }}</option>
+                        }
+                      </select>
+                    }
+                    
                   </div>
                 </div>
               </div>
-            </div>
 
-            <!-- Nombre del local -->
-            <div class="space-y-2">
-              <label class="text-sm text-white uppercase font-black tracking-widest pl-2">Nombre del local</label>
-              <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="name" -->
-              <input 
-                type="text" 
-                placeholder="Ej. Suite 104 - Retail A" 
-                class="w-full h-14 neu-pressed rounded-full bg-surface border-none focus:outline-none focus:ring-4 focus:ring-primary-container/30 text-on-surface font-bold px-6 transition-all"
-              />
-            </div>
-
-            <!-- Descripción -->
-            <div class="space-y-2">
-              <label class="text-sm text-white uppercase font-black tracking-widest pl-2">Descripción</label>
-              <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="description" -->
-              <textarea 
-                rows="3" 
-                placeholder="Detalles sobre el local, acabados o restricciones..." 
-                class="w-full neu-pressed rounded-xl bg-surface border-none focus:outline-none focus:ring-4 focus:ring-primary-container/30 text-on-surface font-medium p-4 transition-all resize-none"
-              ></textarea>
-            </div>
-
-            <!-- Área m² -->
-            <div class="space-y-2">
-              <label class="text-sm text-white uppercase font-black tracking-widest pl-2">Área m²</label>
-              <div class="relative">
-                <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="areaSqm" -->
+              <!-- Nombre del local -->
+              <div class="space-y-2">
+                <label class="text-sm text-black uppercase font-black tracking-widest pl-2">Nombre del local</label>
                 <input 
-                  type="number" 
-                  placeholder="0.00" 
-                  class="w-full h-14 neu-pressed rounded-full bg-surface border-none focus:outline-none focus:ring-4 focus:ring-primary-container/30 text-on-surface font-bold px-6 transition-all pr-16"
+                  type="text" 
+                  formControlName="nombreLocal"
+                  placeholder="Ej. Suite 104 - Retail A" 
+                  class="w-full h-14 neu-pressed rounded-full bg-surface border-none focus:outline-none focus:ring-4 focus:ring-primary-container/30 text-on-surface font-bold px-6 transition-all"
                 />
-                <span class="absolute right-6 top-1/2 -translate-y-1/2 font-black text-secondary uppercase text-sm">SQM</span>
               </div>
-            </div>
 
-            <!-- Botón de Acción -->
-            <div class="pt-4">
-              <!-- TODO [LÓGICA - SUBMIT]: Conectar submit del formulario y deshabilitar si no es válido [disabled]="registerLocalForm.invalid" -->
-              <button 
-                type="submit" 
-                class="w-full h-16 neu-btn-primary text-white font-black text-xl rounded-full flex items-center justify-center gap-4 transform hover:-translate-y-1 active:translate-y-1 cursor-pointer"
-              >
-                <span class="material-symbols-outlined active-icon">add_business</span>
-                REGISTRAR LOCAL
-              </button>
-            </div>
+              <!-- Descripción -->
+              <div class="space-y-2">
+                <label class="text-sm text-black uppercase font-black tracking-widest pl-2">Descripción</label>
+                <textarea 
+                  rows="3" 
+                  formControlName="descripcion"
+                  placeholder="Detalles sobre el local, acabados o restricciones..." 
+                  class="w-full neu-pressed rounded-xl bg-surface border-none focus:outline-none focus:ring-4 focus:ring-primary-container/30 text-on-surface font-medium p-4 transition-all resize-none"
+                ></textarea>
+              </div>
 
-          </form>
+              <!-- Área m² -->
+              <div class="space-y-2">
+                <label class="text-sm text-black uppercase font-black tracking-widest pl-2">Área m²</label>
+                <div class="relative">
+                  <input 
+                    type="number" 
+                    placeholder="0.00" 
+                    formControlName="area"
+                    class="w-full h-14 neu-pressed rounded-full bg-surface border-none focus:outline-none focus:ring-4 focus:ring-primary-container/30 text-on-surface font-bold px-6 transition-all pr-16"
+                  />
+                  <span class="absolute right-6 top-1/2 -translate-y-1/2 font-black text-secondary uppercase text-sm">SQM</span>
+                </div>
+              </div>
 
-          <!-- Destellos decorativos para efecto Glassmorphism -->
-          <div class="absolute -top-24 -right-24 w-48 h-48 bg-primary-container/20 blur-3xl rounded-full pointer-events-none"></div>
-          <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-white/10 blur-3xl rounded-full pointer-events-none"></div>
+              <!-- Botón de Acción -->
+              <div class="pt-4">
+                <button 
+                  type="submit" 
+                  [disabled]="LocalForm.invalid"
+                  class="w-full h-16 neu-btn-primary text-white font-black text-xl rounded-full flex items-center justify-center gap-4 transform hover:-translate-y-1 active:translate-y-1 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <span class="material-symbols-outlined active-icon">add_business</span>
+                  REGISTRAR LOCAL
+                </button>
+              </div>
 
-        </div>
+            </form>
 
-        <!-- Badges de Información Auxiliar -->
-        <div class="mt-8 flex flex-wrap gap-4 justify-center md:justify-start">
-          <div class="neu-raised px-4 py-2 rounded-full flex items-center gap-2">
-            <span class="material-symbols-outlined text-primary text-sm">info</span>
-            <!-- TODO [LÓGICA - INTERPOLACIÓN]: Reemplazar por {{ availableSpacesCount }} espacios disponibles -->
-            <span class="text-xs font-bold uppercase text-on-surface-variant">4 espacios disponibles</span>
+            <!-- Destellos decorativos para efecto Glassmorphism -->
+            <div class="absolute -top-24 -right-24 w-48 h-48 bg-primary-container/20 blur-3xl rounded-full pointer-events-none"></div>
+            <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-white/10 blur-3xl rounded-full pointer-events-none"></div>
+
           </div>
 
-          <div class="neu-raised px-4 py-2 rounded-full flex items-center gap-2">
-            <span class="material-symbols-outlined text-primary text-sm">verified</span>
-            <span class="text-xs font-bold uppercase text-on-surface-variant">Validación automática</span>
-          </div>
-        </div>
+          <!-- Badges de Información Auxiliar -->
+          <div class="mt-8 flex flex-wrap gap-4 justify-center md:justify-start">
+            <div class="neu-raised px-4 py-2 rounded-full flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-sm">info</span>
+              <!-- TODO [LÓGICA - INTERPOLACIÓN]: Reemplazar por {{ availableSpacesCount }} espacios disponibles -->
+              <span class="text-xs font-bold uppercase text-on-surface-variant">4 espacios disponibles</span>
+            </div>
 
+            <div class="neu-raised px-4 py-2 rounded-full flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-sm">verified</span>
+              <span class="text-xs font-bold uppercase text-on-surface-variant">Validación automática</span>
+            </div>
+          </div>
+
+        </div>
       </div>
-    </div>
 
-    <!-- Navegación Inferior para Dispositivos Móviles -->
-    <footer class="md:hidden flex justify-around items-center h-20 bg-surface/90 backdrop-blur-md border-t-2 border-on-surface w-full fixed bottom-0 z-50">
-      <button type="button" class="flex flex-col items-center gap-1 text-secondary">
-        <span class="material-symbols-outlined">dashboard</span>
-        <span class="text-[10px] font-bold uppercase">Dash</span>
-      </button>
-
-      <button type="button" class="flex flex-col items-center gap-1 text-primary">
-        <span class="material-symbols-outlined active-icon">domain</span>
-        <span class="text-[10px] font-bold uppercase">Props</span>
-      </button>
-
-      <div class="-mt-12">
-        <button type="button" class="w-16 h-16 bg-primary text-white rounded-full shadow-lg border-4 border-surface flex items-center justify-center">
-          <span class="material-symbols-outlined text-3xl">add</span>
+      <!-- Navegación Inferior para Dispositivos Móviles -->
+      <footer class="md:hidden flex justify-around items-center h-20 bg-surface/90 backdrop-blur-md border-t-2 border-on-surface w-full fixed bottom-0 z-50">
+        <button type="button" class="flex flex-col items-center gap-1 text-secondary">
+          <span class="material-symbols-outlined">dashboard</span>
+          <span class="text-[10px] font-bold uppercase">Dash</span>
         </button>
-      </div>
 
-      <button type="button" class="flex flex-col items-center gap-1 text-secondary">
-        <span class="material-symbols-outlined">group</span>
-        <span class="text-[10px] font-bold uppercase">Users</span>
-      </button>
+        <button type="button" class="flex flex-col items-center gap-1 text-primary">
+          <span class="material-symbols-outlined active-icon">domain</span>
+          <span class="text-[10px] font-bold uppercase">Props</span>
+        </button>
 
-      <button type="button" class="flex flex-col items-center gap-1 text-secondary">
-        <span class="material-symbols-outlined">assessment</span>
-        <span class="text-[10px] font-bold uppercase">Stats</span>
-      </button>
-    </footer>
+        <div class="-mt-12">
+          <button type="button" class="w-16 h-16 bg-primary text-white rounded-full shadow-lg border-4 border-surface flex items-center justify-center">
+            <span class="material-symbols-outlined text-3xl">add</span>
+          </button>
+        </div>
 
-  </main>
+        <button type="button" class="flex flex-col items-center gap-1 text-secondary">
+          <span class="material-symbols-outlined">group</span>
+          <span class="text-[10px] font-bold uppercase">Users</span>
+        </button>
+
+        <button type="button" class="flex flex-col items-center gap-1 text-secondary">
+          <span class="material-symbols-outlined">assessment</span>
+          <span class="text-[10px] font-bold uppercase">Stats</span>
+        </button>
+      </footer>
+
+    </main>
+  </div>
+  
 </div>

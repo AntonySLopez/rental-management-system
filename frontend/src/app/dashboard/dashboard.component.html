@@ -1,195 +1,193 @@
-<!-- Fondo Global con efecto traslúcido -->
-<div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-  <div class="bg-hero absolute inset-0 -z-10"></div>
-  <div class="absolute inset-0 bg-surface/40 backdrop-blur-[2px]"></div>
+<div class="flex w-full max-h-screen">
+  <!-- Barra de Navegación Lateral (Sidebar) -->
+  <app-panel-lateral></app-panel-lateral>
+
+  <div class="flex flex-col">
+  <!-- Encabezado Superior (Header) -->
+  <header class="fixed top-0 right-0 left-64 z-30 flex justify-between items-center h-20 px-8 bg-surface/80 backdrop-blur-md border-b-2 border-on-surface/10">
+    <div class="flex items-center gap-8">
+      <div class="neo-pressed bg-surface-container-low px-4 py-2 rounded-full flex items-center gap-2 w-80">
+        <span class="material-symbols-outlined text-on-surface-variant">search</span>
+        <!-- TODO [LÓGICA - SEARCH]: Conectar [(ngModel)]="searchQuery" o (input)="onSearch($event)" -->
+        <input type="text" placeholder="Search properties..." class="bg-transparent border-none focus:outline-none w-full text-sm font-normal" />
+      </div>
+
+      <nav class="hidden md:flex gap-6">
+        <a href="#" class="text-sm text-primary border-b-2 border-primary pb-1 font-bold">Portfolio</a>
+        <a href="#" class="text-sm text-on-surface-variant hover:text-primary transition-colors">Insights</a>
+        <a href="#" class="text-sm text-on-surface-variant hover:text-primary transition-colors">Team</a>
+      </nav>
+    </div>
+
+    <div class="flex items-center gap-4">
+      <!-- TODO [LÓGICA - EVENTO]: Enlazar (click)="openNotifications()" -->
+      <button type="button" class="p-2 neo-raised bg-surface rounded-full text-on-surface-variant hover:text-primary transition-all active:scale-95">
+        <span class="material-symbols-outlined">notifications</span>
+      </button>
+
+      <!-- TODO [LÓGICA - EVENTO / IMAGEN]: Enlazar foto de perfil de usuario dinámicamente con [src]="currentUser().avatar" -->
+      <div class="h-10 w-10 rounded-full neo-raised bg-surface-container-highest overflow-hidden cursor-pointer active:scale-95 transition-transform border-2 border-white">
+        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXokPx0A-gTziqUgY0ZYTRjdv7W_p8j12b5_GkuUdghxT_e2PLW-b76lijGRSzWODBphzOasFNBHHG7s17Kd-7UaaGp5K_6jFuDZ5B64PmaeaPWvqD9qNjCXrXF7HLsv7QySa1JWQO9EAKSwVmm5kE-EntPH4OFvG5xIXlXWooXl-GcR2CUuJsHQMf11LT1UwtXmL3UGWywwrdOA8xFHZfpdl_mF4pVJAiiIy4rg3bjrEt2XRrSum6ww" alt="Foto de Perfil" class="w-full h-full object-cover" />
+      </div>
+    </div>
+  </header>
+
+  <!-- Área de Contenido Principal -->
+  <main class="mt-8 p-8 relative z-10 max-h-screen overflow-y-auto bg-hero">
+    <div class="max-w-7xl mx-auto py-12">
+      
+      <!-- Hero / Saludo -->
+      <section class="mb-16">
+        <!-- TODO [LÓGICA - INTERPOLACIÓN]: Reemplazar por {{ adminName }} -->
+        <h2 class="text-4xl font-extrabold text-on-surface mb-2 tracking-tight">
+          Bienvenido, Administrador
+        </h2>
+        <p class="text-base text-on-surface-variant max-w-2xl">
+          Gestione su portafolio de propiedades con precisión. Visualice el rendimiento y acceda a las herramientas clave de administración.
+        </p>
+      </section>
+
+      <!-- Grid de Tarjetas Principales -->
+      <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        
+        <!-- Card 1: Propiedades -->
+        <!-- TODO [LÓGICA - EVENTO]: Enlazar (click)="navigateTo('properties')" -->
+        <div routerLink="/propiedades" class="glass-card neo-raised rounded-2xl p-8 flex flex-col items-center text-center cursor-pointer hover:-translate-y-2 transition-all duration-300 group bg-surface/80">
+          <div class="w-20 h-20 neo-pressed rounded-2xl flex items-center justify-center mb-6 text-primary group-hover:bg-primary-container/20 transition-all">
+            <span class="material-symbols-outlined text-[40px] active-icon">switches</span>
+          </div>
+          <h3 class="text-xl font-bold mb-2 text-on-surface uppercase tracking-wider">Propiedades</h3>
+          <p class="text-sm text-on-surface-variant mb-6">Administre el inventario completo de inmuebles residenciales.</p>
+          <div class="mt-auto neo-pressed bg-surface-container px-4 py-2 rounded-full text-sm font-semibold text-on-surface-variant">
+            <!-- TODO [LÓGICA - INTERPOLACIÓN]: Reemplazar por {{ stats().activeProperties }} Activas -->
+            124 Activas
+          </div>
+        </div>
+
+        <!-- Card 2: Locales Comercial -->
+        <div routerLink="/locales" class="glass-card neo-raised rounded-2xl p-8 flex flex-col items-center text-center cursor-pointer hover:-translate-y-2 transition-all duration-300 group bg-surface/80">
+          <div class="w-20 h-20 neo-pressed rounded-2xl flex items-center justify-center mb-6 text-primary group-hover:bg-primary-container/20 transition-all">
+            <span class="material-symbols-outlined text-[40px] active-icon">store</span>
+          </div>
+          <h3 class="text-xl font-bold mb-2 text-on-surface uppercase tracking-wider">Locales</h3>
+          <p class="text-sm text-on-surface-variant mb-6">Gestión de espacios comerciales y retail premium.</p>
+          <div class="mt-auto neo-pressed bg-surface-container px-4 py-2 rounded-full text-sm font-semibold text-on-surface-variant">
+            <!-- TODO [LÓGICA - INTERPOLACIÓN]: Reemplazar por {{ stats().commercialUnits }} Unidades -->
+            42 Unidades
+          </div>
+        </div>
+
+        <!-- Card 3: Contratos -->
+        <div routerLink="/contratos" class="glass-card neo-raised rounded-2xl p-8 flex flex-col items-center text-center cursor-pointer hover:-translate-y-2 transition-all duration-300 group bg-surface/80">
+          <div class="w-20 h-20 neo-pressed rounded-2xl flex items-center justify-center mb-6 text-primary group-hover:bg-primary-container/20 transition-all">
+            <span class="material-symbols-outlined text-[40px] active-icon">description</span>
+          </div>
+          <h3 class="text-xl font-bold mb-2 text-on-surface uppercase tracking-wider">Contratos</h3>
+          <p class="text-sm text-on-surface-variant mb-6">Revisión legal, firmas digitales y vencimientos próximos.</p>
+          <div class="mt-auto neo-pressed bg-surface-container px-4 py-2 rounded-full text-sm font-semibold text-on-surface-variant">
+            <!-- TODO [LÓGICA - INTERPOLACIÓN]: Reemplazar por {{ stats().expiringLeases }} Por vencer -->
+            15 Por vencer
+          </div>
+        </div>
+
+        <!-- Card 4: Inquilinos -->
+        <div routerLink="/inquilinos" class="glass-card neo-raised rounded-2xl p-8 flex flex-col items-center text-center cursor-pointer hover:-translate-y-2 transition-all duration-300 group bg-surface/80">
+          <div class="w-20 h-20 neo-pressed rounded-2xl flex items-center justify-center mb-6 text-primary group-hover:bg-primary-container/20 transition-all">
+            <span class="material-symbols-outlined text-[40px] active-icon">group</span>
+          </div>
+          <h3 class="text-xl font-bold mb-2 text-on-surface uppercase tracking-wider">Inquilinos</h3>
+          <p class="text-sm text-on-surface-variant mb-6">Base de datos de arrendatarios y historial de pagos.</p>
+          <div class="mt-auto neo-pressed bg-surface-container px-4 py-2 rounded-full text-sm font-semibold text-on-surface-variant">
+            <!-- TODO [LÓGICA - INTERPOLACIÓN]: Reemplazar por {{ stats().totalTenants }} Perfiles -->
+            186 Perfiles
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Resumen de Actividad y Métricas -->
+      <section class="mt-16 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Lista de Actividad Reciente -->
+        <div class="lg:col-span-2 glass-card neo-raised rounded-2xl p-8 bg-surface/80">
+          <div class="flex justify-between items-center mb-8">
+            <h4 class="text-2xl font-bold">Actividad Reciente</h4>
+            <!-- TODO [LÓGICA - EVENTO]: Enlazar (click)="viewAllActivity()" -->
+            <button type="button" class="text-primary font-semibold hover:underline">Ver todo</button>
+          </div>
+
+          <div class="space-y-6">
+            <!-- TODO [LÓGICA - ITERACIÓN]: Implementar bloque @for (item of recentActivities(); track item.id) -->
+            
+            <div class="flex items-center gap-4 p-4 neo-pressed rounded-xl bg-surface/30">
+              <div class="w-10 h-10 rounded-full bg-primary-container/30 flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined">payments</span>
+              </div>
+              <div class="flex-1">
+                <p class="text-sm font-semibold">Pago recibido: Local 104 - Green Market</p>
+                <p class="text-xs text-on-surface-variant">Hace 15 minutos</p>
+              </div>
+              <span class="text-sm font-semibold text-primary">+$1,200.00</span>
+            </div>
+
+            <div class="flex items-center gap-4 p-4 hover:bg-surface/30 transition-all rounded-xl">
+              <div class="w-10 h-10 rounded-full bg-error-container/30 flex items-center justify-center text-error">
+                <span class="material-symbols-outlined">report_problem</span>
+              </div>
+              <div class="flex-1">
+                <p class="text-sm font-semibold">Reporte de mantenimiento: Innovate Tower</p>
+                <p class="text-xs text-on-surface-variant">Hace 2 horas</p>
+              </div>
+              <span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+            </div>
+
+            <div class="flex items-center gap-4 p-4 hover:bg-surface/30 transition-all rounded-xl">
+              <div class="w-10 h-10 rounded-full bg-secondary-container/30 flex items-center justify-center text-secondary">
+                <span class="material-symbols-outlined">verified</span>
+              </div>
+              <div class="flex-1">
+                <p class="text-sm font-semibold">Nuevo contrato firmado: Modern Optics</p>
+                <p class="text-xs text-on-surface-variant">Hace 5 horas</p>
+              </div>
+              <span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Resumen de Ocupación -->
+        <div class="glass-card neo-raised rounded-2xl p-8 flex flex-col justify-between overflow-hidden relative bg-surface/80">
+          <div>
+            <h4 class="text-2xl font-bold mb-6">Ocupación Total</h4>
+            <div class="flex items-end gap-2 mb-2">
+              <!-- TODO [LÓGICA - INTERPOLACIÓN]: Reemplazar por {{ occupancyPercentage }}% -->
+              <span class="text-[56px] font-black leading-none text-primary">94%</span>
+              <span class="text-xs font-semibold text-on-surface-variant mb-2">+2.4% vs mes anterior</span>
+            </div>
+          </div>
+
+          <!-- Representación Gráfica -->
+          <!-- TODO [LÓGICA]: Reemplazar la simulación de barras por integración de Chart.js / ApexCharts según requerimientos -->
+          <div class="w-full h-24 neo-pressed bg-surface-container rounded-xl flex items-end p-2 gap-1 overflow-hidden">
+            <div class="bg-primary/40 w-full rounded-t-sm h-[60%]"></div>
+            <div class="bg-primary/40 w-full rounded-t-sm h-[75%]"></div>
+            <div class="bg-primary/40 w-full rounded-t-sm h-[70%]"></div>
+            <div class="bg-primary/40 w-full rounded-t-sm h-[85%]"></div>
+            <div class="bg-primary/40 w-full rounded-t-sm h-[80%]"></div>
+            <div class="bg-primary/40 w-full rounded-t-sm h-[90%]"></div>
+            <div class="bg-primary/40 w-full rounded-t-sm h-[94%]"></div>
+          </div>
+
+          <!-- Botón de Generar Reporte -->
+          <!-- TODO [LÓGICA - EVENTO]: Enlazar (click)="generateMonthlyReport()" -->
+          <button type="button" class="mt-8 py-4 px-6 neo-raised bg-primary text-white rounded-full font-semibold text-sm hover:scale-[0.98] active:scale-95 transition-all w-full">
+            Generar Reporte Mensual
+          </button>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+  </div>
 </div>
-
-<!-- Barra de Navegación Lateral (Sidebar) -->
-<app-panel-lateral></app-panel-lateral>
-
-<!-- Encabezado Superior (Header) -->
-<header class="fixed top-0 right-0 left-64 z-30 flex justify-between items-center h-20 px-8 bg-surface/80 backdrop-blur-md border-b-2 border-on-surface/10">
-  <div class="flex items-center gap-8">
-    <div class="neo-pressed bg-surface-container-low px-4 py-2 rounded-full flex items-center gap-2 w-80">
-      <span class="material-symbols-outlined text-on-surface-variant">search</span>
-      <!-- TODO [LÓGICA - SEARCH]: Conectar [(ngModel)]="searchQuery" o (input)="onSearch($event)" -->
-      <input type="text" placeholder="Search properties..." class="bg-transparent border-none focus:outline-none w-full text-sm font-normal" />
-    </div>
-
-    <nav class="hidden md:flex gap-6">
-      <a href="#" class="text-sm text-primary border-b-2 border-primary pb-1 font-bold">Portfolio</a>
-      <a href="#" class="text-sm text-on-surface-variant hover:text-primary transition-colors">Insights</a>
-      <a href="#" class="text-sm text-on-surface-variant hover:text-primary transition-colors">Team</a>
-    </nav>
-  </div>
-
-  <div class="flex items-center gap-4">
-    <!-- TODO [LÓGICA - EVENTO]: Enlazar (click)="openNotifications()" -->
-    <button type="button" class="p-2 neo-raised bg-surface rounded-full text-on-surface-variant hover:text-primary transition-all active:scale-95">
-      <span class="material-symbols-outlined">notifications</span>
-    </button>
-
-    <!-- TODO [LÓGICA - EVENTO / IMAGEN]: Enlazar foto de perfil de usuario dinámicamente con [src]="currentUser().avatar" -->
-    <div class="h-10 w-10 rounded-full neo-raised bg-surface-container-highest overflow-hidden cursor-pointer active:scale-95 transition-transform border-2 border-white">
-      <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXokPx0A-gTziqUgY0ZYTRjdv7W_p8j12b5_GkuUdghxT_e2PLW-b76lijGRSzWODBphzOasFNBHHG7s17Kd-7UaaGp5K_6jFuDZ5B64PmaeaPWvqD9qNjCXrXF7HLsv7QySa1JWQO9EAKSwVmm5kE-EntPH4OFvG5xIXlXWooXl-GcR2CUuJsHQMf11LT1UwtXmL3UGWywwrdOA8xFHZfpdl_mF4pVJAiiIy4rg3bjrEt2XRrSum6ww" alt="Foto de Perfil" class="w-full h-full object-cover" />
-    </div>
-  </div>
-</header>
-
-<!-- Área de Contenido Principal -->
-<main class="ml-64 pt-20 p-8 min-h-screen relative z-10">
-  <div class="max-w-7xl mx-auto py-12">
-    
-    <!-- Hero / Saludo -->
-    <section class="mb-16">
-      <!-- TODO [LÓGICA - INTERPOLACIÓN]: Reemplazar por {{ adminName }} -->
-      <h2 class="text-4xl font-extrabold text-on-surface mb-2 tracking-tight">
-        Bienvenido, Administrador
-      </h2>
-      <p class="text-base text-on-surface-variant max-w-2xl">
-        Gestione su portafolio de propiedades con precisión. Visualice el rendimiento y acceda a las herramientas clave de administración.
-      </p>
-    </section>
-
-    <!-- Grid de Tarjetas Principales -->
-    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-      
-      <!-- Card 1: Propiedades -->
-      <!-- TODO [LÓGICA - EVENTO]: Enlazar (click)="navigateTo('properties')" -->
-      <div class="glass-card neo-raised rounded-2xl p-8 flex flex-col items-center text-center cursor-pointer hover:-translate-y-2 transition-all duration-300 group bg-surface/80">
-        <div class="w-20 h-20 neo-pressed rounded-2xl flex items-center justify-center mb-6 text-primary group-hover:bg-primary-container/20 transition-all">
-          <span class="material-symbols-outlined text-[40px] active-icon">switches</span>
-        </div>
-        <h3 class="text-xl font-bold mb-2 text-on-surface uppercase tracking-wider">Propiedades</h3>
-        <p class="text-sm text-on-surface-variant mb-6">Administre el inventario completo de inmuebles residenciales.</p>
-        <div class="mt-auto neo-pressed bg-surface-container px-4 py-2 rounded-full text-sm font-semibold text-on-surface-variant">
-          <!-- TODO [LÓGICA - INTERPOLACIÓN]: Reemplazar por {{ stats().activeProperties }} Activas -->
-          124 Activas
-        </div>
-      </div>
-
-      <!-- Card 2: Locales Comercial -->
-      <div class="glass-card neo-raised rounded-2xl p-8 flex flex-col items-center text-center cursor-pointer hover:-translate-y-2 transition-all duration-300 group bg-surface/80">
-        <div class="w-20 h-20 neo-pressed rounded-2xl flex items-center justify-center mb-6 text-primary group-hover:bg-primary-container/20 transition-all">
-          <span class="material-symbols-outlined text-[40px] active-icon">store</span>
-        </div>
-        <h3 class="text-xl font-bold mb-2 text-on-surface uppercase tracking-wider">Locales</h3>
-        <p class="text-sm text-on-surface-variant mb-6">Gestión de espacios comerciales y retail premium.</p>
-        <div class="mt-auto neo-pressed bg-surface-container px-4 py-2 rounded-full text-sm font-semibold text-on-surface-variant">
-          <!-- TODO [LÓGICA - INTERPOLACIÓN]: Reemplazar por {{ stats().commercialUnits }} Unidades -->
-          42 Unidades
-        </div>
-      </div>
-
-      <!-- Card 3: Contratos -->
-      <div class="glass-card neo-raised rounded-2xl p-8 flex flex-col items-center text-center cursor-pointer hover:-translate-y-2 transition-all duration-300 group bg-surface/80">
-        <div class="w-20 h-20 neo-pressed rounded-2xl flex items-center justify-center mb-6 text-primary group-hover:bg-primary-container/20 transition-all">
-          <span class="material-symbols-outlined text-[40px] active-icon">description</span>
-        </div>
-        <h3 class="text-xl font-bold mb-2 text-on-surface uppercase tracking-wider">Contratos</h3>
-        <p class="text-sm text-on-surface-variant mb-6">Revisión legal, firmas digitales y vencimientos próximos.</p>
-        <div class="mt-auto neo-pressed bg-surface-container px-4 py-2 rounded-full text-sm font-semibold text-on-surface-variant">
-          <!-- TODO [LÓGICA - INTERPOLACIÓN]: Reemplazar por {{ stats().expiringLeases }} Por vencer -->
-          15 Por vencer
-        </div>
-      </div>
-
-      <!-- Card 4: Inquilinos -->
-      <div class="glass-card neo-raised rounded-2xl p-8 flex flex-col items-center text-center cursor-pointer hover:-translate-y-2 transition-all duration-300 group bg-surface/80">
-        <div class="w-20 h-20 neo-pressed rounded-2xl flex items-center justify-center mb-6 text-primary group-hover:bg-primary-container/20 transition-all">
-          <span class="material-symbols-outlined text-[40px] active-icon">group</span>
-        </div>
-        <h3 class="text-xl font-bold mb-2 text-on-surface uppercase tracking-wider">Inquilinos</h3>
-        <p class="text-sm text-on-surface-variant mb-6">Base de datos de arrendatarios y historial de pagos.</p>
-        <div class="mt-auto neo-pressed bg-surface-container px-4 py-2 rounded-full text-sm font-semibold text-on-surface-variant">
-          <!-- TODO [LÓGICA - INTERPOLACIÓN]: Reemplazar por {{ stats().totalTenants }} Perfiles -->
-          186 Perfiles
-        </div>
-      </div>
-
-    </section>
-
-    <!-- Resumen de Actividad y Métricas -->
-    <section class="mt-16 grid grid-cols-1 lg:grid-cols-3 gap-8">
-      
-      <!-- Lista de Actividad Reciente -->
-      <div class="lg:col-span-2 glass-card neo-raised rounded-2xl p-8 bg-surface/80">
-        <div class="flex justify-between items-center mb-8">
-          <h4 class="text-2xl font-bold">Actividad Reciente</h4>
-          <!-- TODO [LÓGICA - EVENTO]: Enlazar (click)="viewAllActivity()" -->
-          <button type="button" class="text-primary font-semibold hover:underline">Ver todo</button>
-        </div>
-
-        <div class="space-y-6">
-          <!-- TODO [LÓGICA - ITERACIÓN]: Implementar bloque @for (item of recentActivities(); track item.id) -->
-          
-          <div class="flex items-center gap-4 p-4 neo-pressed rounded-xl bg-surface/30">
-            <div class="w-10 h-10 rounded-full bg-primary-container/30 flex items-center justify-center text-primary">
-              <span class="material-symbols-outlined">payments</span>
-            </div>
-            <div class="flex-1">
-              <p class="text-sm font-semibold">Pago recibido: Local 104 - Green Market</p>
-              <p class="text-xs text-on-surface-variant">Hace 15 minutos</p>
-            </div>
-            <span class="text-sm font-semibold text-primary">+$1,200.00</span>
-          </div>
-
-          <div class="flex items-center gap-4 p-4 hover:bg-surface/30 transition-all rounded-xl">
-            <div class="w-10 h-10 rounded-full bg-error-container/30 flex items-center justify-center text-error">
-              <span class="material-symbols-outlined">report_problem</span>
-            </div>
-            <div class="flex-1">
-              <p class="text-sm font-semibold">Reporte de mantenimiento: Innovate Tower</p>
-              <p class="text-xs text-on-surface-variant">Hace 2 horas</p>
-            </div>
-            <span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
-          </div>
-
-          <div class="flex items-center gap-4 p-4 hover:bg-surface/30 transition-all rounded-xl">
-            <div class="w-10 h-10 rounded-full bg-secondary-container/30 flex items-center justify-center text-secondary">
-              <span class="material-symbols-outlined">verified</span>
-            </div>
-            <div class="flex-1">
-              <p class="text-sm font-semibold">Nuevo contrato firmado: Modern Optics</p>
-              <p class="text-xs text-on-surface-variant">Hace 5 horas</p>
-            </div>
-            <span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- Resumen de Ocupación -->
-      <div class="glass-card neo-raised rounded-2xl p-8 flex flex-col justify-between overflow-hidden relative bg-surface/80">
-        <div>
-          <h4 class="text-2xl font-bold mb-6">Ocupación Total</h4>
-          <div class="flex items-end gap-2 mb-2">
-            <!-- TODO [LÓGICA - INTERPOLACIÓN]: Reemplazar por {{ occupancyPercentage }}% -->
-            <span class="text-[56px] font-black leading-none text-primary">94%</span>
-            <span class="text-xs font-semibold text-on-surface-variant mb-2">+2.4% vs mes anterior</span>
-          </div>
-        </div>
-
-        <!-- Representación Gráfica -->
-        <!-- TODO [LÓGICA]: Reemplazar la simulación de barras por integración de Chart.js / ApexCharts según requerimientos -->
-        <div class="w-full h-24 neo-pressed bg-surface-container rounded-xl flex items-end p-2 gap-1 overflow-hidden">
-          <div class="bg-primary/40 w-full rounded-t-sm h-[60%]"></div>
-          <div class="bg-primary/40 w-full rounded-t-sm h-[75%]"></div>
-          <div class="bg-primary/40 w-full rounded-t-sm h-[70%]"></div>
-          <div class="bg-primary/40 w-full rounded-t-sm h-[85%]"></div>
-          <div class="bg-primary/40 w-full rounded-t-sm h-[80%]"></div>
-          <div class="bg-primary/40 w-full rounded-t-sm h-[90%]"></div>
-          <div class="bg-primary/40 w-full rounded-t-sm h-[94%]"></div>
-        </div>
-
-        <!-- Botón de Generar Reporte -->
-        <!-- TODO [LÓGICA - EVENTO]: Enlazar (click)="generateMonthlyReport()" -->
-        <button type="button" class="mt-8 py-4 px-6 neo-raised bg-primary text-white rounded-full font-semibold text-sm hover:scale-[0.98] active:scale-95 transition-all w-full">
-          Generar Reporte Mensual
-        </button>
-      </div>
-
-    </section>
-
-  </div>
-</main>

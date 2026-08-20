@@ -7,6 +7,13 @@ export class AuthService {
   private authRepository = inject(AuthRepository);
   
   login(request: LoginRequest) {
-    return this.authRepository.login(request);
+    const result = this.authRepository.login(request);
+    // guarda el token en el localStorage
+    result.subscribe({
+      next: (response) => {
+        localStorage.setItem('token', response.token);
+      }
+    });
+    return result;
   }
 }

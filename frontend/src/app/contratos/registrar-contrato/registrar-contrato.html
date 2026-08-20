@@ -1,69 +1,7 @@
-<<div class="flex min-h-screen text-on-surface overflow-x-hidden bg-surface font-sans">
+<div class="flex min-h-screen text-on-surface overflow-x-hidden bg-surface font-sans">
   
   <!-- SideNavBar (Navegación Lateral) -->
-  <aside class="hidden md:flex flex-col h-screen w-64 docked left-0 sticky top-0 z-40 bg-surface border-r-4 border-on-surface py-6 px-4 shadow-[6px_0px_12px_rgba(0,0,0,0.05)]">
-    <div class="mb-8 px-4">
-      <h1 class="text-3xl font-black uppercase italic tracking-tighter text-on-surface">
-        PropManager Pro
-      </h1>
-      <p class="text-[10px] font-bold text-secondary uppercase tracking-widest mt-1">Management Suite</p>
-    </div>
-
-    <nav class="flex-1 space-y-4">
-      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLink="/dashboard" -->
-      <a href="#" class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200">
-        <span class="material-symbols-outlined">dashboard</span>
-        <span class="text-sm">Dashboard</span>
-      </a>
-
-      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLink="/properties" -->
-      <a href="#" class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200">
-        <span class="material-symbols-outlined">domain</span>
-        <span class="text-sm">Properties</span>
-      </a>
-
-      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLink="/tenants" -->
-      <a href="#" class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200">
-        <span class="material-symbols-outlined">group</span>
-        <span class="text-sm">Tenants</span>
-      </a>
-
-      <!-- Estado Activo: Leases (Contratos) -->
-      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLinkActive -->
-      <a href="#" class="flex items-center gap-3 px-4 py-3 bg-primary text-white rounded-none border-2 border-on-surface shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] translate-x-1 font-bold uppercase">
-        <span class="material-symbols-outlined active-icon">description</span>
-        <span class="text-sm">Leases</span>
-      </a>
-
-      <a href="#" class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200">
-        <span class="material-symbols-outlined">build</span>
-        <span class="text-sm">Maintenance</span>
-      </a>
-
-      <a href="#" class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200">
-        <span class="material-symbols-outlined">assessment</span>
-        <span class="text-sm">Reports</span>
-      </a>
-    </nav>
-
-    <div class="mt-auto space-y-2 border-t-2 border-outline-variant pt-4">
-      <!-- TODO [LÓGICA - EVENTO]: Enlazar (click)="openAddPropertyModal()" -->
-      <button type="button" class="w-full bg-primary-container text-on-primary-container font-black py-4 border-2 border-on-surface shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-1 transition-all mb-4">
-        Add Property
-      </button>
-
-      <a href="#" class="flex items-center gap-3 px-4 py-2 text-on-surface-variant font-bold uppercase text-xs">
-        <span class="material-symbols-outlined text-sm">help</span>
-        <span>Help Center</span>
-      </a>
-
-      <!-- TODO [LÓGICA - LOGOUT]: Enlazar (click)="logout()" -->
-      <a href="#" class="flex items-center gap-3 px-4 py-2 text-on-surface-variant font-bold uppercase text-xs">
-        <span class="material-symbols-outlined text-sm">logout</span>
-        <span>Logout</span>
-      </a>
-    </div>
-  </aside>
+  <app-panel-lateral></app-panel-lateral>
 
   <!-- Contenido Principal -->
   <div class="flex-1 flex flex-col relative min-h-screen bg-hero bg-cover bg-fixed bg-center">

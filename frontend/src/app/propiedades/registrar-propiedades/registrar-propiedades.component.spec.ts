@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RegistrarPropiedadesComponent } from './registrar-propiedades.component/registrar-propiedades.component';
+import { RegistrarPropiedadesComponent } from './registrar-propiedades.component';
 
 describe('RegistrarPropiedadesComponent', () => {
   let component: RegistrarPropiedadesComponent;

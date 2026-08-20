@@ -1,36 +1,58 @@
-/* Textura de fondo */
-.bg-hero {
-  background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLsdaGR7l41Ad4oxvF89k6S8Mn5aimptK2a6x8i13diUey1qyWRXOKN6kuYtDoFd9ecfcdL7kDEvmu3jssmE7IEg8ekq3e2PA_dDNWv_qo9t0w1x85-9VS3toCP5fA_UbE15CREa45WMzICnEgJZN0GaiFyz9--c8wMr1BFi16bV24XkzcPlC0V2TdBGTLwPcmeE_sngaSnBFfrCaHHtwO7-9NiFM1iqSlQhsgBewLgL5FsPSyvPf1_vXDGM');
+/* Malla de Fondo Ligera (Sustituye la textura pesada bg-hero) */
+.bg-dashboard-mesh {
+  background-color: #f1f5f9;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.06) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.05) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(236, 72, 153, 0.04) 0px, transparent 50%);
+  background-attachment: fixed;
 }
 
-/* Elevación Neumórfica */
-.neu-raised {
-  box-shadow: var(--shadow-light), var(--shadow-dark);
+/* Tokens Neumórficos Globales */
+.neo-raised {
+  box-shadow: var(--neo-light, -4px -4px 10px rgba(255, 255, 255, 0.8)), 
+              var(--neo-dark, 4px 4px 10px rgba(163, 177, 198, 0.4));
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.neu-pressed {
-  box-shadow: var(--inner-shadow-dark), var(--inner-shadow-light);
+.neo-raised:hover:not(:disabled) {
+  box-shadow: -2px -2px 6px rgba(255, 255, 255, 0.9), 
+              2px 2px 6px rgba(163, 177, 198, 0.5);
 }
 
-/* Cristal translúcido */
+.neo-pressed {
+  box-shadow: var(--neo-inset-light, inset 2px 2px 5px rgba(163, 177, 198, 0.3)), 
+              var(--neo-inset-dark, inset -2px -2px 5px rgba(255, 255, 255, 0.7));
+}
+
+/* Cristal translúcido con desenfoque de fondo */
 .glass-card {
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.65);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
-/* Detalle Brutalista para Encabezado */
-.brutal-border {
-  border-bottom: 8px solid var(--color-on-surface);
-}
-
-/* Iconos activados */
+/* Estado de relleno completo en Google Material Icons */
 .active-icon {
-  font-variation-settings: 'FILL' 1;
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
 }
 
-/* Animación de Entrada para la Notificación Toast */
+/* Feedback de foco en grupos de entrada */
+.input-group:focus-within label {
+  color: var(--color-primary, #4f46e5);
+  transition: color 0.2s ease;
+}
+
+/* Estado dinámico para inputs inválidos en Angular Reactive Forms */
+input.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched {
+  border: 1px solid var(--color-error, #ef4444) !important;
+  box-shadow: inset 2px 2px 5px rgba(239, 68, 68, 0.15) !important;
+}
+
+/* Animación de entrada fluida para la notificación de éxito */
 @keyframes slideInDown {
   from {
     transform: translate(-50%, -100%);
@@ -43,5 +65,5 @@
 }
 
 .animate-slide-down {
-  animation: slideInDown 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: slideInDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }

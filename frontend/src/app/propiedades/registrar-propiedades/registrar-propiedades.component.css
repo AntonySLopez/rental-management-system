@@ -1,47 +1,53 @@
-/* Imagen de fondo con filtro */
-.bg-hero {
-  background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLsdaGR7l41Ad4oxvF89k6S8Mn5aimptK2a6x8i13diUey1qyWRXOKN6kuYtDoFd9ecfcdL7kDEvmu3jssmE7IEg8ekq3e2PA_dDNWv_qo9t0w1x85-9VS3toCP5fA_UbE15CREa45WMzICnEgJZN0GaiFyz9--c8wMr1BFi16bV24XkzcPlC0V2TdBGTLwPcmeE_sngaSnBFfrCaHHtwO7-9NiFM1iqSlQhsgBewLgL5FsPSyvPf1_vXDGM');
-  filter: blur(8px) scale(1.05);
+/* Fondo liviano dinámico (Sustituye a la imagen bg-hero) */
+.bg-dashboard-mesh {
+  background-color: #f1f5f9;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.06) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.05) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(236, 72, 153, 0.04) 0px, transparent 50%);
+  background-attachment: fixed;
 }
 
-/* Sombra para enlace de navegación activo */
-.active-nav-shadow {
-  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+/* Tokens Neumórficos Oficiales */
+.neo-raised {
+  box-shadow: var(--neo-light, -4px -4px 10px rgba(255, 255, 255, 0.8)), 
+              var(--neo-dark, 4px 4px 10px rgba(163, 177, 198, 0.4));
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Elevación Neumórfica Local */
-.neu-raised {
-  box-shadow: var(--shadow-light), var(--shadow-dark);
+.neo-raised:hover:not(:disabled) {
+  box-shadow: -2px -2px 6px rgba(255, 255, 255, 0.9), 
+              2px 2px 6px rgba(163, 177, 198, 0.5);
 }
 
-.neu-pressed {
-  box-shadow: var(--inner-shadow-light), var(--inner-shadow-dark);
+.neo-pressed {
+  box-shadow: var(--neo-inset-light, inset 2px 2px 5px rgba(163, 177, 198, 0.3)), 
+              var(--neo-inset-dark, inset -2px -2px 5px rgba(255, 255, 255, 0.7));
 }
 
-/* Tarjeta Glassmorphism */
+/* Glassmorphism */
 .glass-card {
-  background: rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 /* Iconos activados */
 .active-icon {
-  font-variation-settings: 'FILL' 1;
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
 }
 
-/* Microinteracción visual al enfocar inputs (Reemplaza al script JS inline) */
-.input-container:focus-within {
-  transform: translateX(4px);
+/* Microinteracciones para grupos de input */
+.input-group:focus-within label {
+  color: var(--color-primary, #4f46e5);
+  transition: color 0.2s ease;
 }
 
-/* Efecto Hover para el botón principal con desplazamiento brutalista */
-.btn-brutal-save:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 1);
-}
-
-.btn-brutal-save:active {
-  transform: translate(0, 0);
-  box-shadow: none;
+/* Estado de campo inválido para Angular Reactive Forms */
+input.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched {
+  border: 1px solid var(--color-error, #ef4444) !important;
+  box-shadow: inset 2px 2px 5px rgba(239, 68, 68, 0.15) !important;
 }
