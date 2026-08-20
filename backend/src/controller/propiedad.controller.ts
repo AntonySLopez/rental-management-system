@@ -16,4 +16,13 @@ export class PropiedadController {
         console.log(result);
         res.status(201).json({ message: "Propiedad registrada correctamente" })
     }
+
+    obtenerListaPropiedades = async (req: Request, res: Response) => {
+        console.log("Obteniendo lista de propiedades...");
+        // 1. Llamar al servicio
+        const result = await propiedadService.obtenerListaPropiedades();
+        // 2. Retornar la respuesta
+        console.log(result);
+        res.status(200).json(result)
+    }
 }

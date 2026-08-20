@@ -8,7 +8,7 @@ export class PropiedadService {
     constructor() {
         this.propiedadRepository = new PropiedadRepository();
     }
-
+    // Registrar nueva propiedad
     async registrarPropiedad(propiedad: RegistrarPropiedadDTO) {
         // validamos que la propiedad no exista
         const propiedadExistente = await this.propiedadRepository.findByNombre(propiedad.nombre);
@@ -16,6 +16,11 @@ export class PropiedadService {
             throw new AppError("La propiedad ya existe", 409);
         }
         const result = await this.propiedadRepository.save(propiedad);
+        return result;
+    }
+    // Obtener lista de propiedades
+    async obtenerListaPropiedades() {
+        const result = await this.propiedadRepository.findAll();
         return result;
     }
 }

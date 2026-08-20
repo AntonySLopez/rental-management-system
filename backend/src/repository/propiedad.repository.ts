@@ -20,5 +20,11 @@ export class PropiedadRepository {
         (`INSERT INTO propiedad (nombre, direccion, descripcion, estado_id) VALUES ($1, $2, $3, (SELECT id FROM estado_general WHERE valor = 'activo')) RETURNING *`, 
         [propiedad.nombre, propiedad.direccion, propiedad.descripcion]);
         return result.rows[0];
-    }
+    };
+    
+    async findAll() {
+        const result = await pool.query
+        (`select id, nombre from propiedad`);
+        return result.rows;
+    };
 }

@@ -7,4 +7,6 @@ const controller = new PropiedadController();
 
 router.post("/registrar", controller.registrarPropiedad);
 
+router.get("/lista", controller.obtenerListaPropiedades);
+
 export default router;
