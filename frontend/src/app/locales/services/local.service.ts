@@ -1,12 +1,10 @@
 import { Service, inject } from '@angular/core';
 import { LocalRepository } from '../repository/local.repository';
-import { PropiedadRepository } from '../repository/propiedad.repository';
 import { LocalRegistrarReq } from '../models/local.model';
 
 @Service()
 export class LocalServices {
     private localRepository = inject(LocalRepository);
-    private propiedadRepository = inject(PropiedadRepository);
     
     // registra nuevo local
     registrarLocal(datos: LocalRegistrarReq) {
@@ -15,6 +13,6 @@ export class LocalServices {
     
     // obtiene lista de locales
     listaDeLocales() {
-        return this.propiedadRepository.listaPropiedades();
+        return this.localRepository.listaPropiedades();
     }
 }

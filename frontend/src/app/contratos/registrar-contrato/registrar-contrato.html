@@ -80,34 +80,58 @@
         <div class="p-6 md:p-8">
           
           <!-- TODO [LÓGICA - FORMULARIO]: Vincular con ReactiveForms mediante [formGroup]="contractForm" y (ngSubmit)="onCreateContract()" -->
-          <form class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-8 gap-x-10">
+          <form [formGroup]="contratoForm" (ngSubmit)="onSubmit()" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-8 gap-x-10">
             
             <!-- Campo: Inquilino (Selector) -->
             <div class="flex flex-col gap-2">
               <label class="text-xs font-black uppercase text-secondary px-2">Inquilino</label>
               <div class="input-wrapper neo-pressed bg-white/50 rounded-full px-6 py-4 flex items-center justify-between transition-all">
-                <!-- TODO [LÓGICA - SELECT / BINDING]: Enlazar con formControlName="tenantId" e iterar opciones con @for (tenant of tenants(); track tenant.id) -->
-                <select class="w-full bg-transparent border-none focus:outline-none text-on-surface font-bold cursor-pointer">
-                  <option value="">Seleccionar inquilino...</option>
-                  <option value="1">Corp. Industrias Unidas</option>
-                  <option value="2">Estudio Creativo Alpha</option>
-                  <option value="3">Farmacias del Valle</option>
-                </select>
+                @if (loadingInquilinos()) {
+                  <span class="text-sm text-secondary">Cargando inquilinos...</span>
+                } @else {
+                  <select formControlName="inquilinoId" class="w-full bg-transparent border-none focus:outline-none text-on-surface font-bold cursor-pointer">
+                    <option value="">Seleccionar inquilino...</option>
+                    @for (inquilino of inquilinos(); track inquilino.id) {
+                      <option [value]="inquilino.id">{{ inquilino.nombre }}</option>
+                    }
+                  </select>
+                }
                 <span class="material-symbols-outlined text-secondary pointer-events-none">expand_more</span>
+              </div>
+            </div>
+
+            <!-- Campo: Propiedad (Selector) -->
+            <div class="flex flex-col gap-2">
+              <label class="text-xs font-black uppercase text-secondary px-2">Propiedad</label>
+              <div class="input-wrapper neo-pressed bg-white/50 rounded-full px-6 py-4 flex items-center justify-between transition-all">
+                @if (loadingPropiedades()) {
+                  <span class="text-sm text-secondary">Cargando propiedades...</span>
+                } @else {
+                  <select formControlName="propiedadId" (change)="onPropiedadChange()" class="w-full bg-transparent border-none focus:outline-none text-on-surface font-bold cursor-pointer">
+                    <option value="">Seleccionar propiedad...</option>
+                    @for (prop of propiedades(); track prop.id) {
+                      <option [value]="prop.id">{{ prop.nombre }}</option>
+                    }
+                  </select>
+                }
+                <span class="material-symbols-outlined text-secondary pointer-events-none">domain</span>
               </div>
             </div>
 
             <!-- Campo: Local / Unidad (Selector) -->
             <div class="flex flex-col gap-2">
-              <label class="text-xs font-black uppercase text-secondary px-2">Local / Unidad</label>
+              <label class="text-xs font-black uppercase text-secondary px-2">Local</label>
               <div class="input-wrapper neo-pressed bg-white/50 rounded-full px-6 py-4 flex items-center justify-between transition-all">
-                <!-- TODO [LÓGICA - SELECT / BINDING]: Enlazar con formControlName="unitId" e iterar opciones con @for (unit of units(); track unit.id) -->
-                <select class="w-full bg-transparent border-none focus:outline-none text-on-surface font-bold cursor-pointer">
-                  <option value="">Seleccionar local...</option>
-                  <option value="101">Local A-102 (Retail)</option>
-                  <option value="102">Oficina B-405 (Office)</option>
-                  <option value="103">Local C-001 (Food Court)</option>
-                </select>
+                @if (loadingLocales()) {
+                  <span class="text-sm text-secondary">Cargando locales...</span>
+                } @else {
+                  <select formControlName="localId" class="w-full bg-transparent border-none focus:outline-none text-on-surface font-bold cursor-pointer">
+                    <option value="">Seleccionar local...</option>
+                    @for (local of locales(); track local.id) {
+                      <option [value]="local.id">{{ local.nombre }}</option>
+                    }
+                  </select>
+                }
                 <span class="material-symbols-outlined text-secondary pointer-events-none">domain</span>
               </div>
             </div>
@@ -117,8 +141,7 @@
               <label class="text-xs font-black uppercase text-secondary px-2">Precio Mensual ($)</label>
               <div class="input-wrapper neo-pressed bg-white/50 rounded-full px-6 py-4 flex items-center transition-all">
                 <span class="material-symbols-outlined text-primary mr-3">payments</span>
-                <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="monthlyPrice" -->
-                <input type="number" placeholder="0.00" class="w-full bg-transparent border-none focus:outline-none text-on-surface font-bold" />
+                <input type="number" formControlName="precioMensual" placeholder="0.00" class="w-full bg-transparent border-none focus:outline-none text-on-surface font-bold" />
               </div>
             </div>
 
@@ -128,7 +151,7 @@
               <div class="input-wrapper neo-pressed bg-white/50 rounded-full px-6 py-4 flex items-center transition-all">
                 <span class="material-symbols-outlined text-secondary mr-3">timer</span>
                 <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="durationMonths" -->
-                <input type="number" value="12" class="w-full bg-transparent border-none focus:outline-none text-on-surface font-bold" />
+                <input type="number" formControlName="duracionMeses" value="12" class="w-full bg-transparent border-none focus:outline-none text-on-surface font-bold" />
               </div>
             </div>
 
@@ -137,8 +160,7 @@
               <label class="text-xs font-black uppercase text-secondary px-2">Fecha Inicio</label>
               <div class="input-wrapper neo-pressed bg-white/50 rounded-full px-6 py-4 flex items-center transition-all">
                 <span class="material-symbols-outlined text-secondary mr-3">calendar_today</span>
-                <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="startDate" -->
-                <input type="date" class="w-full bg-transparent border-none focus:outline-none text-on-surface font-bold uppercase text-sm" />
+                <input type="date" formControlName="fechaInicio" class="w-full bg-transparent border-none focus:outline-none text-on-surface font-bold uppercase text-sm" />
               </div>
             </div>
 
@@ -147,8 +169,7 @@
               <label class="text-xs font-black uppercase text-secondary px-2">Fecha Fin</label>
               <div class="input-wrapper neo-pressed bg-white/50 rounded-full px-6 py-4 flex items-center transition-all">
                 <span class="material-symbols-outlined text-secondary mr-3">event_busy</span>
-                <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="endDate" -->
-                <input type="date" class="w-full bg-transparent border-none focus:outline-none text-on-surface font-bold uppercase text-sm" />
+                <input type="date" formControlName="fechaFin" class="w-full bg-transparent border-none focus:outline-none text-on-surface font-bold uppercase text-sm" />
               </div>
             </div>
 
@@ -158,7 +179,7 @@
               <div class="input-wrapper neo-pressed bg-white/50 rounded-full px-6 py-4 flex items-center transition-all">
                 <span class="material-symbols-outlined text-secondary mr-3">electric_bolt</span>
                 <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="initialElectricMeter" -->
-                <input type="number" placeholder="kW/h inicial" class="w-full bg-transparent border-none focus:outline-none text-on-surface font-bold" />
+                <input type="number" formControlName="lecturaAnterior" placeholder="kW/h inicial" class="w-full bg-transparent border-none focus:outline-none text-on-surface font-bold" />
               </div>
             </div>
 
@@ -168,7 +189,7 @@
               <div class="input-wrapper neo-pressed bg-white/50 rounded-full px-6 py-4 flex items-center transition-all">
                 <span class="material-symbols-outlined text-secondary mr-3">shield</span>
                 <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="securityDeposit" -->
-                <input type="number" placeholder="0.00" class="w-full bg-transparent border-none focus:outline-none text-on-surface font-bold" />
+                <input type="number" formControlName="garantia" placeholder="0.00" class="w-full bg-transparent border-none focus:outline-none text-on-surface font-bold" />
               </div>
             </div>
 
@@ -177,7 +198,7 @@
               <label class="text-xs font-black uppercase text-secondary px-2">Observaciones y Condiciones Especiales</label>
               <div class="input-wrapper neo-pressed bg-white/50 rounded-xl px-6 py-4 transition-all">
                 <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="observations" -->
-                <textarea rows="4" placeholder="Detalles adicionales del contrato, acuerdos específicos, cláusulas de mantenimiento..." class="w-full bg-transparent border-none focus:outline-none text-on-surface font-medium resize-none"></textarea>
+                <textarea rows="4" formControlName="observacion" placeholder="Detalles adicionales del contrato, acuerdos específicos, cláusulas de mantenimiento..." class="w-full bg-transparent border-none focus:outline-none text-on-surface font-medium resize-none"></textarea>
               </div>
             </div>
 
@@ -189,7 +210,7 @@
               </button>
 
               <!-- TODO [LÓGICA - SUBMIT]: Conectar submit y deshabilitar si no es válido [disabled]="contractForm.invalid" -->
-              <button type="submit" class="px-10 py-4 font-black uppercase text-white bg-primary neo-raised border-2 border-on-surface shadow-[6px_6px_0px_0px_rgba(23,28,33,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 rounded-full transition-all flex items-center justify-center gap-3 cursor-pointer">
+              <button type="submit" [disabled]="contratoForm.invalid" class="px-10 py-4 font-black uppercase text-white bg-primary neo-raised border-2 border-on-surface shadow-[6px_6px_0px_0px_rgba(23,28,33,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 rounded-full transition-all flex items-center justify-center gap-3 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
                 <span>GENERAR CONTRATO</span>
                 <span class="material-symbols-outlined active-icon">contract_edit</span>
               </button>
