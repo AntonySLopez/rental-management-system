@@ -3,6 +3,7 @@ import { ContratoService } from "../service/contrato.service.js";
 import { crearContratoSchema } from "../schema/crearContratoDTO.js";
 import { cerrarContratoSchema } from "../schema/cerrarContrato.DTO.js";
 import { renovarContratoSchema } from "../schema/renovarContratoDTO.js";
+import type { ContratoActivo, ContratoDetalle } from "../types/contrato.types.js";
 
 const contratoService = new ContratoService();
 
@@ -40,5 +41,25 @@ export class ContratoController {
         await contratoService.renovarContrato(contrato);
         // 3. Retornar la respuesta
         res.status(200).json({ message: "Contrato renovado correctamente" })
+    }
+
+    // buscar contrato por id
+    buscarContratoPorId = async (req: Request, res: Response) => {
+        console.log("Buscando contrato por id...");
+        // 1. Validar el body
+        const contratoId = req.params.id;
+        // 2. Llamar al servicio
+        const contrato = await contratoService.buscarContratoPorId(Number(contratoId));
+        // 3. Retornar la respuesta
+        res.status(200).json(contrato)
+    }
+
+    // lista de contratos activos
+    listaContratosActivos = async (req: Request, res: Response) => {
+        console.log("Lista de contratos activos...");
+        // 1. Llamar al servicio
+        const contratos = await contratoService.listaContratosActivos();
+        // 2. Retornar la respuesta
+        res.status(200).json(contratos)
     }
 }

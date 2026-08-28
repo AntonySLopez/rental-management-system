@@ -1,6 +1,7 @@
 import pool from "../config/postgres.js";
 import type { PoolClient } from "pg";
 import type { CrearContratoDTO } from "../schema/crearContratoDTO.js";
+import type { ContratoActivo, ContratoDetalle } from "../types/contrato.types.js";
 
 export class ContratoRepository {
     // Guardar contrato
@@ -31,6 +32,34 @@ export class ContratoRepository {
     async renovar(id: number, cliente?: PoolClient) {
         const result = await (cliente ?? pool).query
         (`UPDATE contrato SET estado_id = (SELECT id FROM estado_contrato WHERE estado = 'renovado') WHERE id = $1`, [id]);
+        return result.rows[0];
+    }
+
+    // lista de contratos activos
+    async listaContratosActivos(): Promise<ContratoActivo[]> {
+        const result = await pool.query
+        (`SELECT c.id, p.nombre as propiedad_nombre, l.nombre_local as local_nombre, c.precio_mensual
+            FROM contrato c
+            JOIN local l ON c.local_id = l.id
+            JOIN propiedad p ON l.propiedad_id = p.id
+            JOIN estado_contrato ec ON c.estado_id = ec.id
+            WHERE ec.estado = 'activo'
+        `);
+        return result.rows;
+    }
+
+    // buscar contrato por id
+    async buscarContratoPorId(id: number): Promise<ContratoDetalle> {
+        const result = await pool.query
+        (`
+            SELECT c.*, i.nombre as inquilino_nombre, l.nombre_local as local_nombre, p.nombre as propiedad_nombre
+            FROM contrato c
+            JOIN inquilino i ON c.inquilino_id = i.id
+            JOIN local l ON c.local_id = l.id
+            JOIN propiedad p ON l.propiedad_id = p.id
+            JOIN estado_contrato ec ON c.estado_id = ec.id
+            WHERE c.id = $1
+        `, [id]);
         return result.rows[0];
     }
 }

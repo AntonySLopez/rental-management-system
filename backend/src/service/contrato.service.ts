@@ -14,6 +14,7 @@ import type { Luz } from "../types/luz.types.js";
 import type { Garantia } from "../types/garantia.types.js";
 import type { Contrato } from "../types/contrato.types.js";
 import type { Movimiento } from "../types/movimiento.types.js";
+import type { ContratoActivo, ContratoDetalle } from "../types/contrato.types.js";
 
 import { DeudaService } from "./deuda.service.js";
 
@@ -167,6 +168,17 @@ export class ContratoService {
             console.log("hilo de conexion liberado");
         }
     }
+
+    // buscar contrato por id
+    async buscarContratoPorId(id: number): Promise<ContratoDetalle> {
+        return await this.contratoRepository.buscarContratoPorId(id);
+    }
+
+    // lista de contratos activos
+    async listaContratosActivos(): Promise<ContratoActivo[]> {
+        return await this.contratoRepository.listaContratosActivos();
+    }
+
     //-----------------------------***-----------------------------------//
 
     // validar contrato
