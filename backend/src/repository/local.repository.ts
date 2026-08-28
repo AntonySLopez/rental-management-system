@@ -37,4 +37,11 @@ export class LocalRepository {
         await (cliente ?? pool).query
         (`UPDATE local SET contrato_id = $1 WHERE id = $2`, [contratoId, localId]);
     }
+
+    //obtenrer lista de locales
+    async listaLocales(propiedadId: number) {
+        const result = await pool.query
+        (`SELECT id, nombre_local as nombre FROM local WHERE propiedad_id = $1`, [propiedadId]);
+        return result.rows;
+    }
 };

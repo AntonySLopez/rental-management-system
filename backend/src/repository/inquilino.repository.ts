@@ -23,4 +23,9 @@ export class InquilinoRepository {
                 [inquilino.nombre, inquilino.telefono, inquilino.email, inquilino.documento]);
             return result.rows[0];
         };
+    // obtener lista de inquilinos
+    async listaInquilinos() {
+        const result = await pool.query('SELECT id, nombre FROM inquilino');
+        return result.rows;
+    };
 };

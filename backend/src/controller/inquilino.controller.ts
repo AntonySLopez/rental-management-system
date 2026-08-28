@@ -16,4 +16,13 @@ export class InquilinoController {
         console.log(result);
         res.status(201).json({ message: "Inquilino registrado correctamente" })
     }
+    // obtener lista de inquilinos
+    listaInquilinos = async (req: Request, res: Response) => {
+        console.log("Obteniendo lista de inquilinos...");
+        // 1. Llamar al servicio
+        const result = await inquilinoService.listaInquilinos();
+        // 2. Retornar la respuesta
+        console.log(result);
+        res.status(200).json(result)
+    }
 }

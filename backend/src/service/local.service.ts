@@ -12,7 +12,7 @@ export class LocalService {
         this.localRepository = new LocalRepository();
         this.propiedadRepository = new PropiedadRepository();
     }
-
+    // registra local
     async registrarLocal(local: RegistrarLocalDTO) {
         // validamos que la propiedad exista
         const propiedadExistente = await this.propiedadRepository.findById(local.propiedadId);
@@ -25,6 +25,11 @@ export class LocalService {
             throw new AppError("El local ya existe", 409);
         }
         const result = await this.localRepository.save(local);
+        return result;
+    }
+    // obtiene lista de locales
+    async listaLocales(propiedadId: number) {
+        const result = await this.localRepository.listaLocales(propiedadId);
         return result;
     }
 }
