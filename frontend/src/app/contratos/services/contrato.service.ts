@@ -1,6 +1,6 @@
 import { Service, inject } from '@angular/core';
 import { ContratoRepository } from '../repository/contrato.repository';
-import { CrearContratoReq, CrearContratoRes } from '../models/contrato.model';
+import { CrearContratoReq, CrearContratoRes, ContratoActivoResponse, ContratoDetalleResponse, RenovarContratoReq, RenovarContratoRes } from '../models/contrato.model';
 import { Observable } from 'rxjs';
 import { PropiedadListaResponse } from '../models/propiedad.model';
 import { InquilinoListaResponse } from '../models/inquilino.model';
@@ -23,5 +23,17 @@ export class ContratoService {
 
   getListaDeLocales(propiedadId: number): Observable<LocalListaResponse[]> {
     return this.contratoRepository.listaLocales(propiedadId);
+  }
+
+  getListaDeContratosActivos(): Observable<ContratoActivoResponse[]> {
+    return this.contratoRepository.listaContratosActivos();
+  }
+
+  buscarContratoPorId(id: number): Observable<ContratoDetalleResponse> {
+    return this.contratoRepository.buscarContratoPorId(id);
+  }
+
+  renovarContrato(contrato: RenovarContratoReq): Observable<RenovarContratoRes> {
+    return this.contratoRepository.renovarContrato(contrato);
   }
 }

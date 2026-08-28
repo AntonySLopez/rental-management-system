@@ -15,7 +15,6 @@
         <button type="button" class="md:hidden material-symbols-outlined text-on-surface">menu</button>
         <div class="neu-pressed px-4 py-2 rounded-full flex items-center gap-3 bg-surface-container-low w-64">
           <span class="material-symbols-outlined text-secondary">search</span>
-          <!-- TODO [LÓGICA - BÚSQUEDA]: Conectar [(ngModel)]="searchContractQuery" -->
           <input type="text" placeholder="Search contracts..." class="bg-transparent border-none focus:outline-none text-sm w-full" />
         </div>
       </div>
@@ -31,7 +30,6 @@
           <button type="button" class="material-symbols-outlined text-secondary hover:text-primary transition-colors">notifications</button>
           <button type="button" class="material-symbols-outlined text-secondary hover:text-primary transition-colors">settings</button>
 
-          <!-- TODO [LÓGICA - AVATAR]: Renderizar avatar dinámico con [src]="manager().avatarUrl" -->
           <div class="h-10 w-10 rounded-full neo-raised overflow-hidden border-2 border-on-surface">
             <img 
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0j7_XLDXpTXcCgfpmNSkgnEkJf_sEpU8o4v5lsecWsrwQOr7n7fXT7Rx-P0jcS14tHyKflIV29R_PQu1KjEG7HkcxJSATSF8f99Y5FNGps8qC7d8O6a2vYrjuBOh_kLOAWu5ldYGFpekeYJDns-wFIjbX08CXg_K0Mz7biQU9ctqJtve5I9u_sBiHM1mPJydZ-W22tM_ruK4SQ3cu2L_FZ4gEW49pTmLBBGj2BpPC5pkdpkL1Ik_SLQ" 
@@ -57,29 +55,23 @@
       <!-- Panel Cristalino / Contenedor Principal -->
       <div class="w-full max-w-6xl glass-panel neo-raised rounded-lg overflow-hidden border border-white/40">
         
-        <!-- Pestañas Brutalistas para Cambio de Modos -->
-        <!-- 
-          TODO [LÓGICA - TABS]:
-          Asignar evento de cambio de pestaña (click)="activeTab = 'crear'", etc.,
-          y aplicar condicionalmente la clase '.brutalist-tab-active' según la pestaña activa.
-        -->
+        <!-- Pestañas de navegación para cambiar entre modos de contrato -->
         <div class="flex border-b-2 border-on-surface">
-          <button type="button" class="flex-1 py-6 text-sm font-black uppercase tracking-widest brutalist-tab-active transition-all cursor-pointer">
+          <button type="button" (click)="setActiveTab('crear')" [class.brutalist-tab-active]="activeTab() === 'crear'" class="flex-1 py-6 text-sm font-black uppercase tracking-widest transition-all cursor-pointer">
             Crear
           </button>
-          <button type="button" class="flex-1 py-6 text-sm font-bold uppercase tracking-widest text-on-surface-variant hover:bg-surface-container-high transition-all cursor-pointer">
+          <button type="button" (click)="setActiveTab('renovar')" [class.brutalist-tab-active]="activeTab() === 'renovar'" class="flex-1 py-6 text-sm font-bold uppercase tracking-widest text-on-surface-variant hover:bg-surface-container-high transition-all cursor-pointer">
             Renovar
           </button>
-          <button type="button" class="flex-1 py-6 text-sm font-bold uppercase tracking-widest text-on-surface-variant hover:bg-surface-container-high transition-all cursor-pointer">
+          <button type="button" (click)="setActiveTab('cerrar')" [class.brutalist-tab-active]="activeTab() === 'cerrar'" class="flex-1 py-6 text-sm font-bold uppercase tracking-widest text-on-surface-variant hover:bg-surface-container-high transition-all cursor-pointer">
             Cerrar
           </button>
         </div>
 
         <!-- Contenido del Formulario (Pestaña "Crear") -->
-        <!-- TODO [LÓGICA - CONTROL DE FLUJO]: Renderizar según pestaña activa @if (activeTab === 'crear') -->
+        @if (activeTab() === 'crear') {
         <div class="p-6 md:p-8">
-          
-          <!-- TODO [LÓGICA - FORMULARIO]: Vincular con ReactiveForms mediante [formGroup]="contractForm" y (ngSubmit)="onCreateContract()" -->
+
           <form [formGroup]="contratoForm" (ngSubmit)="onSubmit()" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-8 gap-x-10">
             
             <!-- Campo: Inquilino (Selector) -->
@@ -150,8 +142,7 @@
               <label class="text-xs font-black uppercase text-secondary px-2">Duración (Meses)</label>
               <div class="input-wrapper neo-pressed bg-white/50 rounded-full px-6 py-4 flex items-center transition-all">
                 <span class="material-symbols-outlined text-secondary mr-3">timer</span>
-                <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="durationMonths" -->
-                <input type="number" formControlName="duracionMeses" value="12" class="w-full bg-transparent border-none focus:outline-none text-on-surface font-bold" />
+                      <input type="number" formControlName="duracionMeses" value="12" class="w-full bg-transparent border-none focus:outline-none text-on-surface font-bold" />
               </div>
             </div>
 
@@ -178,7 +169,6 @@
               <label class="text-xs font-black uppercase text-secondary px-2">Lectura Medidor Luz</label>
               <div class="input-wrapper neo-pressed bg-white/50 rounded-full px-6 py-4 flex items-center transition-all">
                 <span class="material-symbols-outlined text-secondary mr-3">electric_bolt</span>
-                <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="initialElectricMeter" -->
                 <input type="number" formControlName="lecturaAnterior" placeholder="kW/h inicial" class="w-full bg-transparent border-none focus:outline-none text-on-surface font-bold" />
               </div>
             </div>
@@ -188,7 +178,6 @@
               <label class="text-xs font-black uppercase text-secondary px-2">Depósito Garantía ($)</label>
               <div class="input-wrapper neo-pressed bg-white/50 rounded-full px-6 py-4 flex items-center transition-all">
                 <span class="material-symbols-outlined text-secondary mr-3">shield</span>
-                <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="securityDeposit" -->
                 <input type="number" formControlName="garantia" placeholder="0.00" class="w-full bg-transparent border-none focus:outline-none text-on-surface font-bold" />
               </div>
             </div>
@@ -197,19 +186,16 @@
             <div class="flex flex-col gap-2 md:col-span-2 lg:col-span-3">
               <label class="text-xs font-black uppercase text-secondary px-2">Observaciones y Condiciones Especiales</label>
               <div class="input-wrapper neo-pressed bg-white/50 rounded-xl px-6 py-4 transition-all">
-                <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="observations" -->
                 <textarea rows="4" formControlName="observacion" placeholder="Detalles adicionales del contrato, acuerdos específicos, cláusulas de mantenimiento..." class="w-full bg-transparent border-none focus:outline-none text-on-surface font-medium resize-none"></textarea>
               </div>
             </div>
 
             <!-- Botones de Acción -->
             <div class="md:col-span-2 lg:col-span-3 flex flex-col sm:flex-row justify-end gap-6 pt-6">
-              <!-- TODO [LÓGICA - CANCELAR]: Enlazar evento (click)="onCancel()" -->
               <button type="button" class="px-10 py-4 font-black uppercase text-secondary neo-raised hover:bg-surface-container-high rounded-full transition-all active:scale-95 cursor-pointer">
                 Cancelar
               </button>
 
-              <!-- TODO [LÓGICA - SUBMIT]: Conectar submit y deshabilitar si no es válido [disabled]="contractForm.invalid" -->
               <button type="submit" [disabled]="contratoForm.invalid" class="px-10 py-4 font-black uppercase text-white bg-primary neo-raised border-2 border-on-surface shadow-[6px_6px_0px_0px_rgba(23,28,33,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 rounded-full transition-all flex items-center justify-center gap-3 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
                 <span>GENERAR CONTRATO</span>
                 <span class="material-symbols-outlined active-icon">contract_edit</span>
@@ -219,6 +205,103 @@
           </form>
 
         </div>
+        }
+
+        <!-- Contenido Renovar Contrato -->
+        @if (activeTab() === 'renovar') {
+        <div class="p-6 md:p-8">
+
+          @if (loadingContratosActivos()) {
+            <div class="text-center py-12">
+              <span class="text-lg text-secondary">Cargando contratos activos...</span>
+            </div>
+          } @else if (!contratoDetalle()) {
+            <div class="space-y-4">
+              <h3 class="text-xl font-black uppercase text-on-surface">Seleccionar Contrato a Renovar</h3>
+              @for (contrato of contratosActivos(); track contrato.id) {
+                <div (click)="seleccionarContrato(contrato)" class="neo-pressed bg-white/50 p-6 rounded-lg cursor-pointer hover:bg-white/70 transition-all">
+                  <div class="flex justify-between items-start">
+                    <div>
+                      <h4 class="font-bold text-on-surface">{{ contrato.propiedad_nombre }} - {{ contrato.local_nombre }}</h4>
+                      <p class="text-sm font-bold text-primary mt-1">${{ contrato.precio_mensual }}/mes</p>
+                    </div>
+                    <span class="material-symbols-outlined text-secondary">arrow_forward</span>
+                  </div>
+                </div>
+              }
+              @if (contratosActivos().length === 0) {
+                <p class="text-center text-secondary py-8">No hay contratos activos para renovar</p>
+              }
+            </div>
+          } @else {
+            <div class="space-y-6">
+              <div class="flex items-center justify-between">
+                <h3 class="text-xl font-black uppercase text-on-surface">Renovar Contrato</h3>
+                <button type="button" (click)="volverALista()" class="text-sm text-secondary hover:text-primary transition-colors">
+                  ← Volver a lista
+                </button>
+              </div>
+
+              <div class="neo-pressed bg-white/50 p-6 rounded-lg">
+                <h4 class="font-bold text-on-surface mb-2">{{ contratoDetalle()!.inquilino_nombre }}</h4>
+                <p class="text-sm text-secondary">{{ contratoDetalle()!.propiedad_nombre }} - {{ contratoDetalle()!.local_nombre }}</p>
+                <p class="text-xs text-on-surface-variant mt-1">Precio actual: ${{ contratoDetalle()!.precio_mensual }}/mes</p>
+              </div>
+
+              <form [formGroup]="contratoForm" (ngSubmit)="onRenovarSubmit()" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="flex flex-col gap-2">
+                  <label class="text-xs font-black uppercase text-secondary px-2">Fecha Inicio</label>
+                  <div class="input-wrapper neo-pressed bg-white/50 rounded-full px-6 py-4 flex items-center transition-all">
+                    <span class="material-symbols-outlined text-secondary mr-3">calendar_today</span>
+                    <input type="date" formControlName="fechaInicio" class="w-full bg-transparent border-none focus:outline-none text-on-surface font-bold uppercase text-sm" />
+                  </div>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                  <label class="text-xs font-black uppercase text-secondary px-2">Fecha Fin</label>
+                  <div class="input-wrapper neo-pressed bg-white/50 rounded-full px-6 py-4 flex items-center transition-all">
+                    <span class="material-symbols-outlined text-secondary mr-3">event_busy</span>
+                    <input type="date" formControlName="fechaFin" class="w-full bg-transparent border-none focus:outline-none text-on-surface font-bold uppercase text-sm" />
+                  </div>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                  <label class="text-xs font-black uppercase text-secondary px-2">Duración (Meses)</label>
+                  <div class="input-wrapper neo-pressed bg-white/50 rounded-full px-6 py-4 flex items-center transition-all">
+                    <span class="material-symbols-outlined text-secondary mr-3">timer</span>
+                    <input type="number" formControlName="duracionMeses" value="12" class="w-full bg-transparent border-none focus:outline-none text-on-surface font-bold" />
+                  </div>
+                </div>
+
+                <div class="flex flex-col gap-2 md:col-span-2">
+                  <label class="text-xs font-black uppercase text-secondary px-2">Observaciones</label>
+                  <div class="input-wrapper neo-pressed bg-white/50 rounded-xl px-6 py-4 transition-all">
+                    <textarea rows="3" formControlName="observacion" placeholder="Detalles adicionales de la renovación..." class="w-full bg-transparent border-none focus:outline-none text-on-surface font-medium resize-none"></textarea>
+                  </div>
+                </div>
+
+                <div class="md:col-span-2 flex justify-end pt-4">
+                  <button type="submit" [disabled]="contratoForm.invalid" class="px-10 py-4 font-black uppercase text-white bg-primary neo-raised border-2 border-on-surface shadow-[6px_6px_0px_0px_rgba(23,28,33,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 rounded-full transition-all flex items-center justify-center gap-3 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+                    <span>RENOVAR CONTRATO</span>
+                    <span class="material-symbols-outlined active-icon">autorenew</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          }
+        </div>
+        }
+
+        <!-- Contenido Cerrar Contrato -->
+        @if (activeTab() === 'cerrar') {
+        <div class="p-6 md:p-8">
+          <div class="text-center py-12">
+            <span class="material-symbols-outlined text-6xl text-secondary">construction</span>
+            <h3 class="text-xl font-black uppercase text-on-surface mt-4">Funcionalidad en desarrollo</h3>
+            <p class="text-sm text-secondary mt-2">Próximamente podrás cerrar contratos desde aquí</p>
+          </div>
+        </div>
+        }
       </div>
 
       <!-- Tarjetas Informativas de Contexto -->

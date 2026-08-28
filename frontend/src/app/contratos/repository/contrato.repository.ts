@@ -1,7 +1,7 @@
 import { Service, inject } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
-import { CrearContratoReq, CrearContratoRes } from '../models/contrato.model';
+import { CrearContratoReq, CrearContratoRes, ContratoActivoResponse, ContratoDetalleResponse, RenovarContratoReq, RenovarContratoRes } from '../models/contrato.model';
 import { PropiedadListaResponse } from '../models/propiedad.model';
 import { InquilinoListaResponse } from '../models/inquilino.model';
 import { LocalListaResponse } from '../models/local-lista.model';
@@ -25,5 +25,17 @@ export class ContratoRepository {
 
   listaLocales(propiedadId: number): Observable<LocalListaResponse[]> {
     return this.http.get<LocalListaResponse[]>(`${environment.apiUrl}/local/lista/${propiedadId}`);
+  }
+
+  listaContratosActivos(): Observable<ContratoActivoResponse[]> {
+    return this.http.get<ContratoActivoResponse[]>(`${environment.apiUrl}/contrato/activos`);
+  }
+
+  buscarContratoPorId(id: number): Observable<ContratoDetalleResponse> {
+    return this.http.get<ContratoDetalleResponse>(`${environment.apiUrl}/contrato/buscar/${id}`);
+  }
+
+  renovarContrato(contrato: RenovarContratoReq): Observable<RenovarContratoRes> {
+    return this.http.post<RenovarContratoRes>(`${environment.apiUrl}/contrato/renovar`, contrato);
   }
 }
