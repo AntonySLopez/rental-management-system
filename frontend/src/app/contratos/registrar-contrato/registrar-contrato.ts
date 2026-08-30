@@ -6,7 +6,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { PropiedadListaResponse } from '../models/propiedad.model';
 import { InquilinoListaResponse } from '../models/inquilino.model';
 import { LocalListaResponse } from '../models/local-lista.model';
-import { CrearContratoReq, ContratoActivoResponse, ContratoDetalleResponse, RenovarContratoReq } from '../models/contrato.model';
+import { CrearContratoReq, ContratoActivoResponse, ContratoDetalleResponse, RenovarContratoReq, CerrarContratoReq } from '../models/contrato.model';
 import { signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -38,6 +38,7 @@ export class RegistrarContrato implements OnInit {
   locales = signal<LocalListaResponse[]>([]);
   contratosActivos = signal<ContratoActivoResponse[]>([]);
   contratoDetalle = signal<ContratoDetalleResponse | null>(null);
+  contratoDetalleCerrar = signal<ContratoDetalleResponse | null>(null);
 
   loadingInquilinos = signal(false);
   loadingPropiedades = signal(true);
@@ -54,6 +55,8 @@ export class RegistrarContrato implements OnInit {
   setActiveTab(tab: 'crear' | 'renovar' | 'cerrar') {
     this.activeTab.set(tab);
     if (tab === 'renovar') {
+      this.cargarContratosActivos();
+    } else if (tab === 'cerrar') {
       this.cargarContratosActivos();
     }
   }
@@ -224,6 +227,46 @@ export class RegistrarContrato implements OnInit {
           duration: 3000,
         });
         console.error('Error al renovar contrato:', error);
+      },
+    });
+  }
+
+  seleccionarContratoCerrar(contrato: ContratoActivoResponse) {
+    this.contratoService.buscarContratoPorId(contrato.id).subscribe({
+      next: (detalle) => {
+        this.contratoDetalleCerrar.set(detalle);
+      },
+      error: (error) => {
+        console.error('Error al cargar detalle del contrato:', error);
+        this.snackBar.open('Error al cargar contrato', 'Cerrar', { duration: 3000 });
+      },
+    });
+  }
+
+  volverAListaCerrar() {
+    this.contratoDetalleCerrar.set(null);
+  }
+
+  onCerrarSubmit() {
+    if (!this.contratoDetalleCerrar()) return;
+
+    const cerrar: CerrarContratoReq = {
+      contrato_id: this.contratoDetalleCerrar()!.id,
+    };
+
+    this.contratoService.cerrarContrato(cerrar).subscribe({
+      next: () => {
+        this.snackBar.open('Contrato cerrado exitosamente', 'Cerrar', {
+          duration: 3000,
+        });
+        this.volverAListaCerrar();
+        this.cargarContratosActivos();
+      },
+      error: (error) => {
+        this.snackBar.open('Error al cerrar el contrato', 'Cerrar', {
+          duration: 3000,
+        });
+        console.error('Error al cerrar contrato:', error);
       },
     });
   }

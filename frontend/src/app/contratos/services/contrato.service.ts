@@ -1,6 +1,6 @@
 import { Service, inject } from '@angular/core';
 import { ContratoRepository } from '../repository/contrato.repository';
-import { CrearContratoReq, CrearContratoRes, ContratoActivoResponse, ContratoDetalleResponse, RenovarContratoReq, RenovarContratoRes } from '../models/contrato.model';
+import { CrearContratoReq, CrearContratoRes, ContratoActivoResponse, ContratoDetalleResponse, RenovarContratoReq, RenovarContratoRes, CerrarContratoReq, CerrarContratoRes } from '../models/contrato.model';
 import { Observable } from 'rxjs';
 import { PropiedadListaResponse } from '../models/propiedad.model';
 import { InquilinoListaResponse } from '../models/inquilino.model';
@@ -35,5 +35,9 @@ export class ContratoService {
 
   renovarContrato(contrato: RenovarContratoReq): Observable<RenovarContratoRes> {
     return this.contratoRepository.renovarContrato(contrato);
+  }
+
+  cerrarContrato(contrato: CerrarContratoReq): Observable<CerrarContratoRes> {
+    return this.contratoRepository.cerrarContrato(contrato);
   }
 }

@@ -216,7 +216,7 @@
               <span class="text-lg text-secondary">Cargando contratos activos...</span>
             </div>
           } @else if (!contratoDetalle()) {
-            <div class="space-y-4">
+            <div class="space-y-4 overflow-y-auto max-h-86">
               <h3 class="text-xl font-black uppercase text-on-surface">Seleccionar Contrato a Renovar</h3>
               @for (contrato of contratosActivos(); track contrato.id) {
                 <div (click)="seleccionarContrato(contrato)" class="neo-pressed bg-white/50 p-6 rounded-lg cursor-pointer hover:bg-white/70 transition-all">
@@ -295,11 +295,53 @@
         <!-- Contenido Cerrar Contrato -->
         @if (activeTab() === 'cerrar') {
         <div class="p-6 md:p-8">
-          <div class="text-center py-12">
-            <span class="material-symbols-outlined text-6xl text-secondary">construction</span>
-            <h3 class="text-xl font-black uppercase text-on-surface mt-4">Funcionalidad en desarrollo</h3>
-            <p class="text-sm text-secondary mt-2">Próximamente podrás cerrar contratos desde aquí</p>
-          </div>
+
+          @if (loadingContratosActivos()) {
+            <div class="text-center py-12">
+              <span class="text-lg text-secondary">Cargando contratos activos...</span>
+            </div>
+          } @else if (!contratoDetalleCerrar()) {
+            <div class="space-y-4">
+              <h3 class="text-xl font-black uppercase text-on-surface">Seleccionar Contrato a Cerrar</h3>
+              @for (contrato of contratosActivos(); track contrato.id) {
+                <div (click)="seleccionarContratoCerrar(contrato)" class="neo-pressed bg-white/50 p-6 rounded-lg cursor-pointer hover:bg-white/70 transition-all">
+                  <div class="flex justify-between items-start">
+                    <div>
+                      <h4 class="font-bold text-on-surface">{{ contrato.propiedad_nombre }} - {{ contrato.local_nombre }}</h4>
+                      <p class="text-sm font-bold text-primary mt-1">${{ contrato.precio_mensual }}/mes</p>
+                    </div>
+                    <span class="material-symbols-outlined text-secondary">arrow_forward</span>
+                  </div>
+                </div>
+              }
+              @if (contratosActivos().length === 0) {
+                <p class="text-center text-secondary py-8">No hay contratos activos para cerrar</p>
+              }
+            </div>
+          } @else {
+            <div class="space-y-6">
+              <div class="flex items-center justify-between">
+                <h3 class="text-xl font-black uppercase text-on-surface">Cerrar Contrato</h3>
+                <button type="button" (click)="volverAListaCerrar()" class="text-sm text-secondary hover:text-primary transition-colors">
+                  ← Volver a lista
+                </button>
+              </div>
+
+              <div class="neo-pressed bg-white/50 p-6 rounded-lg">
+                <h4 class="font-bold text-on-surface mb-2">{{ contratoDetalleCerrar()!.inquilino_nombre }}</h4>
+                <p class="text-sm text-secondary">{{ contratoDetalleCerrar()!.propiedad_nombre }} - {{ contratoDetalleCerrar()!.local_nombre }}</p>
+                <p class="text-xs text-on-surface-variant mt-1">Precio actual: ${{ contratoDetalleCerrar()!.precio_mensual }}/mes</p>
+                <p class="text-xs text-on-surface-variant mt-1">Fecha fin: {{ contratoDetalleCerrar()!.fecha_fin | date:'dd/MM/yyyy' }}</p>
+              </div>
+
+              <div class="flex justify-end pt-4">
+                <button type="button" (click)="onCerrarSubmit()" class="px-10 py-4 font-black uppercase text-white bg-error neo-raised border-2 border-on-surface shadow-[6px_6px_0px_0px_rgba(23,28,33,1)] hover:shadow-none hover:translate-x-1 hover:translate-y-1 rounded-full transition-all flex items-center justify-center gap-3 cursor-pointer">
+                  <span>CERRAR CONTRATO</span>
+                  <span class="material-symbols-outlined active-icon">close</span>
+                </button>
+              </div>
+            </div>
+          }
         </div>
         }
       </div>

@@ -1,7 +1,7 @@
 import { Service, inject } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
-import { CrearContratoReq, CrearContratoRes, ContratoActivoResponse, ContratoDetalleResponse, RenovarContratoReq, RenovarContratoRes } from '../models/contrato.model';
+import { CrearContratoReq, CrearContratoRes, ContratoActivoResponse, ContratoDetalleResponse, RenovarContratoReq, RenovarContratoRes, CerrarContratoReq, CerrarContratoRes } from '../models/contrato.model';
 import { PropiedadListaResponse } from '../models/propiedad.model';
 import { InquilinoListaResponse } from '../models/inquilino.model';
 import { LocalListaResponse } from '../models/local-lista.model';
@@ -37,5 +37,9 @@ export class ContratoRepository {
 
   renovarContrato(contrato: RenovarContratoReq): Observable<RenovarContratoRes> {
     return this.http.post<RenovarContratoRes>(`${environment.apiUrl}/contrato/renovar`, contrato);
+  }
+
+  cerrarContrato(contrato: CerrarContratoReq): Observable<CerrarContratoRes> {
+    return this.http.post<CerrarContratoRes>(`${environment.apiUrl}/contrato/cerrar`, contrato);
   }
 }

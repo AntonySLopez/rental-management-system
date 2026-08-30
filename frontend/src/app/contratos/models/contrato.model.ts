@@ -49,3 +49,11 @@ export interface RenovarContratoReq {
 export interface RenovarContratoRes {
     message: string;
 }
+
+export interface CerrarContratoReq {
+    contrato_id: number;
+}
+
+export interface CerrarContratoRes {
+    message: string;
+}
