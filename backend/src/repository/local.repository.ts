@@ -44,4 +44,18 @@ export class LocalRepository {
         (`SELECT id, nombre_local as nombre FROM local WHERE propiedad_id = $1`, [propiedadId]);
         return result.rows;
     }
+
+    // lista de locales
+    async findAllLocales(cliente?: PoolClient) {
+        const result = await (cliente ?? pool).query(
+            `
+            SELECT 
+                l.id AS local_id,  
+                l.nombre_local, 
+                p.nombre as propiedad
+            FROM local l
+            JOIN propiedad p ON p.id = l.propiedad_id
+        `);
+        return result.rows;
+    }
 };

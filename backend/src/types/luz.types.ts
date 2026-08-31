@@ -10,3 +10,8 @@ export type Luz = {
     monto?: number;
     monto_pagado?: number;
 };
+
+export type ConsumoLuzDetalle = {
+    fecha_inicio: Date;
+    lectura_anterior: number;
+};

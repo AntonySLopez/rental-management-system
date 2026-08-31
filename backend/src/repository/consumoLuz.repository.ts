@@ -82,4 +82,21 @@ export class ConsumoLuzRepository {
         );
         return result.rows[0];
     }
+
+    // detalles de consumo por id
+    async findConsumoById(id: number, cliente?: PoolClient) {
+        const result = await (cliente ?? pool).query(
+            `
+            select 
+                cl.fecha_fin as fecha_inicio,
+                cl.lectura_actual as lectura_anterior
+            from local l
+            join contrato c on c.id = l.contrato_id
+            join consumo_luz cl on cl.contrato_id = c.id
+            where cl.id = $1
+            `,
+            [id]
+        );
+        return result.rows[0];
+    }
 };

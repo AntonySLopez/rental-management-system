@@ -1,5 +1,6 @@
 import type { RegistrarLocalDTO } from "../schema/registrarLocalDTO.js";
 import { LocalRepository } from "../repository/local.repository.js";
+import type { Local, LocalCompleto } from "../types/local.types.js";
 import { PropiedadRepository } from "../repository/propiedad.repository.js";
 
 import { AppError } from "../middleWare/flujo/appError.middleware.js";
@@ -30,6 +31,11 @@ export class LocalService {
     // obtiene lista de locales
     async listaLocales(propiedadId: number) {
         const result = await this.localRepository.listaLocales(propiedadId);
+        return result;
+    }
+    // obtiene lista de todos los locales
+    async findAllLocales(): Promise<LocalCompleto[]> {
+        const result = await this.localRepository.findAllLocales();
         return result;
     }
 }

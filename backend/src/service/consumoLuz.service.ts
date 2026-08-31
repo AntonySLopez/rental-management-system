@@ -1,6 +1,6 @@
 import { ConsumoLuzRepository } from "../repository/consumoLuz.repository.js";
 import { ContratoRepository } from "../repository/contrato.repository.js";
-import type { Luz } from "../types/luz.types.js";
+import type { Luz, ConsumoLuzDetalle } from "../types/luz.types.js";
 import type { RegistrarConsumoLuzDTO } from "../schema/registrarConsumoLuzDTO.js";
 
 import { AppError } from "../middleWare/flujo/appError.middleware.js";
@@ -29,6 +29,12 @@ export class ConsumoLuzService {
         const consumoRegistrado = await this.guardarConsumoLuz(resumen);
         
         return consumoRegistrado;
+    }
+
+    // obtiene detalles de consumo por id
+    async findConsumoById(id: number): Promise<ConsumoLuzDetalle> {
+        const result = await this.consumoLuzRepository.findConsumoById(id);
+        return result;
     }
 
     //valida contrato existente
