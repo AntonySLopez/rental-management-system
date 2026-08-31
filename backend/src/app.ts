@@ -27,7 +27,7 @@ app.use(rateLimitMiddleware);
 app.use("/auth", authRoutes);
 
 // middleware para verificar token
-// app.use(verificarToken);
+app.use(verificarToken);
 
 // middleware para acceso a rutas de rol de administrador
 app.use(autorizacionAdmin, routes);

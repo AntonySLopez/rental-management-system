@@ -83,6 +83,16 @@ export class GarantiaService {
         }
     }
 
+    // lista de garantias retenidas
+    async listarGarantiasRetenidas() {
+        return await this.garantiaRepository.findRetenidas();
+    }
+
+    // obtener garantia detallada
+    async obtenerGarantiaDetallada(garantiaId: number) {
+        return await this.garantiaRepository.findDetallada(garantiaId);
+    }
+
     // validar contrato existente
     private async validarContratoExistente(contratoId: number , client: PoolClient) {
         const contratoExistente = await this.contratoRepository.findById(contratoId, client);

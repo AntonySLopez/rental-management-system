@@ -38,7 +38,12 @@ export class ContratoRepository {
     // lista de contratos activos
     async listaContratosActivos(): Promise<ContratoActivo[]> {
         const result = await pool.query
-        (`SELECT c.id, p.nombre as propiedad_nombre, l.nombre_local as local_nombre, c.precio_mensual
+        (`
+            SELECT 
+                c.id, 
+                p.nombre as propiedad_nombre, 
+                l.nombre_local as local_nombre, 
+                c.precio_mensual
             FROM contrato c
             JOIN local l ON c.local_id = l.id
             JOIN propiedad p ON l.propiedad_id = p.id
