@@ -1,211 +1,172 @@
-<div class="flex h-screen bg-background text-on-surface overflow-hidden font-sans">
-  
-  <!-- SideNavBar Anchor (Navegación Lateral) -->
-  <aside class="hidden md:flex flex-col h-full py-6 px-4 border-r-4 border-on-surface bg-surface w-64 fixed left-0 top-0 z-50">
-    <div class="mb-8 px-4">
-      <h1 class="text-3xl font-black uppercase italic text-primary leading-tight">
-        PropManager Pro
-      </h1>
-      <p class="text-xs font-bold text-secondary mt-1 uppercase tracking-widest">Management Suite</p>
-    </div>
+<div class="flex w-full max-h-screen">
+  <!-- Barra de Navegación Lateral (Sidebar) -->
+  <app-panel-lateral></app-panel-lateral>
 
-    <nav class="flex-1 space-y-4 overflow-y-auto no-scrollbar">
-      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLink="/dashboard" -->
-      <a href="#" class="flex items-center gap-3 p-3 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 hover:bg-surface-container-high">
-        <span class="material-symbols-outlined">dashboard</span>
-        <span class="text-sm">Dashboard</span>
-      </a>
-
-      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLink="/properties" -->
-      <a href="#" class="flex items-center gap-3 p-3 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 hover:bg-surface-container-high">
-        <span class="material-symbols-outlined">domain</span>
-        <span class="text-sm">Properties</span>
-      </a>
-
-      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLink="/tenants" -->
-      <a href="#" class="flex items-center gap-3 p-3 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 hover:bg-surface-container-high">
-        <span class="material-symbols-outlined">group</span>
-        <span class="text-sm">Tenants</span>
-      </a>
-
-      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLink="/leases" -->
-      <a href="#" class="flex items-center gap-3 p-3 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 hover:bg-surface-container-high">
-        <span class="material-symbols-outlined">description</span>
-        <span class="text-sm">Leases</span>
-      </a>
-
-      <!-- Estado Activo: Pagos -->
-      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLinkActive -->
-      <a href="#" class="flex items-center gap-3 p-3 bg-primary text-white border-2 border-on-surface shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] translate-x-1 font-bold uppercase">
-        <span class="material-symbols-outlined active-icon">payments</span>
-        <span class="text-sm">Pagos</span>
-      </a>
-
-      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLink="/reports" -->
-      <a href="#" class="flex items-center gap-3 p-3 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 hover:bg-surface-container-high">
-        <span class="material-symbols-outlined">assessment</span>
-        <span class="text-sm">Reports</span>
-      </a>
-    </nav>
-
-    <div class="mt-auto space-y-2 pt-4 border-t border-surface-variant">
-      <a href="#" class="flex items-center gap-3 p-3 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 hover:bg-surface-container-high">
-        <span class="material-symbols-outlined">help</span>
-        <span class="text-sm">Help Center</span>
-      </a>
-
-      <!-- TODO [LÓGICA - LOGOUT]: Enlazar (click)="logout()" -->
-      <a href="#" class="flex items-center gap-3 p-3 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 hover:bg-surface-container-high">
-        <span class="material-symbols-outlined">logout</span>
-        <span class="text-sm">Logout</span>
-      </a>
-    </div>
-  </aside>
-
-  <!-- Área de Contenido Principal -->
-  <main class="flex-1 md:ml-64 relative min-h-screen overflow-y-auto">
-    
-    <!-- TopNavBar Anchor -->
-    <header class="flex justify-between items-center w-full px-6 h-20 sticky top-0 z-40 bg-surface/80 backdrop-blur-md border-b-4 border-on-surface shadow-[-6px_-6px_12px_rgba(255,255,255,0.8),6px_6px_12px_rgba(0,0,0,0.1)]">
-      <div class="flex items-center gap-6">
-        <button type="button" class="md:hidden p-3 neu-raised rounded-full active:shadow-inner transition-all">
-          <span class="material-symbols-outlined">menu</span>
-        </button>
-        <div class="hidden sm:flex items-center gap-4">
-          <span class="text-sm text-secondary font-bold uppercase">Pagos</span>
-          <span class="text-outline-variant">/</span>
-          <span class="text-primary font-black underline decoration-4 underline-offset-4 text-sm">Registrar Pago</span>
+  <div class="flex flex-col">
+    <!-- Encabezado Superior (Header) -->
+    <header class="fixed top-0 right-0 left-64 z-30 flex justify-between items-center h-20 px-8 bg-surface/80 backdrop-blur-md border-b-2 border-on-surface/10">
+      <div class="flex items-center gap-8">
+        <div class="neo-pressed bg-surface-container-low px-4 py-2 rounded-full flex items-center gap-2 w-80">
+          <span class="material-symbols-outlined text-on-surface-variant">search</span>
+          <input type="text" placeholder="Buscar pagos..." class="bg-transparent border-none focus:outline-none w-full text-sm font-normal" />
         </div>
+
+        <nav class="hidden md:flex gap-6">
+          <a href="#" class="text-sm text-primary border-b-2 border-primary pb-1 font-bold">Pagos</a>
+          <a href="#" class="text-sm text-on-surface-variant hover:text-primary transition-colors">Historial</a>
+          <a href="#" class="text-sm text-on-surface-variant hover:text-primary transition-colors">Reportes</a>
+        </nav>
       </div>
 
-      <div class="flex items-center gap-6">
-        <button type="button" class="p-3 text-on-surface-variant hover:bg-surface-container-highest transition-all duration-200 active:translate-y-1 rounded-full">
+      <div class="flex items-center gap-4">
+        <button type="button" class="p-2 neo-raised bg-surface rounded-full text-on-surface-variant hover:text-primary transition-all active:scale-95">
           <span class="material-symbols-outlined">notifications</span>
         </button>
-        <button type="button" class="p-3 text-on-surface-variant hover:bg-surface-container-highest transition-all duration-200 active:translate-y-1 rounded-full">
-          <span class="material-symbols-outlined">settings</span>
-        </button>
 
-        <!-- TODO [LÓGICA - AVATAR]: Renderizar [src]="currentUser().avatarUrl" -->
-        <div class="w-10 h-10 rounded-full border-2 border-on-surface overflow-hidden neu-raised">
-          <img 
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4U_qijwcY6ylo4AFF5SIRhPLz39ZWJ3PFzfQIL27UZDudp6X1RUN2BdWYRVCM267hzduRoSax6NH3llm8s8gfpWSyrDnfuILJ-JW8QNReNEigaWtBrWzV6L3Q4aycZyJY9FmklBBZ9XJO37ND9a-h7zAD9vrmx0XvaqGyyDlyGHXyvzaUXeVH_UWHbnwikoZri4E7mP-71Seub3i_Rh8WajHUZl2IBrO9p5OtzI0BMciTG7U9l96L6Q" 
-            alt="Avatar de usuario" 
-            class="w-full h-full object-cover" 
-          />
+        <div class="h-10 w-10 rounded-full neo-raised bg-surface-container-highest overflow-hidden cursor-pointer active:scale-95 transition-transform border-2 border-white">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXokPx0A-gTziqUgY0ZYTRjdv7W_p8j12b5_GkuUdghxT_e2PLW-b76lijGRSzWODBphzOasFNBHHG7s17Kd-7UaaGp5K_6jFuDZ5B64PmaeaPWvqD9qNjCXrXF7HLsv7QySa1JWQO9EAKSwVmm5kE-EntPH4OFvG5xIXlXWooXl-GcR2CUuJsHQMf11LT1UwtXmL3UGWywwrdOA8xFHZfpdl_mF4pVJAiiIy4rg3bjrEt2XRrSum6ww" alt="Foto de Perfil" class="w-full h-full object-cover" />
         </div>
       </div>
     </header>
 
-    <!-- Capa de Fondo Dinámico con Blur -->
-    <div class="fixed inset-0 z-0 pointer-events-none opacity-20 transition-opacity duration-1000">
-      <div class="w-full h-full bg-cover bg-center blur-xl scale-110 bg-hero"></div>
-    </div>
+    <!-- Área de Contenido Principal -->
+    <main class="mt-8 p-8 relative z-10 max-h-screen overflow-y-auto bg-hero">
+      <div class="max-w-7xl mx-auto py-12">
 
-    <!-- Lienzo Desplazable -->
-    <div class="relative z-10 px-6 py-16 flex flex-col items-center">
-      <div class="max-w-3xl w-full">
-        
-        <!-- Sección del Título Estilo Brutalista -->
-        <div class="mb-8 space-y-2">
-          <h2 class="brutal-title text-4xl lg:text-5xl font-black text-on-surface flex items-center gap-4">
-            <span class="bg-primary-container text-on-primary-container px-3 py-1 neu-raised border-2 border-on-surface">REGISTRAR</span>
-            <span>PAGO</span>
+        <!-- Hero / Saludo -->
+        <section class="mb-16">
+          <h2 class="text-4xl font-extrabold text-on-surface mb-2 tracking-tight">
+            Registrar Pago
           </h2>
-          <p class="text-secondary font-bold uppercase tracking-wider pl-1 text-sm">Módulo de Conciliación de Alquileres</p>
-        </div>
+          <p class="text-base text-on-surface-variant max-w-2xl">
+            Seleccione un contrato y registre el pago correspondiente. El sistema generará un recibo digital automáticamente.
+          </p>
+        </section>
 
-        <!-- Tarjeta Glassmorphism del Formulario -->
-        <div class="glass-card neu-raised rounded-xl p-6 md:p-12 border-4 border-on-surface/5">
-          
-          <!-- TODO [LÓGICA - FORMULARIO]: Vincular con ReactiveForms mediante [formGroup]="paymentForm" y (ngSubmit)="onProcessPayment()" -->
-          <form class="space-y-8">
-            
-            <!-- Campo Fijo: ID de Contrato -->
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b-2 border-surface-variant pb-6">
-              <div class="space-y-1">
-                <label class="text-xs font-bold text-secondary uppercase">Identificador de Contrato</label>
-                <p class="text-xs text-on-surface-variant">Este campo no es editable para este proceso.</p>
-              </div>
-              
-              <!-- TODO [LÓGICA - INTERPOLACIÓN]: Reemplazar ID de contrato estático por {{ contractId() }} -->
-              <div class="neu-pressed bg-surface-container-lowest px-6 py-2 rounded-full border-2 border-primary text-primary font-black tracking-widest text-lg text-center">
-                #CNTR-2023-9081
-              </div>
+        <!-- Lista de Contratos o Formulario -->
+        <div class="neo-raised rounded-2xl p-8 bg-surface/80">
+
+          @if (loadingContratos()) {
+            <div class="text-center py-12">
+              <span class="text-lg text-secondary">Cargando contratos activos...</span>
             </div>
+          } @else if (!contratoSeleccionado()) {
+            <div class="space-y-4">
+              <h3 class="text-xl font-black uppercase text-on-surface">Seleccionar Contrato</h3>
+              @for (contrato of contratosActivos(); track contrato.id) {
+                <div (click)="seleccionarContrato(contrato)" class="neo-pressed bg-white/50 p-6 rounded-lg cursor-pointer hover:bg-white/70 transition-all">
+                  <div class="flex justify-between items-start">
+                    <div>
+                      <h4 class="font-bold text-on-surface">{{ contrato.propiedad_nombre }} - {{ contrato.local_nombre }}</h4>
+                      <p class="text-sm text-secondary mt-1">{{ contrato.inquilino_nombre }}</p>
+                      <p class="text-sm font-bold text-primary mt-2">${{ contrato.precio_mensual }}/mes</p>
+                    </div>
+                    <span class="material-symbols-outlined text-secondary">arrow_forward</span>
+                  </div>
+                </div>
+              }
+              @if (contratosActivos().length === 0) {
+                <p class="text-center text-secondary py-8">No hay contratos activos para registrar pagos</p>
+              }
+            </div>
+          } @else {
+            <div class="space-y-6">
+              <div class="flex items-center justify-between">
+                <h3 class="text-xl font-black uppercase text-on-surface">Registrar Pago</h3>
+                <button type="button" (click)="volverALista()" class="text-sm text-secondary hover:text-primary transition-colors">
+                  ← Volver a lista
+                </button>
+              </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-              
-              <!-- Campo: Monto -->
-              <div class="space-y-2 field-container transition-transform duration-200">
-                <label for="monto" class="text-xs font-bold text-secondary uppercase pl-1">Monto del Pago ($)</label>
-                <div class="relative">
-                  <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="amount" -->
-                  <input 
-                    id="monto" 
-                    type="number" 
-                    placeholder="0.00" 
-                    class="w-full bg-surface-container-low neu-pressed rounded-lg border-0 px-4 py-4 text-2xl font-bold text-primary focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all placeholder:text-surface-variant"
-                  />
+              <!-- Información del Contrato -->
+              <div class="neo-pressed bg-white/50 p-6 rounded-lg">
+                <h4 class="font-bold text-on-surface mb-2">{{ contratoSeleccionado()!.inquilino_nombre }}</h4>
+                <p class="text-sm text-secondary">{{ contratoSeleccionado()!.propiedad_nombre }} - {{ contratoSeleccionado()!.local_nombre }}</p>
+                <p class="text-xs text-on-surface-variant mt-1">Precio mensual: ${{ contratoSeleccionado()!.precio_mensual }}</p>
+              </div>
+
+              <!-- Campo Fijo: ID de Contrato -->
+              <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b-2 border-surface-variant pb-6">
+                <div class="space-y-1">
+                  <label class="text-xs font-bold text-secondary uppercase">Identificador de Contrato</label>
+                  <p class="text-xs text-on-surface-variant">Este campo no es editable para este proceso.</p>
+                </div>
+
+                <div class="neu-pressed bg-surface-container-lowest px-6 py-2 rounded-full border-2 border-primary text-primary font-black tracking-widest text-lg text-center">
+                  #{{ contratoSeleccionado()!.id }}
                 </div>
               </div>
 
-              <!-- Campo: Método de Pago -->
-              <div class="space-y-2 field-container transition-transform duration-200">
-                <label for="metodo" class="text-xs font-bold text-secondary uppercase pl-1">Método de Pago</label>
-                <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="paymentMethod" -->
-                <select 
-                  id="metodo" 
-                  class="w-full bg-surface-container-low neu-pressed rounded-lg border-0 px-4 py-4 text-base font-bold text-on-surface focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all cursor-pointer"
-                >
-                  <option value="" disabled selected>Seleccionar método...</option>
-                  <option value="transferencia">Transferencia Bancaria</option>
-                  <option value="deposito">Depósito en Efectivo</option>
-                  <option value="tarjeta">Tarjeta de Crédito/Débito</option>
-                  <option value="cheque">Cheque Certificado</option>
-                </select>
-              </div>
+              <!-- Formulario de Pago -->
+              <form [formGroup]="pagoForm" (ngSubmit)="onSubmit()" class="space-y-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <!-- Campo: Monto -->
+                  <div class="space-y-2">
+                    <label for="monto" class="text-xs font-bold text-secondary uppercase pl-1">Monto del Pago ($)</label>
+                    <input
+                      id="monto"
+                      type="number"
+                      formControlName="monto"
+                      placeholder="0.00"
+                      class="w-full bg-surface-container-low neu-pressed rounded-lg border-0 px-4 py-4 text-2xl font-bold text-primary focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all placeholder:text-surface-variant"
+                    />
+                  </div>
 
+                  <!-- Campo: Método de Pago -->
+                  <div class="space-y-2">
+                    <label for="metodo" class="text-xs font-bold text-secondary uppercase pl-1">Método de Pago</label>
+                    <select
+                      id="metodo"
+                      formControlName="metodoPago"
+                      class="w-full bg-surface-container-low neu-pressed rounded-lg border-0 px-4 py-4 text-base font-bold text-on-surface focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all cursor-pointer"
+                    >
+                      <option value="" disabled selected>Seleccionar método...</option>
+                      <option value="efectivo">efectivo</option>
+                      <option value="yape">yape</option>
+                      <option value="deposito">deposito</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Campo: Referencia -->
+                <div class="space-y-2">
+                  <label for="referencia" class="text-xs font-bold text-secondary uppercase pl-1">Referencia / No. de Operación</label>
+                  <input
+                    id="referencia"
+                    type="text"
+                    formControlName="referencia"
+                    placeholder="Ej: TR-998822"
+                    class="w-full bg-surface-container-low neu-pressed rounded-lg border-0 px-4 py-3 text-base text-on-surface focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all"
+                  />
+                </div>
+
+                <!-- Campo: Descripción -->
+                <div class="space-y-2">
+                  <label for="descripcion" class="text-xs font-bold text-secondary uppercase pl-1">Descripción / Notas Adicionales</label>
+                  <textarea
+                    id="descripcion"
+                    rows="3"
+                    formControlName="descripcion"
+                    placeholder="Detalles adicionales del pago..."
+                    class="w-full bg-surface-container-low neu-pressed rounded-lg border-0 px-4 py-3 text-base text-on-surface focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all resize-none"
+                  ></textarea>
+                </div>
+
+                <!-- Botón de Acción -->
+                <div class="pt-4">
+                  <button
+                    type="submit"
+                    [disabled]="pagoForm.invalid"
+                    class="w-full py-5 neu-raised neu-button bg-primary-container text-on-primary-container font-black uppercase text-lg rounded-full border-4 border-on-surface flex items-center justify-center gap-3 hover:scale-[1.01] active:scale-95 transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <span class="material-symbols-outlined active-icon">task_alt</span>
+                    PROCESAR PAGO
+                  </button>
+                </div>
+              </form>
             </div>
+          }
 
-            <!-- Campo: Referencia -->
-            <div class="space-y-2 field-container transition-transform duration-200">
-              <label for="referencia" class="text-xs font-bold text-secondary uppercase pl-1">Referencia / No. de Operación</label>
-              <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="referenceNumber" -->
-              <input 
-                id="referencia" 
-                type="text" 
-                placeholder="Ej: TR-998822" 
-                class="w-full bg-surface-container-low neu-pressed rounded-lg border-0 px-4 py-3 text-base text-on-surface focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all"
-              />
-            </div>
-
-            <!-- Campo: Descripción -->
-            <div class="space-y-2 field-container transition-transform duration-200">
-              <label for="descripcion" class="text-xs font-bold text-secondary uppercase pl-1">Descripción / Notas Adicionales</label>
-              <!-- TODO [LÓGICA - CONTROL]: Enlazar con formControlName="notes" -->
-              <textarea 
-                id="descripcion" 
-                rows="3" 
-                placeholder="Detalles adicionales del pago..." 
-                class="w-full bg-surface-container-low neu-pressed rounded-lg border-0 px-4 py-3 text-base text-on-surface focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all resize-none"
-              ></textarea>
-            </div>
-
-            <!-- Botón de Acción -->
-            <div class="pt-4">
-              <!-- TODO [LÓGICA - ESTADO DESHABILITADO]: Manejar [disabled]="paymentForm.invalid || isSubmitting()" -->
-              <button 
-                type="submit" 
-                class="w-full py-5 neu-raised neu-button bg-primary-container text-on-primary-container font-black uppercase text-lg rounded-full border-4 border-on-surface flex items-center justify-center gap-3 hover:scale-[1.01] active:scale-95 transition-all duration-200 cursor-pointer"
-              >
-                <!-- TODO [LÓGICA - SPINNER]: Controlar estado de carga con @if (isSubmitting()) -->
-                <span class="material-symbols-outlined active-icon">task_alt</span>
-                PROCESAR PAGO
-              </button>
-            </div>
-
-          </form>
         </div>
 
         <!-- Pie de página aclaratorio -->
@@ -216,7 +177,6 @@
         </div>
 
       </div>
-    </div>
-
-  </main>
+    </main>
+  </div>
 </div>

@@ -41,5 +41,18 @@ export const routes: Routes = [
     {
         path: 'luz',
         loadComponent: () => import('./luz/registrar-consumo/registrar-consumo.component').then(m => m.RegistrarConsumoComponent)
+    },
+    {
+        path: 'gastos',
+        loadComponent: () => import('./pagos/registrar-pagos/registrar-pagos').then(m => m.RegistrarPagos)
+    },
+    {
+        path: 'garantia',
+        loadComponent: () => import('./garantia/gestionar-garantia/gestionar-garantia.component').then(m => m.GestionarGarantiaComponent)
+    },
+    {
+        path: 'consumo',
+        loadComponent: () => import('./luz/registrar-consumo/registrar-consumo.component').then(m => m.RegistrarConsumoComponent)
     }
 ];
+

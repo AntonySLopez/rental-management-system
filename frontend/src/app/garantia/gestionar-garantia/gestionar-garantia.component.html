@@ -1,70 +1,10 @@
 <div class="flex min-h-screen text-on-surface font-sans relative">
-  
+
   <!-- Contenedor del fondo con efecto de desenfoque -->
   <div class="bg-blur-container"></div>
 
-  <!-- SideNavBar -->
-  <aside class="hidden md:flex flex-col h-screen w-64 bg-surface border-r-4 border-on-surface sticky top-0 z-50 py-6 px-4 shadow-[6px_0px_12px_rgba(0,0,0,0.05)]">
-    <div class="mb-8 px-2">
-      <h1 class="text-[28px] font-black uppercase italic leading-none text-primary">PropManager Pro</h1>
-      <p class="text-xs font-bold text-secondary uppercase tracking-widest mt-1">Management Suite</p>
-    </div>
-
-    <nav class="flex-1 space-y-2">
-      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLink="/dashboard" -->
-      <a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 hover:bg-surface-container-high" href="#">
-        <span class="material-symbols-outlined">dashboard</span>
-        <span class="text-sm">Dashboard</span>
-      </a>
-
-      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLink="/properties" -->
-      <a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 hover:bg-surface-container-high" href="#">
-        <span class="material-symbols-outlined">domain</span>
-        <span class="text-sm">Properties</span>
-      </a>
-
-      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLink="/tenants" -->
-      <a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 hover:bg-surface-container-high" href="#">
-        <span class="material-symbols-outlined">group</span>
-        <span class="text-sm">Tenants</span>
-      </a>
-
-      <!-- Estado Activo: Leases (Contratos/Garantías) -->
-      <!-- TODO [LÓGICA - ROUTER]: Configurar routerLinkActive -->
-      <a class="flex items-center gap-3 px-4 py-3 bg-primary text-white rounded-none border-2 border-on-surface shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] translate-x-1 font-bold uppercase" href="#">
-        <span class="material-symbols-outlined active-icon">description</span>
-        <span class="text-sm">Leases</span>
-      </a>
-
-      <a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 hover:bg-surface-container-high" href="#">
-        <span class="material-symbols-outlined">build</span>
-        <span class="text-sm">Maintenance</span>
-      </a>
-
-      <a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface font-bold uppercase transition-all duration-200 hover:bg-surface-container-high" href="#">
-        <span class="material-symbols-outlined">assessment</span>
-        <span class="text-sm">Reports</span>
-      </a>
-    </nav>
-
-    <div class="mt-auto pt-6 space-y-2 border-t-2 border-surface-container-high">
-      <!-- TODO [LÓGICA - EVENTO]: Enlazar (click)="openAddPropertyModal()" -->
-      <button type="button" class="w-full neo-button bg-primary-container text-on-primary-container font-black py-3 rounded-full neo-raised hover:-translate-y-0.5 transition-all cursor-pointer">
-        Add Property
-      </button>
-
-      <a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant font-bold uppercase text-xs" href="#">
-        <span class="material-symbols-outlined">help</span>
-        <span>Help Center</span>
-      </a>
-
-      <!-- TODO [LÓGICA - LOGOUT]: Enlazar (click)="logout()" -->
-      <a class="flex items-center gap-3 px-4 py-3 text-tertiary font-bold uppercase text-xs" href="#">
-        <span class="material-symbols-outlined">logout</span>
-        <span>Logout</span>
-      </a>
-    </div>
-  </aside>
+  <!-- Panel Lateral Compartido -->
+  <app-panel-lateral></app-panel-lateral>
 
   <!-- Área Principal -->
   <main class="flex-1 flex flex-col relative">
@@ -100,7 +40,7 @@
 
     <!-- Contenido de la Página -->
     <div class="p-8 lg:p-12 max-w-5xl mx-auto w-full space-y-6">
-      
+
       <!-- Título Principal -->
       <div class="mb-6">
         <h2 class="text-4xl lg:text-5xl font-black uppercase text-on-surface brutal-title leading-tight">
@@ -109,115 +49,144 @@
         <div class="h-2 w-32 bg-primary mt-2"></div>
       </div>
 
-      <!-- Sección 1: Tarjeta Principal de Garantía -->
-      <section class="neo-raised bg-surface rounded-lg p-6 relative overflow-hidden group">
-        <div class="absolute top-0 right-0 p-6">
-          <!-- TODO [LÓGICA - STATUS]: Renderizar dinámicamente según el estado de la garantía -->
-          <span class="bg-primary-container text-on-primary-container px-6 py-2 rounded-full text-sm font-black border-2 border-on-surface shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase tracking-tight">
-            RETENIDA
-          </span>
-        </div>
+      <!-- Lista de Garantías Retenidas -->
+      @if (!garantiaSeleccionada()) {
+        <section class="space-y-4">
+          <h3 class="text-xl font-black uppercase text-on-surface">Seleccionar Garantía</h3>
+          @if (loadingGarantias()) {
+            <p class="text-secondary">Cargando garantías...</p>
+          } @else {
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              @for (garantia of garantiasActivas(); track garantia.garantia_id) {
+                <div (click)="seleccionarGarantia(garantia.garantia_id)" class="neo-raised bg-surface rounded-lg p-4 cursor-pointer hover:-translate-y-1 transition-all border-2 border-transparent hover:border-primary">
+                  <div class="flex justify-between items-start">
+                    <div>
+                      <p class="font-bold text-on-surface">{{ garantia.propiedad_nombre }}</p>
+                      <p class="text-sm text-secondary">{{ garantia.local_nombre }}</p>
+                    </div>
+                    <span class="text-2xl font-black text-primary">${{ garantia.garantia }}</span>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </section>
+      }
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
-          <div class="space-y-1">
-            <p class="text-xs font-bold text-secondary uppercase tracking-widest">Monto Total</p>
-            <!-- TODO [LÓGICA - INTERPOLACIÓN]: {{ warrantyAmount() | currency }} -->
-            <p class="text-3xl font-black text-on-surface">$ 2,450.00 <span class="text-sm font-bold text-secondary">USD</span></p>
-          </div>
+      <!-- Detalles de la Garantía Seleccionada -->
+      @if (garantiaSeleccionada()) {
+        <section class="space-y-6">
+          <!-- Botón volver -->
+          <button (click)="volverALista()" class="flex items-center gap-2 text-secondary hover:text-on-surface font-bold uppercase text-sm cursor-pointer">
+            <span class="material-symbols-outlined">arrow_back</span>
+            Volver a lista
+          </button>
 
-          <div class="space-y-1">
-            <p class="text-xs font-bold text-secondary uppercase tracking-widest">Fecha de Retención</p>
-            <!-- TODO [LÓGICA - INTERPOLACIÓN]: {{ retentionDate() | date:'dd MMM, yyyy' }} -->
-            <p class="text-2xl font-bold text-on-surface">14 Oct, 2023</p>
-          </div>
+          <!-- Sección 1: Tarjeta Principal de Garantía -->
+          <section class="neo-raised bg-surface rounded-lg p-6 relative overflow-hidden group">
+            <div class="absolute top-0 right-0 p-6">
+              <span class="bg-primary-container text-on-primary-container px-6 py-2 rounded-full text-sm font-black border-2 border-on-surface shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] uppercase tracking-tight">
+                {{ garantiaSeleccionada()!.estado }}
+              </span>
+            </div>
 
-          <div class="space-y-1">
-            <p class="text-xs font-bold text-secondary uppercase tracking-widest">Referencia Contrato</p>
-            <!-- TODO [LÓGICA - INTERPOLACIÓN]: {{ contractReference() }} -->
-            <p class="text-2xl font-bold text-on-surface">LC-9902-BX</p>
-          </div>
-        </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+              <div class="space-y-1">
+                <p class="text-xs font-bold text-secondary uppercase tracking-widest">Monto Total</p>
+                <p class="text-3xl font-black text-on-surface">${{ garantiaSeleccionada()!.garantia }} <span class="text-sm font-bold text-secondary">USD</span></p>
+              </div>
 
-        <div class="mt-8 pt-6 border-t-2 border-surface-container-high flex flex-wrap gap-6">
-          <div class="flex items-center gap-3 text-on-surface-variant">
-            <span class="material-symbols-outlined text-primary">person</span>
-            <span class="font-bold">Arrendatario:</span>
-            <!-- TODO [LÓGICA - INTERPOLACIÓN]: {{ tenantName() }} -->
-            <span>Julian Casablancas</span>
-          </div>
+              <div class="space-y-1">
+                <p class="text-xs font-bold text-secondary uppercase tracking-widest">Fecha de Retención</p>
+                <p class="text-2xl font-bold text-on-surface">{{ garantiaSeleccionada()!.fecha_registro }}</p>
+              </div>
 
-          <div class="flex items-center gap-3 text-on-surface-variant">
-            <span class="material-symbols-outlined text-primary">location_on</span>
-            <span class="font-bold">Propiedad:</span>
-            <!-- TODO [LÓGICA - INTERPOLACIÓN]: {{ propertyName() }} -->
-            <span>Complex A, Local 04</span>
-          </div>
-        </div>
-      </section>
+              <div class="space-y-1">
+                <p class="text-xs font-bold text-secondary uppercase tracking-widest">Referencia Contrato</p>
+                <p class="text-2xl font-bold text-on-surface">LC-{{ garantiaSeleccionada()!.contrato_id }}</p>
+              </div>
+            </div>
 
-      <!-- Sección 2: Botones de Acción -->
-      <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        
-        <!-- Botón: Devolver Garantía -->
-        <!-- TODO [LÓGICA - EVENTO]: Enlazar (click)="openReturnModal()" -->
-        <button type="button" class="neo-button group bg-surface p-8 rounded-lg neo-raised flex flex-col items-center justify-center gap-4 hover:-translate-y-1 transition-all cursor-pointer">
-          <div class="w-16 h-16 rounded-full neo-pressed flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-            <span class="material-symbols-outlined text-[32px]">assignment_return</span>
-          </div>
-          <span class="text-2xl font-black uppercase text-on-surface">Devolver Garantía</span>
-          <p class="text-sm text-center text-secondary">Reembolso total o parcial al arrendatario tras finalizar el contrato.</p>
-        </button>
+            <div class="mt-8 pt-6 border-t-2 border-surface-container-high flex flex-wrap gap-6">
+              <div class="flex items-center gap-3 text-on-surface-variant">
+                <span class="material-symbols-outlined text-primary">person</span>
+                <span class="font-bold">Arrendatario:</span>
+                <span>{{ garantiaSeleccionada()!.inquilino_nombre }}</span>
+              </div>
 
-        <!-- Botón: Aplicar a Deuda -->
-        <!-- TODO [LÓGICA - EVENTO]: Enlazar (click)="openApplyToDebtModal()" -->
-        <button type="button" class="neo-button group bg-surface p-8 rounded-lg neo-raised flex flex-col items-center justify-center gap-4 hover:-translate-y-1 transition-all cursor-pointer">
-          <div class="w-16 h-16 rounded-full neo-pressed flex items-center justify-center text-tertiary group-hover:scale-110 transition-transform">
-            <span class="material-symbols-outlined text-[32px]">account_balance_wallet</span>
-          </div>
-          <span class="text-2xl font-black uppercase text-on-surface">Aplicar a Deuda</span>
-          <p class="text-sm text-center text-secondary">Liquidar facturas pendientes utilizando el fondo de garantía.</p>
-        </button>
+              <div class="flex items-center gap-3 text-on-surface-variant">
+                <span class="material-symbols-outlined text-primary">location_on</span>
+                <span class="font-bold">Propiedad:</span>
+                <span>{{ garantiaSeleccionada()!.propiedad_nombre }}, {{ garantiaSeleccionada()!.local_nombre }}</span>
+              </div>
+            </div>
 
-      </section>
+            @if (garantiaSeleccionada()!.observaciones) {
+              <div class="mt-6 pt-6 border-t-2 border-surface-container-high">
+                <p class="text-xs font-bold text-secondary uppercase tracking-widest mb-2">Observaciones</p>
+                <p class="text-base text-on-surface-variant">{{ garantiaSeleccionada()!.observaciones }}</p>
+              </div>
+            }
+          </section>
+
+          <!-- Sección 2: Botones de Acción -->
+          <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <!-- Botón: Devolver Garantía -->
+            <button (click)="openReturnModal()" class="neo-button group bg-surface p-8 rounded-lg neo-raised flex flex-col items-center justify-center gap-4 hover:-translate-y-1 transition-all cursor-pointer">
+              <div class="w-16 h-16 rounded-full neo-pressed flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-[32px]">assignment_return</span>
+              </div>
+              <span class="text-2xl font-black uppercase text-on-surface">Devolver Garantía</span>
+              <p class="text-sm text-center text-secondary">Reembolso total o parcial al arrendatario tras finalizar el contrato.</p>
+            </button>
+
+            <!-- Botón: Aplicar a Deuda -->
+            <button (click)="openApplyToDebtModal()" class="neo-button group bg-surface p-8 rounded-lg neo-raised flex flex-col items-center justify-center gap-4 hover:-translate-y-1 transition-all cursor-pointer">
+              <div class="w-16 h-16 rounded-full neo-pressed flex items-center justify-center text-tertiary group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-[32px]">account_balance_wallet</span>
+              </div>
+              <span class="text-2xl font-black uppercase text-on-surface">Aplicar a Deuda</span>
+              <p class="text-sm text-center text-secondary">Liquidar facturas pendientes utilizando el fondo de garantía.</p>
+            </button>
+
+          </section>
+        </section>
+      }
 
     </div>
 
     <!-- Modal de Confirmación de Devolución -->
-    <!-- TODO [LÓGICA - CONTROL DE FLUJO]: Mostrar/ocultar dinámicamente mediante @if (isReturnModalOpen()) -->
-    <div class="fixed inset-0 z-[60] flex items-center justify-center p-6">
-      
-      <!-- Fondo translúcido con cierre de modal al presionar -->
-      <!-- TODO [LÓGICA - EVENTO]: Enlazar (click)="closeReturnModal()" -->
-      <div class="absolute inset-0 bg-on-surface/20 backdrop-blur-sm"></div>
+    @if (isReturnModalOpen()) {
+      <div class="fixed inset-0 z-60 flex items-center justify-center p-6">
+
+        <!-- Fondo translúcido con cierre de modal al presionar -->
+        <div (click)="closeReturnModal()" class="absolute inset-0 bg-on-surface/20 backdrop-blur-sm"></div>
 
       <!-- Contenido del Modal -->
       <div class="glass-card w-full max-w-lg rounded-xl neo-raised p-8 relative z-10 scale-100 transition-all duration-300">
         
         <div class="flex items-center justify-between mb-6">
           <h3 class="text-2xl font-black uppercase text-on-surface">Confirmar Devolución</h3>
-          <!-- TODO [LÓGICA - EVENTO]: Enlazar (click)="closeReturnModal()" -->
-          <button type="button" class="w-10 h-10 neo-raised rounded-full flex items-center justify-center hover:bg-surface-container-highest cursor-pointer">
+          <button (click)="closeReturnModal()" class="w-10 h-10 neo-raised rounded-full flex items-center justify-center hover:bg-surface-container-highest cursor-pointer">
             <span class="material-symbols-outlined">close</span>
           </button>
         </div>
 
         <div class="space-y-4 mb-8">
           <p class="text-base text-on-surface-variant leading-relaxed">
-            ¿Está seguro de que desea proceder con la devolución de la garantía por el monto de 
-            <!-- TODO [LÓGICA - INTERPOLACIÓN]: {{ warrantyAmount() | currency }} -->
-            <strong class="text-primary">$2,450.00 USD</strong>? Esta acción no se puede deshacer.
+            ¿Está seguro de que desea proceder con la devolución de la garantía por el monto de
+            <strong class="text-primary">${{ garantiaSeleccionada()!.garantia }} USD</strong>? Esta acción no se puede deshacer.
           </p>
 
           <div class="neo-pressed p-4 rounded-lg space-y-2">
             <div class="flex justify-between text-sm">
               <span class="text-secondary font-bold uppercase">Monto de Garantía</span>
-              <!-- TODO [LÓGICA - INTERPOLACIÓN]: {{ warrantyAmount() | currency }} -->
-              <span class="font-black">$ 2,450.00</span>
+              <span class="font-black">${{ garantiaSeleccionada()!.garantia }}</span>
             </div>
 
             <div class="flex justify-between text-sm">
               <span class="text-secondary font-bold uppercase">Deducciones</span>
-              <!-- TODO [LÓGICA - INTERPOLACIÓN]: {{ deductionsAmount() | currency }} -->
               <span class="font-black text-tertiary">$ 0.00</span>
             </div>
 
@@ -225,26 +194,81 @@
 
             <div class="flex justify-between text-2xl">
               <span class="font-black uppercase">Total a Reembolsar</span>
-              <!-- TODO [LÓGICA - INTERPOLACIÓN]: {{ netRefundAmount() | currency }} -->
-              <span class="font-black text-primary">$ 2,450.00</span>
+              <span class="font-black text-primary">${{ garantiaSeleccionada()!.garantia }}</span>
             </div>
           </div>
         </div>
 
         <div class="flex flex-col sm:flex-row gap-4">
-          <!-- TODO [LÓGICA - EVENTO]: Enlazar (click)="closeReturnModal()" -->
-          <button type="button" class="flex-1 neo-button py-3 rounded-full font-bold uppercase text-secondary neo-raised hover:bg-surface-container-high cursor-pointer">
+          <button (click)="closeReturnModal()" class="flex-1 neo-button py-3 rounded-full font-bold uppercase text-secondary neo-raised hover:bg-surface-container-high cursor-pointer">
             Cancelar
           </button>
 
-          <!-- TODO [LÓGICA - ACCIÓN]: Enlazar (click)="confirmWarrantyReturn()" -->
-          <button type="button" class="flex-1 neo-button py-3 rounded-full font-black uppercase bg-primary text-white neo-raised cursor-pointer">
-            Confirmar Envío
+          <button (click)="confirmWarrantyReturn()" class="flex-1 neo-button py-3 rounded-full font-black uppercase bg-primary text-white neo-raised cursor-pointer">
+            Confirmar Devolución
           </button>
         </div>
 
       </div>
-    </div>
+      </div>
+    }
+
+    <!-- Modal de Confirmación de Aplicar a Deuda -->
+    @if (isApplyToDebtModalOpen()) {
+      <div class="fixed inset-0 z-60 flex items-center justify-center p-6">
+
+        <!-- Fondo translúcido con cierre de modal al presionar -->
+        <div (click)="closeApplyToDebtModal()" class="absolute inset-0 bg-on-surface/20 backdrop-blur-sm"></div>
+
+        <!-- Contenido del Modal -->
+        <div class="glass-card w-full max-w-lg rounded-xl neo-raised p-8 relative z-10 scale-100 transition-all duration-300">
+
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="text-2xl font-black uppercase text-on-surface">Confirmar Aplicación a Deuda</h3>
+            <button (click)="closeApplyToDebtModal()" class="w-10 h-10 neo-raised rounded-full flex items-center justify-center hover:bg-surface-container-highest cursor-pointer">
+              <span class="material-symbols-outlined">close</span>
+            </button>
+          </div>
+
+          <div class="space-y-4 mb-8">
+            <p class="text-base text-on-surface-variant leading-relaxed">
+              ¿Está seguro de que desea aplicar la garantía de
+              <strong class="text-primary">${{ garantiaSeleccionada()!.garantia }} USD</strong> a las deudas pendientes del contrato? Esta acción no se puede deshacer.
+            </p>
+
+            <div class="neo-pressed p-4 rounded-lg space-y-2">
+              <div class="flex justify-between text-sm">
+                <span class="text-secondary font-bold uppercase">Monto de Garantía</span>
+                <span class="font-black">${{ garantiaSeleccionada()!.garantia }}</span>
+              </div>
+
+              <div class="flex justify-between text-sm">
+                <span class="text-secondary font-bold uppercase">Deudas Pendientes</span>
+                <span class="font-black text-tertiary">Por calcular</span>
+              </div>
+
+              <div class="h-px bg-on-surface/5"></div>
+
+              <div class="flex justify-between text-2xl">
+                <span class="font-black uppercase">Total a Aplicar</span>
+                <span class="font-black text-primary">${{ garantiaSeleccionada()!.garantia }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-4">
+            <button (click)="closeApplyToDebtModal()" class="flex-1 neo-button py-3 rounded-full font-bold uppercase text-secondary neo-raised hover:bg-surface-container-high cursor-pointer">
+              Cancelar
+            </button>
+
+            <button (click)="confirmApplyToDebt()" class="flex-1 neo-button py-3 rounded-full font-black uppercase bg-tertiary text-white neo-raised cursor-pointer">
+              Confirmar Aplicación
+            </button>
+          </div>
+
+        </div>
+      </div>
+    }
 
   </main>
 </div>
