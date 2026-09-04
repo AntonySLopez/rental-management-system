@@ -83,17 +83,18 @@ export class ConsumoLuzRepository {
         return result.rows[0];
     }
 
-    // detalles de consumo por id
-    async findConsumoById(id: number, cliente?: PoolClient) {
+    // detalles de consumo por local id
+    async findConsumoByLocalId(id: number, cliente?: PoolClient) {
         const result = await (cliente ?? pool).query(
             `
             select 
                 cl.fecha_fin as fecha_inicio,
-                cl.lectura_actual as lectura_anterior
+                cl.lectura_actual as lectura_anterior,
+                c.id as contrato_id
             from local l
             join contrato c on c.id = l.contrato_id
             join consumo_luz cl on cl.contrato_id = c.id
-            where cl.id = $1
+            where l.id = $1
             `,
             [id]
         );

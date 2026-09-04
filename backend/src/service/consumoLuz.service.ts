@@ -33,8 +33,12 @@ export class ConsumoLuzService {
 
     // obtiene detalles de consumo por id
     async findConsumoById(id: number): Promise<ConsumoLuzDetalle> {
-        const result = await this.consumoLuzRepository.findConsumoById(id);
-        return result;
+        const result = await this.consumoLuzRepository.findConsumoByLocalId(id);
+        return {
+            contrato_id: result.contrato_id,
+            fecha_inicio: result.fecha_inicio,
+            lectura_anterior: Number(result.lectura_anterior)
+        };
     }
 
     //valida contrato existente

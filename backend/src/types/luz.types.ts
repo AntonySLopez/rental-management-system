@@ -12,6 +12,7 @@ export type Luz = {
 };
 
 export type ConsumoLuzDetalle = {
+    contrato_id: number;
     fecha_inicio: Date;
     lectura_anterior: number;
 };
