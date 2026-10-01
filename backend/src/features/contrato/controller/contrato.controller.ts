@@ -1,0 +1,65 @@
+import type { Request, Response } from "express";
+import { ContratoService } from "../service/contrato.service.js";
+import { crearContratoSchema } from "../interface/schema/crearContratoDTO.js";
+import { cerrarContratoSchema } from "../interface/schema/cerrarContrato.DTO.js";
+import { renovarContratoSchema } from "../interface/schema/renovarContratoDTO.js";
+import type { ContratoActivo, ContratoDetalle } from "../../../types/contrato.types.js";
+
+const contratoService = new ContratoService();
+
+export class ContratoController {
+
+    // crear contrato
+    crearContrato = async (req: Request, res: Response) => {
+        console.log("Creando contrato...");
+        // 1. Validar el body
+        const contrato = crearContratoSchema.parse(req.body);
+        // 2. Llamar al servicio
+        const result = await contratoService.crearContrato(contrato);
+        // 3. Retornar la respuesta
+        console.log(result);
+        res.status(201).json({ message: "Contrato creado correctamente" })
+    }
+
+    // cerrar contrato
+    cerrarContrato = async (req: Request, res: Response) => {
+        console.log("Cerrando contrato...");
+        // 1. Validar el body
+        const contratoId = cerrarContratoSchema.parse(req.body);
+        // 2. Llamar al servicio
+        await contratoService.cerrarContrato(contratoId.contrato_id);
+        // 3. Retornar la respuesta
+        res.status(200).json({ message: "Contrato cerrado correctamente" })
+    }
+
+    // renovar contrato
+    renovarContrato = async (req: Request, res: Response) => {
+        console.log("Renovando contrato...");
+        // 1. Validar el body
+        const contrato = renovarContratoSchema.parse(req.body);
+        // 2. Llamar al servicio
+        await contratoService.renovarContrato(contrato);
+        // 3. Retornar la respuesta
+        res.status(200).json({ message: "Contrato renovado correctamente" })
+    }
+
+    // buscar contrato por id
+    buscarContratoPorId = async (req: Request, res: Response) => {
+        console.log("Buscando contrato por id...");
+        // 1. Validar el body
+        const contratoId = req.params.id;
+        // 2. Llamar al servicio
+        const contrato = await contratoService.buscarContratoPorId(Number(contratoId));
+        // 3. Retornar la respuesta
+        res.status(200).json(contrato)
+    }
+
+    // lista de contratos activos
+    listaContratosActivos = async (req: Request, res: Response) => {
+        console.log("Lista de contratos activos...");
+        // 1. Llamar al servicio
+        const contratos = await contratoService.listaContratosActivos();
+        // 2. Retornar la respuesta
+        res.status(200).json(contratos)
+    }
+}

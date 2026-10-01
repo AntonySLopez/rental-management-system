@@ -1,12 +1,12 @@
 import express from 'express';
-import errorGlobalMiddleware from './middleWare/global/errorGlobal.middleware.js';
-import verificarToken from './middleWare/global/verificarToken.middleware.js';
-import authRoutes from "./routes/auth.routes.js";
+import errorGlobalMiddleware from './middleWare/errorGlobal.middleware.js';
+import verificarToken from './middleWare/verificarToken.middleware.js';
+import authRoutes from "./features/auth/routes/auth.routes.js";  // ✅ Correcto
 import helmet from 'helmet';
 import cors from 'cors';
-import { rateLimitMiddleware } from './middleWare/global/rateLimit.middleware.js';
+import { rateLimitMiddleware } from './middleWare/rateLimit.middleware.js';
 import routes from './routes/index.js';
-import { autorizacionAdmin } from './middleWare/global/autorizacionAdmin.middleware.js';
+import { autorizacionAdmin } from './middleWare/autorizacionAdmin.middleware.js';
 
 // al usar typescript, es necesario especificar el tipo de la variable: en este caso express.Application
 const app: express.Application = express();
