@@ -21,6 +21,9 @@
     auth.ts
     errorHandler.ts
 
+  /shared
+    appError.ts
+
 .env
 .env.example
 .gitignore

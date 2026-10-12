@@ -7,20 +7,20 @@
 
 **Reglas de dominio**
 
-- El `documento` no debe estar registrado en otro inquilino con estado `activo`
+- documentoUnico() : El `documento` no debe debe existir en otro inquilino
 
 ```ts
 // Entrada
 interface NuevoInquilinoDto {
-  nombre: string;
-  telefono?: string;
-  email?: string;
-  documento: string;
+  nombre: string;  // no vacío ni solo espacios, máx. 200 caracteres
+  telefono?: string;  // solo dígitos, máx. 9 caracteres
+  email?: string;  // formato de email válido, máx. 100 caracteres
+  documento: string;  // exactamente 8 dígitos numéricos
 }
 
 // Salida
 interface NuevoInquilinoResponse {
-  id: number;  // id del nuevo inquilino
+  id: string;  // id del nuevo inquilino
 }
 ```
 
@@ -34,14 +34,17 @@ interface NuevoInquilinoResponse {
 
 ```ts
 // Entrada
-// query: page, limit
+interface ListarInquilinosDto {
+  page?: number;   // query: entero, mínimo 1, default 1
+  limit?: number;  // query: entero, mínimo 1, máximo 100, default 10
+}
 
 // Salida
 interface InquilinoItem {
-  id: number;
+  id: string;
   nombre: string;
-  documento: string;
   telefono: string | null;
+  documento: string;
   estado: string;
 }
 
@@ -59,15 +62,17 @@ interface ListarInquilinosResponse {
 
 **Reglas de dominio**
 
-- El inquilino debe existir en la base de datos
+- `inquilinoExiste()` : Existe un inquilino con el `id` recibido
 
 ```ts
 // Entrada
-// params: id
+interface DetalleInquilinoDto {
+  id: number;  // params: entero, mínimo 1
+}
 
 // Salida
 interface DetalleInquilinoResponse {
-  id: number;
+  id: string;
   nombre: string;
   telefono: string | null;
   email: string | null;
@@ -79,25 +84,26 @@ interface DetalleInquilinoResponse {
 
 ---
 
-**#4 — PUT /inquilinos/:id** — Actualizar inquilino por id — Retorna: Datos
+**#4 — PATCH /inquilinos/:id** — Actualizar inquilino por id — Retorna: Datos
 
 **Reglas de dominio**
 
-- El inquilino debe existir en la base de datos
-- El `documento` no debe estar registrado en otro inquilino con estado `activo`
+- inquilinoExiste() : Existe un inquilino con el `id` recibido
+- documentoUnico() : El `documento` no debe existir en otro inquilino
 
 ```ts
 // Entrada
 interface ActualizarInquilinoDto {
-  nombre?: string;
-  telefono?: string;
-  email?: string;
-  documento?: string;
+  id: number;          // params: entero, mínimo 1
+  nombre?: string;     // no vacío ni solo espacios, máx. 200 caracteres
+  telefono?: string;   // exactamente 9 dígitos numéricos
+  email?: string;      // formato de email válido, máx. 100 caracteres
+  documento: string;  // exactamente 8 dígitos numéricos
 }
 
-// Salida
-interface ActualizarInquilinoResponse {
-  id: number;  // id del inquilino
+// Salida 
+interface ActualizarInquilinoResponse { 
+  id: string; // id del inquilino actualizado 
 }
 ```
 
@@ -109,19 +115,19 @@ interface ActualizarInquilinoResponse {
 
 **Reglas de dominio**
 
-- El `nombre` no debe estar registrado en otro local
+-  `nombreLocalUnico()` : El `nombre` no debe existir en otro local
 
 ```ts
 // Entrada
 interface NuevoLocalDto {
-  nombre: string;
-  descripcion?: string;
-  area: number;
+  nombre: string;       // no vacío ni solo espacios, máx. 100 caracteres
+  descripcion?: string; // máx. 255 caracteres
+  area: number;         // mayor que 0, máx. 2 decimales, máx. 1000
 }
 
 // Salida
 interface NuevoLocalResponse {
-  id: number;  // id del nuevo local
+  id: string;  // id del nuevo local
 }
 ```
 
@@ -135,11 +141,14 @@ interface NuevoLocalResponse {
 
 ```ts
 // Entrada
-// query: page, limit
+interface ListarLocalesDto {
+  page?: number;   // query: entero, mínimo 1, default 1
+  limit?: number;  // query: entero, mínimo 1, máximo 100, default 10
+}
 
 // Salida
 interface LocalItem {
-  id: number;
+  id: string;
   nombre: string;
   area: number;
   estado: string;
@@ -147,7 +156,7 @@ interface LocalItem {
 
 interface ListarLocalesResponse {
   data: LocalItem[];
-  total: number;
+  total: number;  // total de páginas
   page: number;
   limit: number;
 }
@@ -159,15 +168,17 @@ interface ListarLocalesResponse {
 
 **Reglas de dominio**
 
-- El local debe existir en la base de datos
+- `localExiste()` : Existe un local con el `id` recibido
 
 ```ts
 // Entrada
-// params: id
+interface DetalleLocalDto {
+  id: number;  // params: entero, mínimo 1
+}
 
 // Salida
 interface DetalleLocalResponse {
-  id: number;
+  id: string;
   nombre: string;
   descripcion: string | null;
   area: number;
@@ -177,24 +188,25 @@ interface DetalleLocalResponse {
 
 ---
 
-**#8 — PUT /locales/:id** — Actualizar local por id — Retorna: Datos
+**#8 — PATCH /locales/:id** — Actualizar local por id — Retorna: Datos
 
 **Reglas de dominio**
 
-- El local debe existir en la base de datos
-- El `nombre` no debe estar registrado en otro local
+- `localExiste()` : Existe un local con el `id` recibido
+- `nombreLocalUnico()` : El `nombre` no debe existir en otro local
 
 ```ts
 // Entrada
 interface ActualizarLocalDto {
-  nombre?: string;
-  descripcion?: string;
-  area?: number;
+  id: number;            // params: entero, mínimo 1
+  nombre: string;       // no vacío, máx. 100 caracteres, se aplica trim
+  descripcion?: string;  // máx. 255 caracteres
+  area?: number;         // mayor que 0, máx. 2 decimales, máx. 1000
 }
 
 // Salida
 interface ActualizarLocalResponse {
-  id: number;  // id del local
+  id: string;  // id del local actualizado
 }
 ```
 
@@ -206,25 +218,29 @@ interface ActualizarLocalResponse {
 
 **Reglas de dominio**
 
-- El inquilino debe existir y tener estado `activo`
-- El local debe existir y tener estado `libre`
-- La `fecha_inicio` debe ser anterior a `fecha_fin`
+- `inquilinoExiste()` : Existe un inquilino con el `id` recibido
+- `inquilinoActivo()` : El inquilino recibido tiene estado `activo`
+- `localExiste()` : Existe un local con el `id` recibido
+- `localLibre()` : El local recibido tiene estado `libre`
 
 ```ts
 // Entrada
 interface NuevoContratoDto {
-  inquilino_id: number;
-  local_id: number;
-  precio_mensual: number;
-  garantia: number;
-  fecha_inicio: string;
-  fecha_fin: string;
-  observaciones?: string;
+  inquilino_id: number;         // entero, mínimo 1
+  local_id: number;             // entero, mínimo 1
+  precio_mensual: number;       // mayor que 0, máx. 2 decimales
+  garantia: number;             // mayor que 0, máx. 2 decimales
+  lectura_inicial_luz: number;  // mayor o igual a 0, máx. 2 decimales
+  fecha_inicio: string;         // formato YYYY-MM-DD
+  fecha_fin: string;            // formato YYYY-MM-DD, mayor a fecha_inicio
+  observaciones?: string;       // máx. 255 caracteres
+  metodo_pago: 'efectivo' | 'transferencia' | 'deposito_bancario';  // pago de la primera cuota y garantia
+  referencia?: string;          // máx. 100 caracteres
 }
 
 // Salida
 interface NuevoContratoResponse {
-  id: number;  // id del nuevo contrato
+  id: string;  // id del nuevo contrato
 }
 ```
 
@@ -238,22 +254,25 @@ interface NuevoContratoResponse {
 
 ```ts
 // Entrada
-// query: page, limit
+interface ListarContratosDto {
+  page?: number;   // query: entero, mínimo 1, default 1
+  limit?: number;  // query: entero, mínimo 1, máximo 100, default 10
+}
 
 // Salida
 interface ContratoItem {
-  id: number;
-  inquilino: string;
-  local: string;
+  id: string;
+  inquilino: string;       // nombre del inquilino
+  local: string;           // nombre del local
   precio_mensual: number;
-  fecha_inicio: string;
-  fecha_fin: string;
+  fecha_inicio: string;    // YYYY-MM-DD
+  fecha_fin: string;       // YYYY-MM-DD
   estado: string;
 }
 
 interface ListarContratosResponse {
   data: ContratoItem[];
-  total: number;
+  total: number;  // total de páginas
   page: number;
   limit: number;
 }
@@ -265,39 +284,43 @@ interface ListarContratosResponse {
 
 **Reglas de dominio**
 
-- El contrato debe existir en la base de datos
+- `contratoExiste()` : Existe un contrato con el `id` recibido
 
 ```ts
 // Entrada
-// params: id
+interface DetalleContratoDto {
+  id: number;  // params: entero, mínimo 1
+}
 
 // Salida
 interface InquilinoResumen {
-  id: number;
+  id: string;
   nombre: string;
   documento: string;
 }
 
 interface LocalResumen {
-  id: number;
+  id: string;
   nombre: string;
   area: number;
 }
 
-interface DeudaResumen { 
-total_cuotas_pendientes: number; 
-total_consumos_pendientes: number; 
-total_deuda: number; }
+interface DeudaResumen {
+  total_cuotas_adeudadas: number;    // importe de las cuotas en estado activo o atrasado
+  total_consumos_pendientes: number;  // importe de los consumos en estado pendiente
+  total_deuda: number;                // suma de los dos anteriores
+}
 
 interface DetalleContratoResponse {
-  id: number;
+  id: string;
   inquilino: InquilinoResumen;
   local: LocalResumen;
   precio_mensual: number;
-  garantia: number;
-  fecha_creacion: string;
-  fecha_inicio: string;
-  fecha_fin: string;
+  garantia: number;              // monto de la garantía del contrato
+  lectura_inicial_luz: number;
+  fecha_creacion: string;        // ISO 8601
+  fecha_inicio: string;          // YYYY-MM-DD
+  fecha_fin: string;             // YYYY-MM-DD
   observaciones: string | null;
   estado: string;
   deuda: DeudaResumen;
@@ -306,24 +329,30 @@ interface DetalleContratoResponse {
 
 ---
 
-**#12 — PUT /contratos/:id** — Actualizar contrato por id — Retorna: Datos
+**#12 —PATCH /contratos/:id** — Actualizar contrato por id — Retorna: Datos
 
 **Reglas de dominio**
 
-- El contrato debe existir en la base de datos
-- El estado del contrato debe ser `activo` o `renovado`
+- `contratoExiste()` : Existe un contrato con el `id` recibido
+- `contratoVigente()` : El contrato recibido tiene estado `activo` o `renovado`
+- `inquilinoExiste()` : Existe un inquilino con el `id` recibido
+- `inquilinoActivo()` : El inquilino recibido tiene estado `activo`
+- `localExiste()` : Existe un local con el `id` recibido
+- `localLibre()` : El local recibido tiene estado `libre`
 
 ```ts
 // Entrada
+// debe recibir al menos un campo del body
 interface ActualizarContratoDto {
-  precio_mensual?: number;
-  fecha_fin?: string;
-  observaciones?: string;
+  id: number;              // params: entero, mínimo 1
+  inquilino_id?: number;   // entero, mínimo 1
+  local_id: number;       // entero, mínimo 1
+  observaciones?: string;  // máx. 255 caracteres
 }
 
 // Salida
 interface ActualizarContratoResponse {
-  id: number;  // id del contrato actualizado
+  id: string;  // id del contrato actualizado
 }
 ```
 
@@ -333,12 +362,14 @@ interface ActualizarContratoResponse {
 
 **Reglas de dominio**
 
-- El contrato debe existir en la base de datos
-- El estado del contrato debe ser `activo` o `renovado`
+- `contratoExiste()` : Existe un contrato con el `id` recibido
+- `contratoVigente()` : El contrato recibido tiene estado `activo` o `renovado`
 
 ```ts
 // Entrada
-// params: id
+interface CerrarContratoDto {
+  id: number;  // params: entero, mínimo 1
+}
 
 // Salida
 interface CerrarContratoResponse {
@@ -353,21 +384,23 @@ interface CerrarContratoResponse {
 
 **Reglas de dominio**
 
-- El contrato debe existir en la base de datos
-- El estado del contrato debe ser `activo`
-- La nueva `fecha_fin` debe ser posterior a la `fecha_fin` actual
+- `contratoExiste()` : Existe un contrato con el `id` recibido
+- `contratoActivo()` : El contrato recibido tiene estado `activo`
+- `contratoSinDeuda()` : El contrato no tiene cuotas en estado `activo` o `atrasado` ni consumos en estado `pendiente`
+- `fechaInicioValido()` : La `fecha_inicio` recibida es superior la fecha_fin de la ultima cuota pagada
 
 ```ts
 // Entrada
 interface RenovarContratoDto {
-  fecha_fin: string;
-  precio_mensual?: number;
-  observaciones?: string;
+  id: number;               // params: entero, mínimo 1
+  fecha_inicio: string;        // formato YYYY-MM-DD
+  precio_mensual?: number;  // mayor que 0, máx. 2 decimales
+  observaciones?: string;   // máx. 255 caracteres
 }
 
 // Salida
 interface RenovarContratoResponse {
-  id: number;
+  id: string;  // id del contrato nuevo
 }
 ```
 
@@ -379,21 +412,23 @@ interface RenovarContratoResponse {
 
 **Reglas de dominio**
 
-- El contrato debe existir en la base de datos
-- El contrato debe tener una garantía registrada
+- `contratoExiste()` : Existe un contrato con el `id` recibido
+- `contratoTieneGarantia()` : El contrato recibido tiene una garantía registrada
 
 ```ts
 // Entrada
-// params: contrato_id
+interface DetalleGarantiaDto {
+  contrato_id: number;  // params: entero, mínimo 1
+}
 
 // Salida
 interface DetalleGarantiaResponse {
-  id: number;
-  contrato_id: number;
-  monto_inicial: number;
-  monto_actual: number;
-  fecha_registro: string;
-  fecha_cierre: string | null;
+  id: string;
+  contrato_id: string;
+  monto: number;                 // monto de la garantía
+  saldo: number;                 // depósitos - devoluciones - consumos
+  fecha_registro: string;        // ISO 8601
+  fecha_cierre: string | null;   // ISO 8601
   observaciones: string | null;
   estado: string;
 }
@@ -405,26 +440,31 @@ interface DetalleGarantiaResponse {
 
 **Reglas de dominio**
 
-- El contrato debe existir en la base de datos
-- El contrato debe tener una garantía registrada
+- `contratoExiste()` : Existe un contrato con el `id` recibido
+- `contratoTieneGarantia()` : El contrato recibido tiene una garantía registrada
 
 ```ts
 // Entrada
-// params: contrato_id
-// query: page, limit
+interface ListarMovimientosGarantiaDto {
+  contrato_id: number;  // params: entero, mínimo 1
+  page?: number;        // query: entero, mínimo 1, default 1
+  limit?: number;       // query: entero, mínimo 1, máximo 100, default 10
+}
 
 // Salida
 interface MovimientoGarantiaItem {
-  id: number;
-  fecha_registro: string;
+  id: string;
+  fecha_registro: string;        // ISO 8601
   monto: number;
   metodo_pago: string;
+  referencia: string | null;
   tipo_accion: string;
+  observaciones: string | null;
 }
 
 interface ListarMovimientosGarantiaResponse {
   data: MovimientoGarantiaItem[];
-  total: number;
+  total: number;  // total de páginas
   page: number;
   limit: number;
 }
@@ -436,24 +476,25 @@ interface ListarMovimientosGarantiaResponse {
 
 **Reglas de dominio**
 
-- El contrato debe existir en la base de datos
-- La garantía debe tener estado `deposito`
-- El `monto` no debe superar el `monto_actual` de la garantía
+- `contratoExiste()` : Existe un contrato con el `id` recibido
+- `contratoTieneGarantia()` : El contrato recibido tiene una garantía registrada
+- `garantiaRetenida()` : La garantía del contrato recibido tiene estado `retenida`
+- `montoNoSuperaSaldoGarantia()` : El `monto` recibido no supera el saldo de la garantía del contrato
 
 ```ts
 // Entrada
 interface NuevoMovimientoGarantiaDto {
-  monto: number;
-  metodo_pago: 'efectivo' | 'transferencia' | 'deposito';
-  referencia?: string;
-  tipo_accion: 'devuelta' | 'consumida';
-  observaciones?: string;
+  contrato_id: number;   // params: entero, mínimo 1
+  monto: number;         // mayor que 0, máx. 2 decimales, máx. 10000.00
+  metodo_pago: 'efectivo' | 'transferencia' | 'deposito_bancario';  // si tipo_accion es 'consumida', solo 'deposito_bancario'
+  referencia?: string;   // máx. 100 caracteres
+  tipo_accion: 'deposito' | 'devuelta' | 'consumida';
+  observaciones?: string;  // máx. 255 caracteres
 }
 
 // Salida
 interface NuevoMovimientoGarantiaResponse {
-  id: number;  // id de de garantia
-  contrato_id: number;  // id de de contrato
+  id: string;  // id del nuevo movimiento
 }
 ```
 
@@ -465,54 +506,53 @@ interface NuevoMovimientoGarantiaResponse {
 
 **Reglas de dominio**
 
-- El contrato debe existir en la base de datos
+- `contratoExiste()` : Existe un contrato con el `id` recibido
 
 ```ts
 // Entrada
-// params: contrato_id
-// query: page, limit
+interface ListarCuotasDto {
+  contrato_id: number;  // params: entero, mínimo 1
+}
 
 // Salida
 interface CuotaItem {
-  id: number;
-  fecha_inicio: string;
-  fecha_vencimiento: string;
+  id: string;
+  fecha_inicio: string;       // YYYY-MM-DD
+  fecha_vencimiento: string;  // YYYY-MM-DD
   monto: number;
-  monto_pagado: number;
   estado: string;
 }
 
 interface ListarCuotasResponse {
   data: CuotaItem[];
-  total: number;
-  page: number;
-  limit: number;
 }
 ```
 
 ---
 
-**#19 — GET /contratos/:contrato_id/cuotas/:id** — Obtener cuota por id — Retorna: Datos
+**#19 — GET /contratos/:contrato_id/cuotas/:id** — Obtener pago de cuota por id — Retorna: Datos
 
 **Reglas de dominio**
 
-- El contrato debe existir en la base de datos
-- La cuota debe existir y pertenecer al contrato
+- `contratoExiste()` : Existe un contrato con el `id` recibido
+- `cuotaExiste()` : Existe una cuota con el `id` recibido que pertenece al contrato recibido
+- `cuotaNoAnulada()` : La cuota recibida no tiene estado `anulada`
 
 ```ts
 // Entrada
-// params: contrato_id, id
+interface DetalleCuotaDto {
+  contrato_id: number;        // params: entero, mínimo 1
+  cuota_id: number;           // params: entero, mínimo 1
+}
 
 // Salida
-interface DetalleCuotaResponse {
-  id: number;
-  contrato_id: number;
-  fecha_inicio: string;
-  fecha_vencimiento: string;
-  fecha_pago: string | null;
+interface PagoAlquilerResponse {
+  id: string;
   monto: number;
-  monto_pagado: number;
-  estado: string;
+  metodo_pago: string;
+  referencia: string | null;
+  fecha_registro: string;       // ISO 8601
+  observaciones: string | null;
 }
 ```
 
@@ -522,24 +562,26 @@ interface DetalleCuotaResponse {
 
 **Reglas de dominio**
 
-- El contrato debe existir en la base de datos
-- La cuota debe existir y pertenecer al contrato
-- El estado de la cuota debe ser `pendiente`, `activo`, `atrasado` o `parcial`
-- El `monto` no debe superar el saldo pendiente de la cuota
+- `contratoExiste()` : Existe un contrato con el `id` recibido
+- `contratoActivo()` : El contrato recibido tiene estado `activo`
+- `cuotaExiste()` : Existe una cuota con el `id` recibido que pertenece al contrato recibido
+- `cuotaPagable()` : La cuota recibida tiene estado `pendiente`, `activo` o `atrasado`
+- `montoIgualAMontoCuota()` : El `monto` recibido es igual al monto de la cuota
 
 ```ts
 // Entrada
 interface NuevoPagoAlquilerDto {
-  monto: number;
-  metodo_pago: 'efectivo' | 'transferencia' | 'deposito';
-  referencia?: string;
-  observaciones?: string;
+  contrato_id: number;   // params: entero, mínimo 1
+  id: number;            // params: entero, mínimo 1 (id de la cuota)
+  monto: number;         // mayor que 0, máx. 2 decimales, máx. 10000
+  metodo_pago: 'efectivo' | 'transferencia' | 'deposito_bancario';
+  referencia?: string;   // máx. 100 caracteres
+  observaciones?: string;  // máx. 255 caracteres
 }
 
 // Salida
 interface NuevoPagoAlquilerResponse {
-  id: number;  // id de garantia
-  contrato_id: number;  // id de contrato
+  id: string;  // id del nuevo pago
 }
 ```
 
@@ -551,24 +593,25 @@ interface NuevoPagoAlquilerResponse {
 
 **Reglas de dominio**
 
-- El contrato debe existir y tener estado `activo` o `renovado`
-- No debe existir un consumo con estado `activo`, `atrasado` o `parcial` para el contrato
+- `contratoExiste()` : Existe un contrato con el `id` recibido
+- `contratoActivo()` : El contrato recibido tiene estado `activo`
+- `lecturaAnteriorConsecutiva()` : La `lectura_anterior` recibida es igual a la `lectura_actual` del consumo más reciente del contrato que no esté `anulada`, o a la `lectura_inicial_luz` del contrato si no tiene consumos
 
 ```ts
 // Entrada
 interface NuevoConsumoDto {
-  fecha_inicio: string;
-  fecha_fin: string;
-  lectura_anterior: number;
-  lectura_actual: number;
-  precio_kwh: number;
-  alumbrado_publico: number;
+  contrato_id: number;         // params: entero, mínimo 1
+  fecha_inicio: string;        // formato YYYY-MM-DD, fecha válida
+  fecha_fin: string;           // formato YYYY-MM-DD, fecha válida, igual o posterior a fecha_inicio
+  lectura_anterior: number;    // mayor o igual a 0, máx. 2 decimales, máx. 10000.00
+  lectura_actual: number;      // mayor o igual a lectura_anterior, máx. 2 decimales, máx. 10000.00
+  precio_kwh: number;          // mayor que 0, máx. 4 decimales, máx. 10.0000
+  alumbrado_publico?: number;  // mayor o igual a 0, máx. 2 decimales, máx. 10000.00, default 0
 }
 
 // Salida
 interface NuevoConsumoResponse {
-  id: number;  // id de consumo#
-  contrato_id: number;  // id de contrato
+  id: string;  // id del nuevo consumo
 }
 ```
 
@@ -578,29 +621,26 @@ interface NuevoConsumoResponse {
 
 **Reglas de dominio**
 
-- El contrato debe existir en la base de datos
+- `contratoExiste()` : Existe un contrato con el `id` recibido
 
 ```ts
 // Entrada
-// params: contrato_id
-// query: page, limit
+interface ListarConsumosDto {
+  contrato_id: number;  // params: entero, mínimo 1
+}
 
 // Salida
 interface ConsumoItem {
-  id: number;
-  fecha_inicio: string;
-  fecha_fin: string;
+  id: string;
+  fecha_inicio: string;       // YYYY-MM-DD
+  fecha_fin: string;          // YYYY-MM-DD
   consumo_kwh_total: number;
   monto: number;
-  monto_pagado: number;
   estado: string;
 }
 
 interface ListarConsumosResponse {
   data: ConsumoItem[];
-  total: number;
-  page: number;
-  limit: number;
 }
 ```
 
@@ -610,28 +650,40 @@ interface ListarConsumosResponse {
 
 **Reglas de dominio**
 
-- El contrato debe existir en la base de datos
-- El consumo debe existir y pertenecer al contrato
+- `contratoExiste()` : Existe un contrato con el `id` recibido
+- `consumoExiste()` : Existe un consumo con el `id` recibido que pertenece al contrato recibido
+- `consumoNoAnulado()` : El consumo recibido no tiene estado `anulada`
 
 ```ts
 // Entrada
-// params: contrato_id, id
+interface DetalleConsumoDto {
+  contrato_id: number;  // params: entero, mínimo 1
+  id: number;           // params: entero, mínimo 1 (id del consumo)
+}
 
 // Salida
+interface PagoConsumoItem {
+  id: string;
+  monto: number;
+  metodo_pago: string;
+  referencia: string | null;
+  fecha_registro: string;       // ISO 8601
+  observaciones: string | null;
+}
+
 interface DetalleConsumoResponse {
-  id: number;
-  contrato_id: number;
-  fecha_inicio: string;
-  fecha_fin: string;
-  fecha_pago: string | null;
+  id: string;
+  contrato_id: string;
+  fecha_inicio: string;         // YYYY-MM-DD
+  fecha_fin: string;            // YYYY-MM-DD
   lectura_anterior: number;
   lectura_actual: number;
-  precio_kwh: number;
   consumo_kwh_total: number;
+  precio_kwh: number;
   alumbrado_publico: number;
   monto: number;
-  monto_pagado: number;
   estado: string;
+  pago: PagoConsumoItem | null;  // null si el consumo aún no tiene pago registrado
 }
 ```
 
@@ -641,23 +693,25 @@ interface DetalleConsumoResponse {
 
 **Reglas de dominio**
 
-- El contrato debe existir en la base de datos
-- El consumo debe existir y pertenecer al contrato
-- El estado del consumo debe ser `activo`, `atrasado` o `parcial`
-- El `monto` no debe superar el saldo pendiente del consumo
+- `contratoExiste()` : Existe un contrato con el `id` recibido
+- `contratoActivo()` : El contrato recibido tiene estado `activo`
+- `consumoExiste()` : Existe un consumo con el `id` recibido que pertenece al contrato recibido
+- `consumoPagable()` : El consumo recibido tiene estado `pendiente`
+- `montoIgualAMontoConsumo()` : El `monto` recibido es igual al monto del consumo
 
 ```ts
 // Entrada
 interface NuevoPagoConsumoDto {
-  monto: number;
-  metodo_pago: 'efectivo' | 'transferencia' | 'deposito';
-  referencia?: string;
-  observaciones?: string;
+  contrato_id: number;     // params: entero, mínimo 1
+  id: number;              // params: entero, mínimo 1 (id del consumo)
+  monto: number;           // mayor que 0, máx. 2 decimales, máx. 1000.00
+  metodo_pago: 'efectivo' | 'transferencia' | 'deposito_bancario';
+  referencia?: string;     // máx. 100 caracteres
+  observaciones?: string;  // máx. 255 caracteres
 }
 
 // Salida
 interface NuevoPagoConsumoResponse {
-  id: number;  // id de consumo
-  contrato_id: number;  // id de contrato
+  id: string;  // id del nuevo pago
 }
 ```
