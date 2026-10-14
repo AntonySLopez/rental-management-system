@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import inquilinoRoutes from "../features/inquilinos/routes/inquilino.routes.js";
+import inquilinoRoutes from "../features/RfInquilino/routes/inquilino.routes.js";
 import authRoutes from "../features/auth/routes/auth.routes.js";
 import propiedadRoutes from "../features/propiedad/routes/propiedad.routes.js";
 import localRoutes from "../features/local/routes/local.routes.js";

@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import { AuthRepository } from "../repository/auth.respository.js";
+import { AuthRepository } from "../features/auth/repository/auth.respository.js";
 import { AppError } from "../shared/appError.js";
 
 const authRepository = new AuthRepository();

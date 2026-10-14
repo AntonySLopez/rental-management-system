@@ -1,7 +1,7 @@
 import express from 'express';
 import errorGlobalMiddleware from './middleWare/errorGlobal.middleware.js';
 import verificarToken from './middleWare/verificarToken.middleware.js';
-import authRoutes from "./features/auth/routes/auth.routes.js";  // ✅ Correcto
+import authRoutes from "./features/auth/routes/auth.routes.js";
 import helmet from 'helmet';
 import cors from 'cors';
 import { rateLimitMiddleware } from './middleWare/rateLimit.middleware.js';
