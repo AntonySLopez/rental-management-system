@@ -1,5 +1,5 @@
 import { ContratoRepository } from "../repository/contrato.repository.js";
-import { InquilinoRepository } from "../../inquilinos/repository/inquilino.repository.js";
+import { InquilinoRepository } from "../../RfInquilino/repository/inquilino.repository.js";
 import { CuotaAlquilerRepository } from "../repository/cuotaAlquiler.repository.js";
 import { ConsumoLuzRepository } from "../../consumoLuz/repository/consumoLuz.repository.js";
 import { GarantiaRepository } from "../../garantia/repository/garantia.repository.js";
@@ -62,9 +62,9 @@ export class ContratoService {
                 console.log("local disponible");
             }
             
-            // validar inquilino existente
-            await this.validarInquilinoExistente(contrato.inquilinoId, cliente);
-            console.log("inquilino validado");
+            // // validar inquilino existente
+            // await this.validarInquilinoExistente(contrato.inquilinoId, cliente);
+            // console.log("inquilino validado");
             
             // guardar contrato
             const contratoId = await this.contratoRepository.save(contrato, cliente);
@@ -275,12 +275,12 @@ export class ContratoService {
     //-----------------------------***-----------------------------------//
 
     // validar inquilino existente
-    private async validarInquilinoExistente(inquilinoId: number, cliente: PoolClient) {
-        const inquilinoExistente = await this.inquilinoRepository.findById(inquilinoId, cliente);
-        if (!inquilinoExistente) {
-            throw new AppError("El inquilino no existe", 404);
-        }
-    }
+    // private async validarInquilinoExistente(inquilinoId: number, cliente: PoolClient) {
+    //     const inquilinoExistente = await this.inquilinoRepository.findById(inquilinoId, cliente);
+    //     if (!inquilinoExistente) {
+    //         throw new AppError("El inquilino no existe", 404);
+    //     }
+    // }
 
     // validar local disponible
     private async validarLocalDisponible(localId: number, cliente: PoolClient) {

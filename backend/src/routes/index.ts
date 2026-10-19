@@ -3,7 +3,7 @@ import { Router } from "express";
 import inquilinoRoutes from "../features/RfInquilino/routes/inquilino.routes.js";
 import authRoutes from "../features/auth/routes/auth.routes.js";
 import propiedadRoutes from "../features/propiedad/routes/propiedad.routes.js";
-import localRoutes from "../features/local/routes/local.routes.js";
+import localRoutes from "../features/RfLocal/routes/local.routes.js";
 import contratoRoutes from "../features/contrato/routes/contrato.routes.js";
 import luzRoutes from "../features/consumoLuz/routes/luz.routes.js";
 import deudaRoutes from "../features/deuda/routes/deuda.routes.js";

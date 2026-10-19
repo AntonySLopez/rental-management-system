@@ -24,13 +24,14 @@ app.use(express.json());
 app.use(rateLimitMiddleware);
 
 // rutas de autenticación
-app.use("/auth", authRoutes);
+// app.use("/auth", authRoutes);
 
 // middleware para verificar token
-app.use(verificarToken);
+// app.use(verificarToken);
 
 // middleware para acceso a rutas de rol de administrador
-app.use(autorizacionAdmin, routes);
+// app.use(autorizacionAdmin, routes);
+app.use(routes);
 
 // middleware global para manejar errores
 app.use(errorGlobalMiddleware);

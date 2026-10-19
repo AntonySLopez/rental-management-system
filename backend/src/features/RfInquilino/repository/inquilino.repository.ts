@@ -1,5 +1,4 @@
 import pool from "../../../infrastructure/postgres.js";
-import type { PoolClient } from "pg";
 import type { InquilinoInput } from "../interface/types/inquilino.types.js";
 
 export class InquilinoRepository {
