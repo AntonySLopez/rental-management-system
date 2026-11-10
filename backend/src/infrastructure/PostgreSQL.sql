@@ -38,20 +38,21 @@ CREATE TABLE local (
 
 
 
+
 CREATE TABLE contrato (
-    id              BIGINT GENERATED ALWAYS AS IDENTITY,
-    inquilino_id    BIGINT        NOT NULL,
-    local_id        BIGINT        NOT NULL,
-    precio_mensual  NUMERIC(12,2) NOT NULL,
-    garantia        NUMERIC(12,2),
-    lectura_inicial_luz NUMERIC(12,2) NOT NULL,
-    fecha_creacion  TIMESTAMPTZ   NOT NULL DEFAULT now(),
-    fecha_inicio    DATE          NOT NULL,
-    fecha_fin       DATE          NOT NULL,
-    observaciones   VARCHAR(255),
-    estado          TEXT          NOT NULL DEFAULT 'activo',
-	metodo_pago     TEXT          NOT NULL DEFAULT 'efectivo',
-	referencia      VARCHAR(100),
+    id                    BIGINT GENERATED ALWAYS AS IDENTITY,
+    inquilino_id          BIGINT        NOT NULL,
+    local_id              BIGINT        NOT NULL,
+    precio_mensual        NUMERIC(12,2) NOT NULL,
+    garantia              NUMERIC(12,2),
+    lectura_inicial_luz   NUMERIC(12,2) NOT NULL,
+    fecha_creacion        TIMESTAMPTZ   NOT NULL DEFAULT now(),
+    fecha_inicio          DATE          NOT NULL,
+    duracion_meses        INTEGER       NOT NULL,
+    observaciones         VARCHAR(255),
+    estado                TEXT          NOT NULL DEFAULT 'activo',
+    metodo_pago           TEXT          NOT NULL DEFAULT 'efectivo',
+    referencia            VARCHAR(100),
 
     CONSTRAINT pk_contrato PRIMARY KEY (id),
     CONSTRAINT fk_contrato_inquilino FOREIGN KEY (inquilino_id)
@@ -60,12 +61,12 @@ CREATE TABLE contrato (
         REFERENCES local (id) ON DELETE RESTRICT,
     CONSTRAINT ck_contrato_precio CHECK (precio_mensual > 0),
     CONSTRAINT ck_contrato_lectura_inicial CHECK (lectura_inicial_luz >= 0),
-    CONSTRAINT ck_contrato_fechas CHECK (fecha_fin > fecha_inicio),
+    CONSTRAINT ck_contrato_duracion CHECK (duracion_meses > 0),
     CONSTRAINT ck_contrato_estado CHECK (
         estado IN ('activo', 'finalizado', 'renovado', 'cerrado')
     ),
     CONSTRAINT ck_metodo_pago CHECK (
-	    metodo_pago IN ('efectivo', 'transferencia', 'deposito_bancario')
+        metodo_pago IN ('efectivo', 'transferencia', 'deposito_bancario')
     )
 );
 
@@ -79,15 +80,14 @@ CREATE INDEX idx_contrato_local ON contrato (local_id);
 
 
 
-
 CREATE TABLE garantia (
     id              BIGINT GENERATED ALWAYS AS IDENTITY,
     contrato_id     BIGINT        NOT NULL,
     monto           NUMERIC(12,2) NOT NULL,
     fecha_registro  TIMESTAMPTZ   NOT NULL DEFAULT now(),
     fecha_cierre    TIMESTAMPTZ,
-    observaciones   VARCHAR(255),
-    estado          TEXT          NOT NULL,
+    observaciones   VARCHAR(255) DEFAULT 'Sin observaciones',
+    estado          TEXT          NOT NULL DEFAULT 'retenida',
 
     CONSTRAINT pk_garantia PRIMARY KEY (id),
     CONSTRAINT uq_garantia_contrato UNIQUE (contrato_id),
@@ -171,9 +171,9 @@ CREATE TABLE pago_alquiler (
     cuota_alquiler_id  BIGINT        NOT NULL,
     monto              NUMERIC(12,2) NOT NULL,
     metodo_pago        TEXT          NOT NULL,
-    referencia         VARCHAR(100),
+    referencia         VARCHAR(100)  DEFAULT 'sin referencia',
     fecha_registro     TIMESTAMPTZ   NOT NULL DEFAULT now(),
-    observaciones      VARCHAR(255),
+    observaciones      VARCHAR(255) DEFAULT 'Inicio de contrato',
 
     CONSTRAINT pk_pago_alquiler PRIMARY KEY (id),
     CONSTRAINT fk_pago_alquiler_cuota_alquiler FOREIGN KEY (cuota_alquiler_id)
