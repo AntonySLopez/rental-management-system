@@ -8,7 +8,7 @@ import contratoRoutes from "../features/Rfcontrato/routes/contrato.routes.js";
 import luzRoutes from "../features/consumoLuz/routes/luz.routes.js";
 import deudaRoutes from "../features/deuda/routes/deuda.routes.js";
 import pagoRoutes from "../features/pago/routes/pago.routes.js";
-import garantiaRoutes from "../features/garantia/routes/garantia.routes.js";
+import garantiaRoutes from "../features/RfGarantia/routes/garantia.routes.js";
 
 const routes = Router() as Router;
 
