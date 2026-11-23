@@ -9,17 +9,23 @@ import luzRoutes from "../features/consumoLuz/routes/luz.routes.js";
 import deudaRoutes from "../features/deuda/routes/deuda.routes.js";
 import pagoRoutes from "../features/pago/routes/pago.routes.js";
 import garantiaRoutes from "../features/RfGarantia/routes/garantia.routes.js";
+import alquiler from "../features/RfAlquiler/routes/alquiler.routes.js";
 
 const routes = Router() as Router;
-
+// inquilino refactorizado
 routes.use("/inquilino", inquilinoRoutes);
 routes.use("/auth", authRoutes);
 routes.use("/propiedad", propiedadRoutes);
+// local refactorizado
 routes.use("/local", localRoutes);
+// contrato refactorizado
 routes.use("/contrato", contratoRoutes);
 routes.use("/luz", luzRoutes);
 routes.use("/deuda", deudaRoutes);
 routes.use("/pago", pagoRoutes);
+// garantia refactorizado
 routes.use("/garantia", garantiaRoutes);
+// alquiler refactorizado
+routes.use("/alquiler", alquiler);
 
 export default routes;
