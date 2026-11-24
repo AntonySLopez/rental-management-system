@@ -1,3 +1,8 @@
 node_modules
 .env
 src/database/
+
+dist
+backend/dist
+
+docs/.obsidian

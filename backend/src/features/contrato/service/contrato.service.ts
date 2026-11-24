@@ -1,334 +1,152 @@
 import { ContratoRepository } from "../repository/contrato.repository.js";
-import { InquilinoRepository } from "../../RfInquilino/repository/inquilino.repository.js";
-import { CuotaAlquilerRepository } from "../repository/cuotaAlquiler.repository.js";
-import { ConsumoLuzRepository } from "../../consumoLuz/repository/consumoLuz.repository.js";
-import { GarantiaRepository } from "../../garantia/repository/garantia.repository.js";
-import { LocalRepository } from "../../local/repository/local.repository.js";
-import { movimientoRepository } from "../../pago/repository/movimiento.repository.js";
+import { RDRepository } from "../repository/rd.repository.js";
+import { RD } from "./rule/rd.js";
+import { ContratoLogic } from "./logic/contrato.logic.js";
+import type { NuevoContratoDto } from "../interface/dto/nuevoContrato.dto.js";
+import type { NuevoContratoResponse } from "../interface/types/contrato.types.js";
+import type { ContratoInput } from "../interface/types/contrato.types.js";
+import type { ListarContratosDto } from "../interface/dto/listarContratos.dto.js";
+import type { ListarContratosResponse } from "../interface/types/contrato.types.js";
+import type { DetalleContratoDto } from "../interface/dto/detalleContrato.dto.js";
+import type { DetalleContratoResponse } from "../interface/types/contrato.types.js";
+import type { ActualizarContratoDto } from "../interface/dto/actualizarContrato.dto.js";
+import type { ActualizarContratoResponse } from "../interface/types/contrato.types.js";
+import type { CerrarContratoDto } from "../interface/dto/cerrarContrato.dto.js";
+import type { CerrarContratoResponse } from "../interface/types/contrato.types.js";
+import type { RenovarContratoDto } from "../interface/dto/renovarContrato.dto.js";
+import type { RenovarContratoResponse } from "../interface/types/contrato.types.js";
 
-import type { CrearContratoDTO } from "../interface/schema/crearContratoDTO.js";
-import type { RenovarContratoDTO } from "../interface/schema/renovarContratoDTO.js";
-import type { ConsultarDeudaDTO } from "../../deuda/interface/schema/consultarDeudaDTO.js";
-import type { Cuota } from "../../../types/cuota.types.js";
-import type { Luz } from "../../../types/luz.types.js";
-import type { Garantia } from "../../../types/garantia.types.js";
-import type { Contrato } from "../../../types/contrato.types.js";
-import type { Movimiento } from "../../../types/movimiento.types.js";
-import type { ContratoActivo, ContratoDetalle } from "../../../types/contrato.types.js";
-
-import { DeudaService } from "../../deuda/service/deuda.service.js";
-
-import pool from "../../../infrastructure/postgres.js";
-import type { PoolClient } from "pg";
-import { AppError } from "../../../shared/appError.js";
-
+/**
+ * Service: ContratoService
+ * Orquesta el flujo de creación de contrato según B8
+ */
 export class ContratoService {
-    private inquilinoRepository: InquilinoRepository;
     private contratoRepository: ContratoRepository;
-    private cuotaAlquilerRepository: CuotaAlquilerRepository;
-    private consumoLuzRepository: ConsumoLuzRepository;
-    private garantiaRepository: GarantiaRepository;
-    private localRepository: LocalRepository;
-    private deudaService: DeudaService;
-    private movimientoRepository: any;
+    private rdRepository: RDRepository;
+    private RD: RD;
+    private contratoLogic: ContratoLogic;
 
     constructor() {
-        this.inquilinoRepository = new InquilinoRepository();
         this.contratoRepository = new ContratoRepository();
-        this.cuotaAlquilerRepository = new CuotaAlquilerRepository();
-        this.consumoLuzRepository = new ConsumoLuzRepository();
-        this.garantiaRepository = new GarantiaRepository();
-        this.localRepository = new LocalRepository();
-        this.deudaService = new DeudaService();
-        this.movimientoRepository = new movimientoRepository();
-    }
-    
-    // crear contrato
-    async crearContrato(contrato: CrearContratoDTO, client?: PoolClient, isRenovacion: boolean = false) {
-
-        const isExternalClient = !!client;
-        const cliente: PoolClient = client ?? await pool.connect();
-        console.log("hilo de conexion obtenido");
-        
-        try {
-            // iniciamos transaccion
-            if (!isExternalClient) {
-                await cliente.query('BEGIN');
-            }
-            
-            // validar local disponible (solo si no es renovacion)
-            if (!isRenovacion) {
-                await this.validarLocalDisponible(contrato.localId, cliente);
-                console.log("local disponible");
-            }
-            
-            // // validar inquilino existente
-            // await this.validarInquilinoExistente(contrato.inquilinoId, cliente);
-            // console.log("inquilino validado");
-            
-            // guardar contrato
-            const contratoId = await this.contratoRepository.save(contrato, cliente);
-            console.log("contrato guardado con id", contratoId);
-
-            // R. C.U. actualizar local a ocupado con id de contrato
-            await this.actualizarLocalOcupado(contrato.localId, contratoId, cliente);
-            console.log("local actualizado a ocupado");
-            
-            // crear cuotas de alquiler
-            await this.crearCuotasAlquiler(contratoId, contrato, cliente);
-            console.log("cuotas creadas");
-
-            // crear primer consumo de luz
-            await this.crearPrimerConsumoLuz(contratoId, contrato, cliente);
-            console.log("primer consumo de luz creado");
-
-            // crear garantia si existe
-            if (contrato.garantia) {
-                await this.crearGarantia(contratoId, contrato.garantia, contrato.fechaInicio, cliente);
-                console.log("garantia creada");
-            };
-            
-            // confirmamos transaccion
-            if (!isExternalClient) {
-                await cliente.query('COMMIT'); 
-            }
-
-            console.log("id de contrato creado:", contratoId);
-            return contratoId;
-
-        } catch (error) {
-            if (!isExternalClient) {
-                await cliente.query('ROLLBACK');
-            }
-            throw error;
-        } finally {
-            // liberamos cliente
-            if (!isExternalClient) {
-                cliente.release();
-                console.log("hilo de conexion liberado");
-            }
-        }
+        this.rdRepository = new RDRepository();
+        this.RD = new RD(this.rdRepository);
+        this.contratoLogic = new ContratoLogic(this.contratoRepository);
     }
 
-    // cerrar contrato
-    async cerrarContrato(contratoId: number) {
-        
-            // validamos contrato
-            await this.validarContrato(contratoId);
-            console.log("contrato valido");
-            
-            // cerramos contrato
-            await this.cerrar(contratoId);
-            console.log("contrato cerrado");
-    }
+    /**
+     * nuevoContrato - Caso de uso #9
+     * Flujo según B8
+     */
+    async nuevoContrato(contrato: NuevoContratoDto): Promise<NuevoContratoResponse> {
+        // RD.nuevoContrato: inquilinoExiste
+        await this.RD.inquilinoExiste(contrato.inquilino_id);
+        console.log('inquilinoExiste passed');
+        // RD.nuevoContrato: inquilinoActivo
+        await this.RD.inquilinoActivo(contrato.inquilino_id);
+        console.log('inquilinoActivo passed');
 
-    // renovar contrato
-    async renovarContrato(renovar: RenovarContratoDTO) {
-        
-        // obtenemos cliente
-        const cliente = await pool.connect();
-        
-        try {
-            // iniciamos transaccion
-            await cliente.query('BEGIN');
-            console.log("transaccion iniciada");
-            
-            // validamos que exista el contrato
-            const contrato = await this.validarContrato(renovar.contrato_id, cliente);
-            console.log("contrato valido", contrato);
-            
-            // R. C.U. consultar deuda
-            await this.validarDeuda(renovar.contrato_id, cliente);
-            console.log("deuda validada");
-            
-            // R. C.U. actualizar contrato a renovado
-            await this.actualizarContratoRenovado(renovar.contrato_id, cliente);
-            console.log("contrato actualizado a renovado");
-            
-            // R. C.U. gestion de garantia : devuelta
-            const garantia = await this.renovarGarantia(renovar.contrato_id, cliente);
-            console.log(garantia);
-            
-            // crea nuevo objeto contrato
-            const nuevoContrato : CrearContratoDTO = await this.crearObjetoContrato(contrato, renovar, garantia, cliente);
-            console.log("nuevo contrato creado", nuevoContrato);
+        // RD.nuevoContrato: localExiste
+        await this.RD.localExiste(contrato.local_id);
+        console.log('localExiste passed');
 
-            // R. C.U. crear contrato nuevo
-            const nuevoContratoId = await this.crearContratoNuevo(nuevoContrato, cliente);
-            console.log("contrato nuevo creado con id:", nuevoContratoId);
+        // RD.nuevoContrato: localLibre
+        await this.RD.localLibre(contrato.local_id);
 
-            await cliente.query('COMMIT');
-            return nuevoContratoId;
-        } catch (error) {
-            await cliente.query('ROLLBACK');
-            throw error;
-        } finally {
-            // liberamos cliente
-            cliente.release();
-            console.log("hilo de conexion liberado");
-        }
-    }
-
-    // buscar contrato por id
-    async buscarContratoPorId(id: number): Promise<ContratoDetalle> {
-        return await this.contratoRepository.buscarContratoPorId(id);
-    }
-
-    // lista de contratos activos
-    async listaContratosActivos(): Promise<ContratoActivo[]> {
-        return await this.contratoRepository.listaContratosActivos();
-    }
-
-    //-----------------------------***-----------------------------------//
-
-    // validar contrato
-    private async validarContrato(contratoId: number, cliente?: PoolClient) {
-        const contrato = await this.contratoRepository.findById(contratoId, cliente);
-        if (!contrato) {
-            throw new AppError("Contrato no encontrado", 404);
-        }
-        if (contrato.estado !== 'activo') {
-            throw new AppError("El contrato no está activo", 409);
-        }
-        return contrato;
-    }
-
-    // cierra contrato
-    private async cerrar(contratoId: number, cliente?: PoolClient) {
-        await this.contratoRepository.close(contratoId, cliente);
-    }
-//
-    // consultar y validar deuda
-    private async validarDeuda(contratoId: number, cliente?: PoolClient) {
-        const id: ConsultarDeudaDTO = { contratoId };
-        const deuda = await this.deudaService.consultarDeuda(id);
-        if (deuda.total.general > 0) {
-            throw new AppError("El contrato tiene deuda pendiente", 409);
-        }
-    }
-    // libera local
-    private async liberarLocal(localId: number, cliente?: PoolClient) {
-        await this.localRepository.liberar(localId, cliente);
-    }
-    // actualizar contrato a renovado
-    private async actualizarContratoRenovado(contratoId: number, cliente?: PoolClient) {
-        await this.contratoRepository.renovar(contratoId, cliente);
-    }
-//    
-    // renovar garantia
-    private async renovarGarantia(contratoId: number, cliente?: PoolClient): Promise<number> {
-        const garantia = await this.garantiaRepository.findByContratoId(contratoId, cliente);
-        if (!garantia) {
-            console.log("No se encontro garantia para el contrato");
-            return 0;
-        }
-        
-        // Crear movimiento de devolución de garantía
-        const movimiento: Movimiento = {
-            contrato_id: contratoId,
-            fecha: new Date(),
-            monto: garantia.monto,
-            metodo_pago: "devolucion_garantia",
-            referencia: "Devolución de garantía por renovación",
-            descripcion: "Garantia devuelta"
+        // Convertir undefined a null para campos opcionales
+        const contratoInput: ContratoInput = {
+            inquilino_id: contrato.inquilino_id,
+            local_id: contrato.local_id,
+            precio_mensual: contrato.precio_mensual,
+            garantia: contrato.garantia ?? 0,
+            lectura_inicial_luz: contrato.lectura_inicial_luz ?? 0,
+            fecha_inicio: contrato.fecha_inicio,
+            duracion_meses: contrato.duracion_meses,
+            observaciones: contrato.observaciones ?? null,
+            metodo_pago: contrato.metodo_pago,
+            referencia: contrato.referencia ?? null,
         };
-        const movimientoGuardado = await this.movimientoRepository.saveMovimiento(movimiento, cliente);
+
+        // operation9: registrarContrato.repository() + operaciones relacionadas
+        return await this.contratoLogic.operation9(contratoInput);
+    }
+    /**
+     * listarContratos - Caso de uso #10
+     * Flujo según B8
+     */
+    async listarContratos(dto: ListarContratosDto): Promise<ListarContratosResponse> {
+        // operation10: listarContratos.repository()
+        return await this.contratoLogic.operation10(dto.page, dto.limit);
+    }
+
+    /**
+     * detalleContrato - Caso de uso #11
+     * Flujo según B8
+     */
+    async detalleContrato(dto: DetalleContratoDto): Promise<DetalleContratoResponse> {
+        // RD.detalleContrato: contratoExiste
+        await this.RD.contratoExiste(dto.id);
         
-        await this.garantiaRepository.updateEstadoByContratoId(contratoId, {
-            fecha_movimiento: new Date(),
-            observaciones: "Garantia devuelta",
-            estado_id: "devuelta",
-            movimiento_id: movimientoGuardado.id
-        });
-        return garantia.monto;
+        // operation11
+        return await this.contratoLogic.operation11(dto.id);
     }
 
-    // crear nuevo objeto de contrato
-    private async crearObjetoContrato(oldContrato: Contrato, renovar:RenovarContratoDTO, garantia: number, cliente: PoolClient) {
+    /**
+     * actualizarContrato - Caso de uso #12
+     * Flujo según B8
+     */
+    async actualizarContrato(id: number, dto: ActualizarContratoDto): Promise<ActualizarContratoResponse> {
+        // RD.actualizarContrato: contratoExiste (siempre)
+        await this.RD.contratoExiste(id);
 
-        const ultimaLectura = await this.consumoLuzRepository.findLastByContratoId(renovar.contrato_id, cliente);
+        // RD.actualizarContrato: contratoVigente (siempre)
+        await this.RD.contratoVigente(id);
+
+        // RD.actualizarContrato: localExiste
+        await this.RD.localExiste(dto.local_id);
         
-        if (!ultimaLectura) {
-            throw new AppError("No se encontró lectura anterior para el contrato", 404);
-        }
-
-        const nuevoContratoObj : CrearContratoDTO = {
-            inquilinoId: oldContrato.inquilino_id,
-            localId: oldContrato.local_id,
-            precioMensual: oldContrato.precio_mensual,
-            duracionMeses: renovar.duracion_meses,
-            lecturaAnterior: ultimaLectura.lectura_actual,
-            fechaInicio: renovar.fecha_inicio,
-            fechaFin: renovar.fecha_fin,
-            observacion: "Contrato renovado",
-            garantia: garantia > 0 ? garantia : undefined
-        };
-        return nuevoContratoObj;
-    }
-    // crear contrato nuevo
-    private async crearContratoNuevo(nuevoContrato: CrearContratoDTO, cliente: PoolClient) {
+        // RD.actualizarContrato: localLibre
+        await this.RD.localLibre(dto.local_id);
         
-        const contrato = await this.crearContrato(nuevoContrato, cliente, true);
-        return contrato;
+        // operation13: actualizarContratoLocal.repository() + actualizarEstadoLocal.repository()
+        await this.contratoLogic.operation13(id, dto.local_id, dto.observaciones);
+        
+        return { id: id.toString() };
     }
 
-    //-----------------------------***-----------------------------------//
+    /**
+     * cerrarContrato - Caso de uso #13
+     * Flujo según B8
+     */
+    async cerrarContrato(dto: CerrarContratoDto): Promise<CerrarContratoResponse> {
+        // RD.cerrarContrato: contratoExiste
+        await this.RD.contratoExiste(dto.id);
 
-    // validar inquilino existente
-    // private async validarInquilinoExistente(inquilinoId: number, cliente: PoolClient) {
-    //     const inquilinoExistente = await this.inquilinoRepository.findById(inquilinoId, cliente);
-    //     if (!inquilinoExistente) {
-    //         throw new AppError("El inquilino no existe", 404);
-    //     }
-    // }
+        // RD.cerrarContrato: contratoVigente
+        await this.RD.contratoVigente(dto.id);
 
-    // validar local disponible
-    private async validarLocalDisponible(localId: number, cliente: PoolClient) {
-        const localDisponible = await this.localRepository.findById(localId, cliente);
-        if (localDisponible.contrato_id) {
-            throw new AppError("El local no está disponible", 409);
-        }
+        // operation14: cerrarContrato.repository() + liberarEstadoLocal.repository()
+        return await this.contratoLogic.operation14(dto.id);
     }
 
-    // crear cuotas de alquiler
-    private async crearCuotasAlquiler(contratoId: number, contrato: CrearContratoDTO, cliente: PoolClient) {
-        const cuotaAlquiler: Cuota = {
-            contrato_id: contratoId,
-            fecha_inicio: new Date(contrato.fechaInicio),
-            fecha_fin: new Date(contrato.fechaFin),
-            monto: contrato.precioMensual,
-        };
-        await this.cuotaAlquilerRepository.saveAllCuotasForContrato(cuotaAlquiler, contrato.duracionMeses, cliente);
-    }
+    /**
+     * renovarContrato - Caso de uso #14
+     * Flujo según B8
+     */
+    async renovarContrato(id: number, dto: RenovarContratoDto): Promise<RenovarContratoResponse> {
+        // RD.renovarContrato: contratoExiste
+        await this.RD.contratoExiste(id);
 
-    // crear primer consumo de luz
-    private async crearPrimerConsumoLuz(contratoId: number, contrato: CrearContratoDTO, cliente: PoolClient) {
-        const primerRegistro: Luz = {
-            contrato_id: contratoId,
-            fecha_inicio: new Date(contrato.fechaInicio),
-            fecha_fin: new Date(contrato.fechaFin),
-            lectura_anterior: 0,
-            lectura_actual: contrato.lecturaAnterior,
-            precio_kwh: 0,
-            alumbrado_publico: 0,
-            consumo_total: 0,
-        };
-        await this.consumoLuzRepository.saveFirstConsumoLuz(primerRegistro, cliente);
-    }
+        // RD.renovarContrato: contratoActivo
+        await this.RD.contratoActivo(id);
 
-    // crear garantia
-    private async crearGarantia(contratoId: number, monto: number, fechaInicio: string, cliente: PoolClient) {
-        const garantia: Garantia = {
-            contrato_id: contratoId,
-            monto: monto,
-            fecha_registro: new Date(fechaInicio),
-        };
-        await this.garantiaRepository.saveGarantia(garantia, cliente);
-    }
+        // RD.renovarContrato: contratoSinDeuda
+        await this.RD.contratoSinDeuda(id);
 
-    // actualizar local a ocupado
-    private async actualizarLocalOcupado(localId: number, contratoId: number, cliente: PoolClient) {
-        await this.localRepository.updateLocalOcupado(localId, contratoId, cliente);
-    }
+        // RD.renovarContrato: fechaInicioValido
+        // await this.RD.fechaInicioValido(id, dto.fecha_inicio);
 
+        // operation15: transacción de renovación
+        return await this.contratoLogic.operation15(id, dto.fecha_inicio, dto.precio_mensual, dto.observaciones);
+    }
 }
+

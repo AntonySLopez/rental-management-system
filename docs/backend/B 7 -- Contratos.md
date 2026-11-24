@@ -3,7 +3,7 @@
 
 ## Inquilino
 
-**#1 — POST /inquilinos** — Registrar nuevo inquilino — Retorna: Datos
+**#1 — POST /inquilinos/register** — Registrar nuevo inquilino — Retorna: Datos
 
 **Reglas de dominio**
 
@@ -111,7 +111,7 @@ interface ActualizarInquilinoResponse {
 
 ## Local
 
-**#5 — POST /locales** — Registrar nuevo local — Retorna: Datos
+**#5 — POST /locales/register** — Registrar nuevo local — Retorna: Datos
 
 **Reglas de dominio**
 
@@ -232,7 +232,7 @@ interface NuevoContratoDto {
   garantia: number;             // mayor que 0, máx. 2 decimales
   lectura_inicial_luz: number;  // mayor o igual a 0, máx. 2 decimales
   fecha_inicio: string;         // formato YYYY-MM-DD
-  fecha_fin: string;            // formato YYYY-MM-DD, mayor a fecha_inicio
+  duracion_meses: number;       // entero, mínimo 1
   observaciones?: string;       // máx. 255 caracteres
   metodo_pago: 'efectivo' | 'transferencia' | 'deposito_bancario';  // pago de la primera cuota y garantia
   referencia?: string;          // máx. 100 caracteres
@@ -266,7 +266,7 @@ interface ContratoItem {
   local: string;           // nombre del local
   precio_mensual: number;
   fecha_inicio: string;    // YYYY-MM-DD
-  fecha_fin: string;       // YYYY-MM-DD
+  duracion_meses: string;       // YYYY-MM-DD
   estado: string;
 }
 
@@ -320,7 +320,7 @@ interface DetalleContratoResponse {
   lectura_inicial_luz: number;
   fecha_creacion: string;        // ISO 8601
   fecha_inicio: string;          // YYYY-MM-DD
-  fecha_fin: string;             // YYYY-MM-DD
+  duracion_meses: string;             // YYYY-MM-DD
   observaciones: string | null;
   estado: string;
   deuda: DeudaResumen;
@@ -329,14 +329,12 @@ interface DetalleContratoResponse {
 
 ---
 
-**#12 —PATCH /contratos/:id** — Actualizar contrato por id — Retorna: Datos
+**#12 —PATCH /contratos/:id** — Actualizar local de contrato por id — Retorna: Datos
 
 **Reglas de dominio**
 
 - `contratoExiste()` : Existe un contrato con el `id` recibido
 - `contratoVigente()` : El contrato recibido tiene estado `activo` o `renovado`
-- `inquilinoExiste()` : Existe un inquilino con el `id` recibido
-- `inquilinoActivo()` : El inquilino recibido tiene estado `activo`
 - `localExiste()` : Existe un local con el `id` recibido
 - `localLibre()` : El local recibido tiene estado `libre`
 
@@ -345,7 +343,6 @@ interface DetalleContratoResponse {
 // debe recibir al menos un campo del body
 interface ActualizarContratoDto {
   id: number;              // params: entero, mínimo 1
-  inquilino_id?: number;   // entero, mínimo 1
   local_id: number;       // entero, mínimo 1
   observaciones?: string;  // máx. 255 caracteres
 }
@@ -472,7 +469,7 @@ interface ListarMovimientosGarantiaResponse {
 
 ---
 
-**#17 — POST /garantias/:contrato_id/movimientos** — Registrar movimiento de garantía — Retorna: Datos
+**#17 — POST /garantias/:contrato_id/movimientos/registrar** — Registrar movimiento de garantía — Retorna: Datos
 
 **Reglas de dominio**
 
@@ -502,7 +499,7 @@ interface NuevoMovimientoGarantiaResponse {
 
 ## Alquiler
 
-**#18 — GET /contratos/:contrato_id/cuotas** — Listar cuotas de alquiler por contrato — Retorna: Datos
+**#18 — GET /alquiler/:contrato_id/cuotas** — Listar cuotas de alquiler por contrato — Retorna: Datos
 
 **Reglas de dominio**
 
@@ -530,7 +527,7 @@ interface ListarCuotasResponse {
 
 ---
 
-**#19 — GET /contratos/:contrato_id/cuotas/:id** — Obtener pago de cuota por id — Retorna: Datos
+**#19 — GET /alquiler/:contrato_id/cuotas/:id** — Obtener pago de cuota por id — Retorna: Datos
 
 **Reglas de dominio**
 
@@ -558,7 +555,7 @@ interface PagoAlquilerResponse {
 
 ---
 
-**#20 — POST /contratos/:contrato_id/cuotas/:id/pagos** — Registrar pago de alquiler — Retorna: Datos
+**#20 — POST /alquiler/:contrato_id/cuotas/:id/pagos** — Registrar pago de alquiler — Retorna: Datos
 
 **Reglas de dominio**
 
@@ -589,7 +586,7 @@ interface NuevoPagoAlquilerResponse {
 
 ## Consumo de Luz
 
-**#21 — POST /contratos/:contrato_id/consumos** — Registrar consumo de luz — Retorna: Datos
+**#21 — POST /consumo/:contrato_id/registrar** — Registrar consumo de luz — Retorna: Datos
 
 **Reglas de dominio**
 
@@ -617,7 +614,7 @@ interface NuevoConsumoResponse {
 
 ---
 
-**#22 — GET /contratos/:contrato_id/consumos** — Listar consumos de luz por contrato — Retorna: Datos
+**#22 — GET /consumo/:contrato_id/** — Listar consumos de luz por contrato — Retorna: Datos
 
 **Reglas de dominio**
 
@@ -646,7 +643,7 @@ interface ListarConsumosResponse {
 
 ---
 
-**#23 — GET /contratos/:contrato_id/consumos/:id** — Obtener consumo por id — Retorna: Datos
+**#23 — GET /consumo/:contrato_id/detalle/:id** — Obtener consumo por id — Retorna: Datos
 
 **Reglas de dominio**
 
@@ -689,7 +686,7 @@ interface DetalleConsumoResponse {
 
 ---
 
-**#24 — POST /contratos/:contrato_id/consumos/:id/pagos** — Registrar pago de consumo — Retorna: Datos
+**#24 — POST /consumo/:contrato_id/pagar/:id** — Registrar pago de consumo — Retorna: Datos
 
 **Reglas de dominio**
 

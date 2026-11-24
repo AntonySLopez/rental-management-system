@@ -1,65 +1,105 @@
 import type { Request, Response } from "express";
 import { ContratoService } from "../service/contrato.service.js";
-import { crearContratoSchema } from "../interface/schema/crearContratoDTO.js";
-import { cerrarContratoSchema } from "../interface/schema/cerrarContrato.DTO.js";
-import { renovarContratoSchema } from "../interface/schema/renovarContratoDTO.js";
-import type { ContratoActivo, ContratoDetalle } from "../../../types/contrato.types.js";
+import { nuevoContratoSchema } from "../interface/dto/nuevoContrato.dto.js";
+import { listarContratosSchema } from "../interface/dto/listarContratos.dto.js";
+import { detalleContratoSchema } from "../interface/dto/detalleContrato.dto.js";
+import { actualizarContratoSchema } from "../interface/dto/actualizarContrato.dto.js";
+import { cerrarContratoSchema } from "../interface/dto/cerrarContrato.dto.js";
+import { renovarContratoSchema } from "../interface/dto/renovarContrato.dto.js";
 
 const contratoService = new ContratoService();
 
 export class ContratoController {
 
-    // crear contrato
-    crearContrato = async (req: Request, res: Response) => {
-        console.log("Creando contrato...");
-        // 1. Validar el body
-        const contrato = crearContratoSchema.parse(req.body);
-        // 2. Llamar al servicio
-        const result = await contratoService.crearContrato(contrato);
-        // 3. Retornar la respuesta
-        console.log(result);
-        res.status(201).json({ message: "Contrato creado correctamente" })
+    /**
+     * Crear nuevo contrato
+     * POST /contratos
+     */
+    nuevoContrato = async (req: Request, res: Response) => {
+        // 1. Validar forma del DTO
+        const contrato = nuevoContratoSchema.parse(req.body);
+        
+        // 2. Delegar al service
+        const result = await contratoService.nuevoContrato(contrato);
+        
+        // 3. Retornar respuesta según B7
+        res.status(201).json(result);
     }
 
-    // cerrar contrato
+    /**
+     * Listar contratos con paginación
+     * GET /contratos
+     */
+    listarContratos = async (req: Request, res: Response) => {
+        // 1. Validar query params
+        const dto = listarContratosSchema.parse(req.query);
+        
+        // 2. Delegar al service
+        const result = await contratoService.listarContratos(dto);
+        
+        // 3. Retornar respuesta según B7
+        res.status(200).json(result);
+    }
+
+    /**
+     * Obtener detalle de contrato
+     * GET /contratos/:id
+     */
+    detalleContrato = async (req: Request, res: Response) => {
+        // 1. Validar params
+        const dto = detalleContratoSchema.parse(req.params);
+        
+        // 2. Delegar al service
+        const result = await contratoService.detalleContrato(dto);
+        
+        // 3. Retornar respuesta según B7
+        res.status(200).json(result);
+    }
+
+    /**
+     * Actualizar contrato
+     * PATCH /contratos/:id
+     */
+    actualizarContrato = async (req: Request, res: Response) => {
+        // 1. Validar params y body
+        const id = parseInt(req.params.id as string);
+        const dto = actualizarContratoSchema.parse(req.body);
+        
+        // 2. Delegar al service
+        const result = await contratoService.actualizarContrato(id, dto);
+        
+        // 3. Retornar respuesta según B7
+        res.status(200).json(result);
+    }
+
+    /**
+     * Cerrar contrato
+     * PATCH /contratos/:id/cerrar
+     */
     cerrarContrato = async (req: Request, res: Response) => {
-        console.log("Cerrando contrato...");
-        // 1. Validar el body
-        const contratoId = cerrarContratoSchema.parse(req.body);
-        // 2. Llamar al servicio
-        await contratoService.cerrarContrato(contratoId.contrato_id);
-        // 3. Retornar la respuesta
-        res.status(200).json({ message: "Contrato cerrado correctamente" })
+        // 1. Validar params
+        const dto = cerrarContratoSchema.parse(req.params);
+        
+        // 2. Delegar al service
+        const result = await contratoService.cerrarContrato(dto);
+        
+        // 3. Retornar respuesta según B7
+        res.status(200).json(result);
     }
 
-    // renovar contrato
+    /**
+     * Renovar contrato
+     * PATCH /contratos/:id/renovar
+     */
     renovarContrato = async (req: Request, res: Response) => {
-        console.log("Renovando contrato...");
-        // 1. Validar el body
-        const contrato = renovarContratoSchema.parse(req.body);
-        // 2. Llamar al servicio
-        await contratoService.renovarContrato(contrato);
-        // 3. Retornar la respuesta
-        res.status(200).json({ message: "Contrato renovado correctamente" })
-    }
-
-    // buscar contrato por id
-    buscarContratoPorId = async (req: Request, res: Response) => {
-        console.log("Buscando contrato por id...");
-        // 1. Validar el body
-        const contratoId = req.params.id;
-        // 2. Llamar al servicio
-        const contrato = await contratoService.buscarContratoPorId(Number(contratoId));
-        // 3. Retornar la respuesta
-        res.status(200).json(contrato)
-    }
-
-    // lista de contratos activos
-    listaContratosActivos = async (req: Request, res: Response) => {
-        console.log("Lista de contratos activos...");
-        // 1. Llamar al servicio
-        const contratos = await contratoService.listaContratosActivos();
-        // 2. Retornar la respuesta
-        res.status(200).json(contratos)
+        // 1. Validar params y body
+        const id = parseInt(req.params.id as string);
+        const dto = renovarContratoSchema.parse(req.body);
+        
+        // 2. Delegar al service
+        const result = await contratoService.renovarContrato(id, dto);
+        
+        // 3. Retornar respuesta según B7
+        res.status(200).json(result);
     }
 }

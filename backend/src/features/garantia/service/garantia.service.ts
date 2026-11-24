@@ -1,142 +1,85 @@
-import { ContratoRepository } from "../../contrato/repository/contrato.repository.js";
-import { movimientoRepository } from "../../pago/repository/movimiento.repository.js";
 import { GarantiaRepository } from "../repository/garantia.repository.js";
-import type { Movimiento } from "../../../types/movimiento.types.js";
-import type { GarantiaUpdate, GarantiaMovimiento } from "../../../types/gestionGarantia.types.js";
-import type { GestionarGarantiaDTO } from "../interface/schema/gestionarGarantiaDTO.js";
+import { RD } from "./rule/rd.js";
+import { GarantiaLogic } from "./logic/garantia.logic.js";
+import type { DetalleGarantiaDto } from "../interface/dto/detalleGarantia.dto.js";
+import type { DetalleGarantiaResponse } from "../interface/types/garantia.types.js";
+import type { ListarMovimientosGarantiaDto } from "../interface/dto/listarMovimientosGarantia.dto.js";
+import type { ListarMovimientosGarantiaResponse } from "../interface/types/garantia.types.js";
+import type { NuevoMovimientoGarantiaDto } from "../interface/dto/nuevoMovimientoGarantia.dto.js";
+import type { NuevoMovimientoGarantiaResponse } from "../interface/types/garantia.types.js";
 
-import pool from "../../../infrastructure/postgres.js";
-import type { PoolClient } from "pg";
-import { AppError } from "../../../shared/appError.js";
-
+/**
+ * Service: GarantiaService
+ * Orquesta el flujo de detalle de garantía según B8
+ */
 export class GarantiaService {
-    // instancia de garantia repository
     private garantiaRepository: GarantiaRepository;
-    private contratoRepository: ContratoRepository;
-    private movimientoRepository: movimientoRepository;
-    
+    private RD: RD;
+    private garantiaLogic: GarantiaLogic;
+
     constructor() {
         this.garantiaRepository = new GarantiaRepository();
-        this.contratoRepository = new ContratoRepository();
-        this.movimientoRepository = new movimientoRepository();
-    }
-    // devolver garantia
-    async devolverGarantia(garantia: GestionarGarantiaDTO) {
-        // creamos hijo
-        const client: PoolClient = await pool.connect();
-        try {
-            await client.query('BEGIN');
-            // valida que el contrato exista y esté activo
-            await this.validarContratoExistente(garantia.contrato_id, client);
-            console.log('contrato valido');
-            
-            // valida que la garantia exista
-            const garantiaExistente = await this.validarGarantiaExistente(garantia.contrato_id, client);
-            console.log('garantia valida');
-            
-            // guardar movimiento de garantia
-            const movimiento = await this.guardarMovimientoGarantia(garantiaExistente, garantia.tipo_operacion, client);
-            console.log('movimiento guardado');
-            
-            // actualizar garantia
-            await this.actualizarGarantia(garantiaExistente, movimiento.id, garantia.tipo_operacion, client);
-            console.log('garantia actualizada');
-            
-            await client.query('COMMIT');
-        } catch (error) {
-            await client.query('ROLLBACK');
-            throw error;
-        } finally {
-            client.release();
-        }
-        
+        this.RD = new RD();
+        this.garantiaLogic = new GarantiaLogic(this.garantiaRepository);
     }
 
-    // aplicar garantia
-    async aplicarGarantia(garantia: GestionarGarantiaDTO) {
-        // creamos hijo
-        const client: PoolClient = await pool.connect();
-        try {
-            await client.query('BEGIN');
-        // valida que el contrato exista y esté activo
-        await this.validarContratoExistente(garantia.contrato_id, client);
-        console.log('contrato valido');
+    /**
+     * detalleGarantia - Caso de uso #15
+     * Flujo según B8
+     */
+    async detalleGarantia(dto: DetalleGarantiaDto): Promise<DetalleGarantiaResponse> {
+        // RD.detalleGarantia: contratoExiste
+        await this.RD.contratoExiste(dto.contrato_id);
 
-        // valida que la garantia exista
-        const garantiaExistente = await this.validarGarantiaExistente(garantia.contrato_id, client);
-        console.log('garantia valida');
+        // RD.detalleGarantia: contratoTieneGarantia
+        await this.RD.contratoTieneGarantia(dto.contrato_id);
 
-        // guardar movimiento de garantia
-        const movimiento = await this.guardarMovimientoGarantia(garantiaExistente, garantia.tipo_operacion, client);
-        console.log('movimiento guardado');
-        
-        // actualizar garantia
-        await this.actualizarGarantia(garantiaExistente, movimiento.id, garantia.tipo_operacion, client);
-        console.log('garantia actualizada');
-        
-        await client.query('COMMIT');
-        } catch (error) {
-            await client.query('ROLLBACK');
-            throw error;
-        } finally {
-            client.release();
-        }
+        // operation16: obtenerGarantia.repository() + obtenerMovimientoGarantia.repository() + obtenerSaldoGarantia.repository()
+        return await this.garantiaLogic.operation16(dto.contrato_id);
     }
 
-    // lista de garantias retenidas
-    async listarGarantiasRetenidas() {
-        return await this.garantiaRepository.findRetenidas();
+    /**
+     * listarMovimientosGarantia - Caso de uso #16
+     * Flujo según B8
+     */
+    async listarMovimientosGarantia(dto: ListarMovimientosGarantiaDto): Promise<ListarMovimientosGarantiaResponse> {
+        // RD.listarMovimientosGarantia: contratoExiste
+        await this.RD.contratoExiste(dto.contrato_id);
+
+        // RD.listarMovimientosGarantia: contratoTieneGarantia
+        await this.RD.contratoTieneGarantia(dto.contrato_id);
+
+        // operation18: listarMovimientos.repository()
+        return await this.garantiaLogic.operation18(dto.contrato_id, dto.page, dto.limit);
     }
 
-    // obtener garantia detallada
-    async obtenerGarantiaDetallada(garantiaId: number) {
-        return await this.garantiaRepository.findDetallada(garantiaId);
-    }
+    /**
+     * nuevoMovimientoGarantia - Caso de uso #17
+     * Flujo según B8
+     */
+    async nuevoMovimientoGarantia(dto: NuevoMovimientoGarantiaDto): Promise<NuevoMovimientoGarantiaResponse> {
+        // RD.nuevoMovimientoGarantia: contratoExiste
+        await this.RD.contratoExiste(dto.contrato_id);
 
-    // validar contrato existente
-    private async validarContratoExistente(contratoId: number , client: PoolClient) {
-        const contratoExistente = await this.contratoRepository.findById(contratoId, client);
-        if (!contratoExistente || contratoExistente.estado == "activo") {
-            throw new AppError("No se puede gestionar una garantía de un contrato activo", 409);
-        }
-    }
+        // RD.nuevoMovimientoGarantia: contratoTieneGarantia
+        await this.RD.contratoTieneGarantia(dto.contrato_id);
 
-    // valida garantia existente
-    private async validarGarantiaExistente(contratoId: number, client: PoolClient) {        
-        const garantiaExistente = await this.garantiaRepository.findByContratoId(contratoId, client);
-        if (!garantiaExistente) {
-            throw new AppError("La garantia no existe", 404);
-        }
-        return {
-            id: garantiaExistente.id,
-            contrato_id: garantiaExistente.contrato_id,
-            monto: garantiaExistente.monto,
-            observaciones: garantiaExistente.observaciones
-        };
-    }
+        // RD.nuevoMovimientoGarantia: garantiaRetenida
+        await this.RD.garantiaRetenida(dto.contrato_id);
 
-    // guardar movimiento de garantia
-    private async guardarMovimientoGarantia(garantia: GarantiaMovimiento, tipoOperacion: string, client: PoolClient) {
-        const movimiento: Movimiento = {
-            contrato_id: garantia.contrato_id,
-            fecha: new Date(),
-            monto: garantia.monto,
-            metodo_pago: "efectivo",
-            referencia: "",
-            descripcion: `gestion de garantia: ${tipoOperacion}`
-        };
-        const movimientoGuardado = await this.movimientoRepository.saveMovimiento(movimiento, client);
-        return movimientoGuardado;
-    }
+        // RD.nuevoMovimientoGarantia: montoNoSuperaSaldoGarantia
+        await this.RD.montoNoSuperaSaldoGarantia(dto.contrato_id, dto.monto);
 
-    // actualizar garantia
-    private async actualizarGarantia(garantia: GarantiaMovimiento, movimientoId: number, estado: string, cliente: PoolClient) {
-        const garantiaActualizada: GarantiaUpdate = {
-            fecha_movimiento: new Date(),
-            observaciones: garantia.observaciones + ` | gestion: ${estado}`,
-            estado_id: estado,
-            movimiento_id: movimientoId
-        };
-        await this.garantiaRepository.updateEstadoByContratoId(garantia.contrato_id, garantiaActualizada, cliente);
+        // operation19: obtenerGarantia.repository() + registrarMovimientoGarantia.repository()
+        const garantiaId = await this.garantiaLogic.operation19(
+            dto.contrato_id,
+            dto.monto,
+            dto.metodo_pago,
+            dto.referencia || 'sin referencia',
+            dto.tipo_accion,
+            dto.observaciones || 'sin observaciones'
+        );
+
+        return { id: garantiaId.toString() };
     }
 }

@@ -1,43 +1,72 @@
 import type { Request, Response } from "express";
-import { registrarLocalSchema } from "../interface/schema/registrarLocalDTO.js";
 import { LocalService } from "../service/local.service.js";
-import type { LocalCompleto } from "../../../types/local.types.js";
+import { nuevoLocalSchema } from "../interface/dto/registrarLocal.dto.js";
+import { listarLocalesSchema } from "../interface/dto/listarLocales.dto.js";
+import { detalleLocalSchema } from "../interface/dto/detalleLocal.dto.js";
+import { actualizarLocalSchema } from "../interface/dto/actualizarLocal.dto.js";
 
 const localService = new LocalService();
 
 export class LocalController {
 
-    // registra local
+    /**
+     * Registrar nuevo local
+     * POST /locales
+     */
     registrarLocal = async (req: Request, res: Response) => {
-        console.log("Registrando local...");
-        // 1. Validar el body
-        const local = registrarLocalSchema.parse(req.body);
-        // 2. Llamar al servicio
+        // 1. Validar forma del DTO
+        const local = nuevoLocalSchema.parse(req.body);
+        console.log('radar1');
+        
+        // 2. Delegar al service
         const result = await localService.registrarLocal(local);
-        // 3. Retornar la respuesta
-        console.log(result);
-        res.status(201).json({ message: "Local registrado correctamente" })
+        
+        // 3. Retornar respuesta según B7
+        res.status(201).json(result);
     }
-    
-    // obtiene lista de locales
-    listaLocales = async (req: Request, res: Response) => {
-        console.log("Obteniendo lista de locales...");
-        // 1. Extraer propiedadId del request
-        const propiedadId = Number(req.params.propiedadId);
-        // 2. Llamar al servicio
-        const result = await localService.listaLocales(propiedadId);
-        // 3. Retornar la respuesta
-        console.log(result);
-        res.status(200).json(result)
+
+    /**
+     * Listar locales con paginación
+     * GET /locales
+     */
+    listarLocales = async (req: Request, res: Response) => {
+        // 1. Validar query params
+        const dto = listarLocalesSchema.parse(req.query);
+        
+        // 2. Delegar al service
+        const result = await localService.listarLocales(dto);
+        
+        // 3. Retornar respuesta según B7
+        res.status(200).json(result);
     }
-    
-    // obtiene lista de todos los locales
-    findAllLocales = async (req: Request, res: Response<LocalCompleto[]>) => {
-        console.log("Obteniendo lista de todos los locales...");
-        // 1. Llamar al servicio
-        const result = await localService.findAllLocales();
-        // 2. Retornar la respuesta
-        console.log(result);
-        res.status(200).json(result)
+
+    /**
+     * Obtener detalle de local
+     * GET /locales/:id
+     */
+    detalleLocal = async (req: Request, res: Response) => {
+        // 1. Validar params
+        const dto = detalleLocalSchema.parse(req.params);
+        
+        // 2. Delegar al service
+        const result = await localService.detalleLocal(dto);
+        
+        // 3. Retornar respuesta según B7
+        res.status(200).json(result);
+    }
+
+    /**
+     * Actualizar local
+     * PATCH /locales/:id
+     */
+    actualizarLocal = async (req: Request, res: Response) => {
+        // 1. Validar params y body
+        const dto = actualizarLocalSchema.parse({ ...req.params, ...req.body });
+        
+        // 2. Delegar al service
+        const result = await localService.actualizarLocal(dto);
+        
+        // 3. Retornar respuesta según B7
+        res.status(200).json(result);
     }
 }

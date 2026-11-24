@@ -1,14 +1,25 @@
 import { Router } from "express";
 import { ContratoController } from "../controller/contrato.controller.js";
 
-const router = Router() as Router
+const router: Router = Router();
+const contratoController = new ContratoController();
 
-const controller = new ContratoController()
+// POST /contratos/registrar - Crear nuevo contrato
+router.post("/registrar", contratoController.nuevoContrato);
 
-router.post("/crear", controller.crearContrato);
-router.post("/cerrar", controller.cerrarContrato);
-router.post("/renovar", controller.renovarContrato);
-router.get("/buscar/:id", controller.buscarContratoPorId);
-router.get("/activos", controller.listaContratosActivos);
+// GET /contratos - Listar contratos con paginación
+router.get("/", contratoController.listarContratos);
 
-export default router
+// GET /contratos/:id - Detalle de contrato
+router.get("/:id", contratoController.detalleContrato);
+
+// PATCH /contratos/:id - Actualizar contrato
+router.patch("/:id", contratoController.actualizarContrato);
+
+// PATCH /contratos/:id/cerrar - Cerrar contrato
+router.patch("/:id/cerrar", contratoController.cerrarContrato);
+
+// PATCH /contratos/:id/renovar - Renovar contrato
+router.post("/:id/renovar", contratoController.renovarContrato);
+
+export default router;

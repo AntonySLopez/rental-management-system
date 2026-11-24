@@ -1,12 +1,19 @@
 import { Router } from "express";
 import { LocalController } from "../controller/local.controller.js";
 
-const router = Router() as Router;
-
+const router: Router = Router();
 const localController = new LocalController();
 
-router.post("/registrar", localController.registrarLocal);
-router.get("/lista/:propiedadId", localController.listaLocales);
-router.get("/todos", localController.findAllLocales);
+// POST /locales/register - Registrar nuevo local
+router.post("/register", localController.registrarLocal);
+
+// GET /locales - Listar locales con paginación
+router.get("/", localController.listarLocales);
+
+// GET /locales/:id - Obtener detalle de local
+router.get("/:id", localController.detalleLocal);
+
+// PATCH /locales/:id - Actualizar local
+router.patch("/:id", localController.actualizarLocal);
 
 export default router;

@@ -1,6 +1,4 @@
 
----
-
 ## B8 — Inquilinos
 
 **#1 — POST /inquilinos — Registrar nuevo inquilino**
@@ -217,7 +215,7 @@ detalleContrato {
 
 ---
 
-**#12 — PATCH /contratos/:id — Actualizar contrato**
+**#12 — PATCH /contratos/:id — Actualizar local de contrato por id**
 
 ```ts
 actualizarContrato() {
@@ -225,23 +223,18 @@ actualizarContrato() {
   RD.actualizarContrato:
     - contratoExiste.repository()          // se espera true
     - contratoVigente.repository()         // se espera true
-    - inquilinoExiste.repository()         // ? se espera true
-    - inquilinoActivo.repository()         // ? se espera true
-    - localExiste.repository()             // ? se espera true   
-    - localLibre()                         // ? se espera true
+    - localExiste.repository()             // ? se espera true
+    - localLibre.repository()              // ? se espera true
 
-  !/* si inquilino se modifica */
-  operation12(){
-    actualizarContratoInquilino.repository()
-	// actualiza inquilino_id de inquilino en el contrato
-  }
-  
-  !/* si local se modifica */
   operation13(){
-    actualizarContrato.repository()         
+    alternarDisponibilidadLocal.repository()
+    // marca el local como ocupado y libera el anterior
+    actualizarContratoLocal.repository()
     // actualiza local_id en el contrato
+    actualizarContratoObservaciones.repository()
+    // actualiza observaciones del contrato
   }
-  respuesta         // retorna el id del contrato actualizado
+  respuesta         // retornar id de contrato
 }
 ```
 
@@ -257,9 +250,9 @@ cerrarContrato {
     - contratoVigente.repository()         // se espera true
 
   operation14(){
-    cerrarContrato.repository()      
+    cerrarContrato.repository()
     // cambia el estado del contrato a 'cerrado'
-    liverarEstadoLocal.repository()     
+    liberarEstadoLocal.repository()
     // marca el local como libre
   }
   respuesta          // confirma el cierre del contrato
@@ -279,17 +272,21 @@ renovarContrato {
     - contratoSinDeuda.repository()            // se espera true
     - fechaInicioValido.repository()           // se espera true
 
-  transaction15(){
-    garantia = extraerGarantiaByid.repository() 
-    // retira el saldo restante
+  operation15(){
+    garantia = extraerGarantiaByid.repository()
+    // retira el saldo restante de la garantía del contrato actual
     renovarContrato.repository()
     // cambia el estado del contrato a 'renovado'
-    guardarContrato.repository()
-    // inserta el contrato nuevo con los valores del anterior 
+    obtenerDatosContrato.repository()
+    // obtiene los datos del contrato actual para reutilizar
+    registrarContrato.repository()
+    // inserta el contrato nuevo con los valores del anterior
     registrarNuevaGarantia.repository(garantia)
     // registra nueva garantia con id y monto del contrato renovado
     crearCuotasDeAlquiler.repository()
     // genera todas las cuotas del contrato, en estado pendiente
+    registrarPagoAlquiler.repository()
+    // registra el pago de la primera cuota de alquiler
   }
   respuesta            // retorna el id del contrato nuevo
 }
@@ -309,16 +306,13 @@ detalleGarantia {
     - contratoExiste.repository()          // se espera true
     - contratoTieneGarantia.repository()   // se espera true
 
-  transaction16():id{
+  operation16(){
     obtenerGarantia.repository()
-    // obtiene los datos de la garantía del contrato vinculado a un contrato
-  }
-  
-  transaction17(id){
-    movimientos = obtenerMovimientoGarantia.repository()
-    // obtiene los movimientos realizados bajo el id de garantia
-    calculaSaldoGarantia.repository(movimientos)
-	// opera los movimientos sobre el monto registrado sobre garantia
+    // obtiene los datos de la garantía del contrato
+    obtenerMovimientoGarantia.repository()
+    // obtiene los movimientos realizados bajo el id de garantía
+    calcularSaldo()
+    // calcula el saldo: monto - movimientos
   }
 
   respuesta           // retorna DetalleGarantiaResponse
@@ -336,9 +330,11 @@ listarMovimientosGarantia {
     - contratoExiste.repository()          // se espera true
     - contratoTieneGarantia.repository()   // se espera true
 
-  transaction18(){
+  operation18(){
+    obtenerGarantia.repository()
+    // obtiene garantia_id del contrato
     listarMovimientos.repository()
-    // obtener movimientos ejecutados a un garantia segun page y limit
+    // obtiene movimientos con paginación
   }
 
   respuesta         // ListarMovimientosGarantiaResponse
@@ -347,7 +343,7 @@ listarMovimientosGarantia {
 
 ---
 
-**#17 — POST /garantias/:contrato_id/movimientos — Registrar movimiento de garantía**
+**#17 — POST /garantias/:contrato_id/movimientos/registrar — Registrar movimiento de garantía**
 
 ```ts
 nuevoMovimientoGarantia {
@@ -358,21 +354,22 @@ nuevoMovimientoGarantia {
     - garantiaRetenida.repository()              // se espera true
     - montoNoSuperaSaldoGarantia.repository()    // se espera true
 
-  transaction19():id{
+  operation19(poolClient){
+    obtenerGarantia.repository()
+    // obtiene garantia_id del contrato
     registrarMovimientoGarantia.repository()
-    // registra el movimiento de la garantía del contrato
-  }
-  
-  saldo = transaction17.repository(id)
-  // retorna el saldo actual de la garantia
-  
-  ! /*  si saldo es igual a monto  */ 
-  transaction20(id){
+    // registra el movimiento de garantía
+    obtenerMovimientoGarantia.repository()
+    // obtiene el saldo actual de movimientos
+    
+    ! /* si saldo de movimientos es igual a monto de garantía */
     actualizarEstadoGarantia.repository()
-    // cambia a estado segun tipo_accion
+    // cambia estado según tipo_accion
+    
+    return garantia_id
   }
-  
-  respuesta         // retorna NuevoMovimientoGarantiaResponse
+
+  respuesta         // NuevoMovimientoGarantiaResponse
 }
 ```
 
@@ -381,7 +378,7 @@ nuevoMovimientoGarantia {
 
 # Alquiler
 
-**#18 — GET /contratos/:contrato_id/cuotas** — Listar cuotas de alquiler por contrato — Retorna: Datos
+**#18 — GET /alquiler/:contrato_id/cuotas** — Listar cuotas de alquiler por contrato — Retorna: Datos
 
 ```ts
 listarCuotas {
@@ -389,7 +386,7 @@ listarCuotas {
   RD.listarCuotas:
     - contratoExiste.repository()          // se espera true
 
-  transaction21(){
+  operation21(){
     listarCuotas.repository()
     // extrae todas las cuotas del contrato recibido, incluidas las anuladas
   }
@@ -400,7 +397,7 @@ listarCuotas {
 
 ---
 
-**#19 — GET /contratos/:contrato_id/cuotas/:id** — Obtener pago de cuota por id — Retorna: Datos
+**#19 — GET /alquiler/:contrato_id/cuotas/:id** — Obtener pago de cuota por id — Retorna: Datos
 
 ```ts
 detalleCuota {
@@ -410,28 +407,29 @@ detalleCuota {
     - cuotaExiste.repository()             // se espera true
     - cuotaNoAnulada.repository()          // se espera true
 
-  trasaction22(){
+  operation22(){
     obtenerPagoAlquiler.repository()
     // obtiene informacion del pago registrado sobre la cuota_id
   }
-  respuesta           // retorna DetalleCuotaResponse
+  respuesta           // retorna PagoAlquilerResponse
 }
 ```
 
 ---
 
-**#20 — POST /contratos/:contrato_id/cuotas/:id/pagos** — Registrar pago de alquiler — Retorna: Datos
+**#20 — POST /alquiler/:contrato_id/cuotas/:id/pagos** — Registrar pago de alquiler — Retorna: Datos
 
 ```ts
-registrarPagoAlquiler {
+nuevoPagoAlquiler {
     RD.nuevoPagoAlquiler:
     - contratoExiste.repository()          // se espera true
     - contratoActivo.repository()          // se espera true
     - cuotaExiste.repository()             // se espera true
     - cuotaPagable.repository()            // se espera true
     - montoIgualAMontoCuota.repository()   // se espera true
-	  
-  transaction23(){
+    - cuotaSiguiente.repository()          // se espera true
+  
+  operation23(){
     registrarPagoAlquiler.repository()
     // inserta el pago en la base de datos
     actualizarCuota.repository()
@@ -447,7 +445,7 @@ registrarPagoAlquiler {
 
 # Consumo Luz
 
-**#21 — POST /contratos/:contrato_id/consumos** — Registrar consumo de luz — Retorna: Datos
+**#21 — POST /consumo/:contrato_id/registrar** — Registrar consumo de luz — Retorna: Datos
 
 ```ts
 nuevoConsumo {
@@ -461,7 +459,7 @@ nuevoConsumo {
   lecturaAnterior = obtenerContrato.repository(): lectura_inicial_luz
     // obtiene todos los valores del contrato
  
-  trasaction24(){
+  operation24(){
     consumo = calcularConsumo(lecturaAnterior | input.lecturaAnterior);      
     // calcula y formatea valores de consumo
     registrarConsumo.repository(consumo);          
@@ -475,7 +473,7 @@ nuevoConsumo {
 
 ---
 
-**#22 — GET /contratos/:contrato_id/consumos** — Listar consumos de luz por contrato — Retorna: Datos
+**#22 — GET /consumo/:contrato_id/** — Listar consumos de luz por contrato — Retorna: Datos
 
 ```ts
 listarConsumos {
@@ -483,7 +481,7 @@ listarConsumos {
   RD.listarConsumos:
     - contratoExiste.repository()        // se espera true
 
-  transaction25(){
+  operation25(){
     listasConsumosLuz.repository()
 	// extrae todos los registro de consumo de luz
   }
@@ -493,7 +491,7 @@ listarConsumos {
 
 ---
 
-**#23 — GET /contratos/:contrato_id/consumos/:id** — Obtener consumo por id — Retorna: Datos
+**#23 — GET /consumo/:contrato_id/detalle/:id** — Obtener consumo por id — Retorna: Datos
 
 ```ts
 detalleConsumo {
@@ -503,7 +501,7 @@ detalleConsumo {
     - consumoExiste.repository()         // se espera true
     - consumoNoAnulado.repository()      // se espera true
 
-  transaction26(){
+  operation26(){
     obtenerConsumo.repository()            
     // consulta todos los datos del consumo de luz
     obtenerPagoConsumo.repository()        
@@ -516,7 +514,7 @@ detalleConsumo {
 
 ---
 
-**#24 — POST /contratos/:contrato_id/consumos/:id/pagos** — Registrar pago de consumo — Retorna: Datos
+**#24 — POST /consumo/:contrato_id/pagar/:id** — Registrar pago de consumo — Retorna: Datos
 
 ```ts
 nuevoPagoConsumo {
@@ -527,7 +525,7 @@ nuevoPagoConsumo {
 	- consumoPagable.repository()               // se espera true 
 	- montoIgualAMontoConsumo.repository()      // se espera true
 	  
-  transaction27(){
+  operation27(){
     registrarPagoConsumo.repository()   
     // inserta el pago en la base de datos
     actualizarConsumo.repository()     
